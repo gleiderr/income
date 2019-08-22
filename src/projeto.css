@@ -1,0 +1,132 @@
+
+/*https://material.io/design/typography/the-type-system.html#*/
+/*https://developers.google.com/web/fundamentals/design-and-ux/responsive/*/
+:root {
+    font-family: 'Roboto', sans-serif;
+    -webkit-font-smoothing: antialiased;
+
+    /* https://material.io/resources/color/#!/?view.left=0&view.right=0&primary.color=B0BEC5&secondary.color=00C853&primary.text.color=000000 */
+    --primary-color: #b0bec5;
+    --primary-color-dark: #808e95;
+    --primary-color-light: #e2f1f8;
+    --primary-color-text: #000000;
+    --secondary-color: #00c853;
+    --secondary-color-dark: #009624;
+    --secondary-color-light: #5efc82;
+    --secondary-color-text: #000000;
+    
+    /* https://material-components.github.io/material-components-web-catalog/#/component/elevation */
+    --dp1: 0 2px 1px -1px rgba(0,0,0,.2), 0 1px 1px 0 rgba(0,0,0,.14), 0 1px 3px 0 rgba(0,0,0,.12);
+    --dp2: 0 3px 1px -2px rgba(0,0,0,.2), 0 2px 2px 0 rgba(0,0,0,.14), 0 1px 5px 0 rgba(0,0,0,.12);
+    --dp4: 0 2px 4px -1px rgba(0,0,0,.2), 0 4px 5px 0 rgba(0,0,0,.14), 0 1px 10px 0 rgba(0,0,0,.12);
+    --dp8: 0 5px 5px -3px rgba(0,0,0,.2), 0 8px 10px 1px rgba(0,0,0,.14), 0 3px 14px 2px rgba(0,0,0,.12);
+    --dp12: 0 7px 8px -4px rgba(0,0,0,.2), 0 12px 17px 2px rgba(0,0,0,.14), 0 5px 22px 4px rgba(0,0,0,.12);;
+    --dp16: 0 8px 10px -5px rgba(0,0,0,.2), 0 16px 24px 2px rgba(0,0,0,.14), 0 6px 30px 5px rgba(0,0,0,.12);
+}
+
+body {
+    margin: 0;
+}
+
+.projeto {
+    --padding: 8px;
+    margin: 0;
+}
+
+.projeto.card {
+    border-top-style: solid;
+    border-top-width: 8px;
+    border-top-color: var(--primary-color-dark);
+    box-shadow: var(--dp1);
+    margin: 16px;
+    position: relative;
+}
+
+.projeto.card:hover {
+    box-shadow: var(--dp8);
+}
+
+.projeto-title.card {
+    background: var(--primary-color);
+    color: var(--primary-color-text);
+    padding: var(--padding);
+    padding-bottom: 0;
+    margin-block-start: 0;
+    margin-block-end: 0;
+}
+
+.projeto-subtitle.card {
+    background: var(--primary-color);
+    color: var(--primary-color-text);
+    margin-block-start: 0;
+    margin-block-end: 0;
+    padding: var(--padding);
+    padding-top: 0;
+    font-weight: initial;
+}
+
+.projeto-resume.card {
+    padding: var(--padding);
+}
+
+.button-row {
+    display: flex;
+}
+
+button {
+    padding: 8px;
+    font-weight: bold;
+    /*min-width: -webkit-fill-available;*/
+    margin: var(--padding);
+    /*margin-colapse*/
+    border-radius: 5px;
+}
+
+.button-primary {
+    box-shadow: var(--dp2);
+    border-style: none;
+    background-color: var(--secondary-color);
+    flex: auto;
+}
+
+#saiba-mais {
+    display: none;
+}
+
+.card #saiba-mais {
+    display: flex;
+}
+
+.button-star {
+    display: flex;
+    background-color: #00000000;
+    border-style: solid;
+    border-color: var(--secondary-color);
+    border-width: 0;
+
+    position: fixed;
+    right: 0;
+    top: 0;
+}
+
+.card .button-star {
+    position: relative;
+}
+
+.button-star div {
+    margin: auto;
+}
+
+.star {
+    transform: scale(2.5);
+    transform-box: fill-box;
+    shape-rendering: geometricPrecision;
+    filter: url(#starshadow);
+}
+
+.star:hover {
+    fill: #f3cb06;
+}
+
+@media (max-width: 320px) {
+}
