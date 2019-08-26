@@ -1,12 +1,22 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+//react-chat-widget
+//react-chat-window
+import React from "react";
+import ReactDOM from "react-dom";
+//import firebase from "firebase";
+//import firebase from "firebase";
+//import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
 //import './index.css';
-import App from './App';
-import * as serviceWorker from './serviceWorker';
+import SignInScreen from "./SignInScreen";
+//import App from "./App";
+//import * as serviceWorker from "./serviceWorker";
 
-ReactDOM.render(<App />, document.getElementById('root'));
+//console.log(SignInScreen);
+
+const rootElement = document.querySelector("body");
+ReactDOM.render(<SignInScreen />, rootElement);
+console.log(rootElement);
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
 // Learn more about service workers: https://bit.ly/CRA-PWA
-serviceWorker.unregister();
+//serviceWorker.unregister();
