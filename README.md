@@ -1,4 +1,4 @@
-# Sistema 'Mínimo' de Projetos (4%)
+# Sistema 'Mínimo' de Projetos (2%)
 
 **Características:**
 - Login de usuários (70%)
@@ -6,6 +6,7 @@
 - Painel de valores (60%)
 - Layout Responsivo (Celular, desktop e tablet, nessa ordem) (60%)
 - Edição de projetos pelo administrador (50%)
+- Contagem de Estrelas e Cliques (50%)
 
 Os percentuais são qualitativos e referem-se ao sentimento probabilidade de entrega.
 A probabilidade geral refere-se ao produto das probabilidades.
