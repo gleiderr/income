@@ -1,8 +1,8 @@
-# Sistema 'Mínimo' de Projetos (2%)
+# Sistema 'Mínimo' de Projetos (2.5%)
 
 **Características:**
 - Login de usuários (70%)
-- Chat de contexto (30%)
+- Chat de contexto (40%)
 - Painel de valores (60%)
 - Layout Responsivo (Celular, desktop e tablet, nessa ordem) (60%)
 - Edição de projetos pelo administrador (50%)
@@ -11,7 +11,7 @@
 Os percentuais são qualitativos e referem-se ao sentimento probabilidade de entrega.
 A probabilidade geral refere-se ao produto das probabilidades.
 
-0.7*0.3*0.6*0.6*0.5
+0.7*0.3*0.6*0.6*0.5*0.5
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
