@@ -1,12 +1,12 @@
-# Sistema 'Mínimo' de Projetos (2.5%)
+# Sistema 'Mínimo' de Projetos (6%)
 
 **Características:**
 - Login de usuários (70%)
-- Chat de contexto (40%)
+- Chat de contexto (50%)
 - Painel de valores (60%)
 - Layout Responsivo (Celular, desktop e tablet, nessa ordem) (60%)
-- Edição de projetos pelo administrador (50%)
 - Contagem de Estrelas e Cliques (50%)
+- ~Edição de projetos pelo administrador (50%)~(fazer diretamente no código fonte)
 
 Os percentuais são qualitativos e referem-se ao sentimento probabilidade de entrega.
 A probabilidade geral refere-se ao produto das probabilidades.
