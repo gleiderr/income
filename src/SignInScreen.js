@@ -1,8 +1,15 @@
 import React, { useState, useEffect } from "react";
 import firebase from "firebase";
+import firebase_init from "./firebase-local";
 import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
 
-const firebaseConfig = {
+try {
+  firebase.app();
+} catch(err) {
+  firebase_init();
+}
+
+/*const firebaseConfig = {
   apiKey: "AIzaSyCI77PrVU6FyFQN9OQhF8uo2ypHZQTQqSM",
   authDomain: "gleider-dev.firebaseapp.com",
   databaseURL: "https://gleider-dev.firebaseio.com",
@@ -12,13 +19,15 @@ const firebaseConfig = {
   appId: "1:868861057308:web:72ab5d4b1e875ce7"
 };
 // Initialize Firebase
-firebase.initializeApp(firebaseConfig);
+firebase.initializeApp(firebaseConfig);*/
 
 const uiConfig = {
   // Popup signin flow rather than redirect flow.
   signInFlow: "popup",
+
   // We will display Google and Facebook as auth providers.
   signInOptions: [
+    //firebase.auth.FacebookAuthProvider.PROVIDER_ID,
     firebase.auth.GoogleAuthProvider.PROVIDER_ID,
     firebase.auth.EmailAuthProvider.PROVIDER_ID,
     firebase.auth.GithubAuthProvider.PROVIDER_ID,
@@ -31,13 +40,27 @@ const uiConfig = {
 };
 
 export default function SignInScreen(props) {
-  const [isSignedIn, setSign] = useState(false);
+  const [conectado, conectar] = useState(false);
 
   useEffect(() => {
-    return firebase.auth().onAuthStateChanged(user => setSign(!!user));
+    return firebase.auth().onAuthStateChanged(user => conectar(!!user));
   });
 
-  if (!isSignedIn) {
+  useEffect(() => {
+    const db = firebase.firestore();
+    db.collection('testeCollection').onSnapshot(querySnapshot => {
+      console.log(querySnapshot.metadata);
+      querySnapshot.forEach(doc => {
+        console.log(doc.data());
+      });
+    }, error => {
+      console.log('Deu ruim: ', error);
+    });
+  });
+
+  
+
+  if (!conectado) {
     return (
       <div>
         <h1>teste</h1>
@@ -49,6 +72,7 @@ export default function SignInScreen(props) {
       </div>
     );
   }
+
   return (
     <div>
       <h1>Outline</h1>
