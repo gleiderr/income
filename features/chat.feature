@@ -4,15 +4,21 @@ Funcionalidade: Chat em torno de um projeto
   Eu como usuário tímido desejo consultar as documentações e solicitações de outros usuários para saber se alguém já mencionou o que preciso.
   Eu como desenvolvedor desejo mapear quem são os interessados em determinada funcionalidade para comunicar-lhes efetivamente sobre seu desenvolvimento.
   
-  #Pré-requisitos para interação via chat
-  Contexto:
+  Cenário: Todo usuário deseja ler as mensagens públicas
+  
+  Cenário: Todo usuário deseja saber quando uma mensagem foi lida pelo destinatário
+  
+  Cenário: Todo usuário não logado deseja ler mensagens de seu interesse
+    Dado que foi acessado o projeto "Sistema de Projetos"
+    Então devem ser exibidas as 50 últimas mensagens 
+    E as mensagens devem ser sobre o assunto "Sistema de Projetos"
+  
+  Cenário: Todo usuário logado deseja ler mensagens ordenadas sob determinada prioridade
     Dado que usuário está logado
-    
-  Cenário: Todo usuário deseja ler mensagens sob determinada prioridade
     Então o usuário deseja ver as mensagens ordenadas cronologicamente
     E primeiro as respostas a suas próprias mensagens
     E segundo as respostas aos assuntos de seu interesse
-    E terceiro as respostas a outros assuntos
+    E terceiro as mensagens a outros assuntos
   
   Cenário: Usuário comunicativo deseja enviar mensagens e não se importa de serem públicas
   Cenário: Usuário comunicativo deseja obter respostas públicas ou não
@@ -23,4 +29,7 @@ Funcionalidade: Chat em torno de um projeto
   Cenário: Desenvolvedor deseja responder publicamente a outros usuários
   Cenário: Desenvolvedor deseja responder privadamente a outros usuários
     Então as mensagem respondida deve tornar-se privada
+  
+  Cenário: O desenvolvedor deseja ler todas as mensagens ainda não lidas por ele
+  
   
