@@ -42,18 +42,10 @@ const uiConfig = {
 export function SignInChat(props) {
 
   useEffect(() => {
-    const db = firebase.firestore();
-    db.collection('testeCollection').onSnapshot(querySnapshot => {
-      console.log(querySnapshot.metadata);
-      querySnapshot.forEach(doc => {
-        console.log(doc.data());
-      });
-    }, error => {
-      console.log('Deu ruim: ', error);
-    });
+    return firebase.auth().onAuthStateChanged(user => props.setLogin(!!user));
   });
 
-  if (!conectado) {
+  if (!props.logged) {
     return (
       <>
         <div>Faça seu login com um dos métodos abaixo:</div>
