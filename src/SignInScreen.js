@@ -39,61 +39,7 @@ const uiConfig = {
   }
 };
 
-export default function SignInScreen(props) {
-  const [conectado, conectar] = useState(false);
-
-  useEffect(() => {
-    return firebase.auth().onAuthStateChanged(user => conectar(!!user));
-  });
-
-  useEffect(() => {
-    const db = firebase.firestore();
-    db.collection('testeCollection').onSnapshot(querySnapshot => {
-      console.log(querySnapshot.metadata);
-      querySnapshot.forEach(doc => {
-        console.log(doc.data());
-      });
-    }, error => {
-      console.log('Deu ruim: ', error);
-    });
-  });
-
-  
-
-  if (!conectado) {
-    return (
-      <div>
-        <h1>teste</h1>
-        <p>Please sign-in:</p>
-        <StyledFirebaseAuth
-          uiConfig={uiConfig}
-          firebaseAuth={firebase.auth()}
-        />
-      </div>
-    );
-  }
-
-  return (
-    <div>
-      <h1>Outline</h1>
-      <p>
-        <img src={firebase.auth().currentUser.photoURL} alt="Foto do Usuário" />
-        <br />
-        Welcome {firebase.auth().currentUser.displayName}! You are now
-        signed-in!
-      </p>
-      <button onClick={() => firebase.auth().signOut()}>Sair</button>
-    </div>
-  );
-}
-
-
 export function SignInChat(props) {
-  const [conectado, conectar] = useState(false);
-
-  useEffect(() => {
-    return firebase.auth().onAuthStateChanged(user => conectar(!!user));
-  });
 
   useEffect(() => {
     const db = firebase.firestore();
