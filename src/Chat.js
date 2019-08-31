@@ -13,23 +13,6 @@ try {
 
 const db = firebase.firestore();
 
-let model = {
-  conversas: { //collection
-    id1: { //doc
-      assunto: 'Sistema de Projetos',
-      timestamp: 123456,
-      envolvidos: ['UsuárioID', 'GleiderID'],
-      mensagens: { //sub-collection
-        id1: {
-          autor: "GleiderID",
-          timestamp: 123456,
-          texto: "minha mensagem"
-        }
-      }
-    }
-  }
-};
-
 /**
  * @example Modelo de Dados Mensagens
  * //Ponteiro para identificar usuários
@@ -50,10 +33,9 @@ export default function Chat(props) {
                     
   const keyDownHandle = evt => {
     const texto = evt.target.value.trim();
-    const timestamp = firebase.firestore.FieldValue.serverTimestamp();
 
     if (evt.key === "Enter" && texto.length > 0) {
-      msgsRef.add({texto, timestamp})
+      const timestamp = firebase.firestore.FieldValue.serverTimestamp();
         .catch(err => console.error(err));
        
       evt.target.value = ''; //Limpa o campo
