@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 //import firebase from "firebase";
-import SignInScreen from "./SignInScreen";
+//import SignInScreen from "./SignInScreen";
 import Chat from './Chat';
 //import './index.css';
 //import App from "./App";
