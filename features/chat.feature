@@ -7,6 +7,9 @@ Funcionalidade: Chat em torno de um projeto
   Cenário: Todo usuário deseja ler as mensagens
   
   Cenário: Todo usuário deseja saber quando uma mensagem foi lida pelo destinatário
+    Dado que o usuário enviou uma mensagem
+    E o administrador leu
+    Então deve ser exibida a data de leitura na mensagem
   
   Cenário: Todo usuário deseja ler mensagens de seu interesse
     Dado que foi acessado o projeto "Sistema de Projetos"
