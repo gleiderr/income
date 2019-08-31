@@ -86,3 +86,48 @@ export default function SignInScreen(props) {
     </div>
   );
 }
+
+
+export function SignInChat(props) {
+  const [conectado, conectar] = useState(false);
+
+  useEffect(() => {
+    return firebase.auth().onAuthStateChanged(user => conectar(!!user));
+  });
+
+  useEffect(() => {
+    const db = firebase.firestore();
+    db.collection('testeCollection').onSnapshot(querySnapshot => {
+      console.log(querySnapshot.metadata);
+      querySnapshot.forEach(doc => {
+        console.log(doc.data());
+      });
+    }, error => {
+      console.log('Deu ruim: ', error);
+    });
+  });
+
+  if (!conectado) {
+    return (
+      <>
+        <div>Faça seu login com um dos métodos abaixo:</div>
+        <StyledFirebaseAuth
+          uiConfig={uiConfig}
+          firebaseAuth={firebase.auth()}
+        />
+      </>
+    );
+  }
+
+  return (
+    <>
+      <div>Olá {firebase.auth().currentUser.displayName}! Tudo bem?</div>
+      <div>
+        Você está conectado! 
+        <button onClick={() => firebase.auth().signOut()}>Sair</button>
+      </div>
+      
+      
+    </>
+  );
+}
