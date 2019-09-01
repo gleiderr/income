@@ -72,7 +72,11 @@ export default function Chat(props) {
       });
   }, []);
 
-  const divMsgs = msgList.map(msg => <div key={msg.id}>{msg.texto}</div>);
+  const divMsgs = msgList.map(msg => {
+      const style = {textAlign: msg.autor === uid ? 'right' : 'left' };
+      return <div key={msg.id} style={style}>{msg.texto}</div>
+    }
+  );
   
   return (
     <>
