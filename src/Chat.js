@@ -72,18 +72,46 @@ export default function Chat(props) {
       });
   }, []);
 
-  const divMsgs = msgList.map(msg => {
-      const style = {textAlign: msg.autor === uid ? 'right' : 'left' };
-      return <div key={msg.id} style={style}>{msg.texto}</div>
-    }
-  );
+  const divMsgs = msgList.map(msg => <Mensagem key={msg.id} msg={msg} uid={uid} />);
   
   return (
-    <>
-      <div>Chat de Contexto ({userRole})</div>
+    <div style={{maxWidth: 411}}>
+      <div>Comunicação ({userRole})</div>
       <SignInChat logged={logged} setLogin={status => setLogin(status)}/>
       {divMsgs}
       <input type="text" onKeyDown={keyDownHandle} />
-    </>
+    </div>
+  );
+}
+
+function Mensagem(props) {
+  const d = new Date();
+  d.getDate()
+
+  const p = v => v < 10 ? '0' + v : v;
+  const dataHora = timestamp => {
+    console.log(props.msg.timestamp && props.msg.timestamp.toDate());
+
+    if (!timestamp) return 'aguardando';
+    const date = timestamp.toDate();
+    return `${p(date.getDate())}/${p(date.getMonth())}/${date.getFullYear()} ` +
+           `${p(date.getHours())}:${p(date.getMinutes())}`;
+  }
+
+  const style = {
+    textAlign: props.msg.autor === props.uid ? 'right' : 'left',
+    justifyContent: props.msg.autor === props.uid ? 'flex-end' : 'flex-start',
+    display: 'flex',
+  };
+
+  
+  
+  return (
+    <div style={style}>
+      <div>
+        <div style={{borderStyle: 'dashed', borderWidth: '1px'}}>{props.msg.texto}</div>
+        {dataHora(props.msg.timestamp)}
+      </div>
+    </div>
   );
 }
