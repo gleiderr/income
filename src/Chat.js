@@ -44,7 +44,7 @@ export default function Chat(props) {
     
     if (evt.key === "Enter" && texto.length > 0) {
       const timestamp = firebase.firestore.FieldValue.serverTimestamp();
-      msgsRef.add({texto, timestamp, autor: uid})
+      msgsRef.add({texto, timestamp, autor: uid, destinatario: 'administrador'})
         .catch(err => console.error(err));
        
       evt.target.value = ''; //Limpa o campo
@@ -53,7 +53,6 @@ export default function Chat(props) {
 
   //Atualiza papel do usuário
   useEffect(() => {
-    console.log(uid, logged);
     if (uid) {
       db.collection('usuários').doc(uid).get().then(doc =>setRole(doc.data().papel))
     } else {
@@ -72,7 +71,8 @@ export default function Chat(props) {
       });
   }, []);
 
-  const divMsgs = msgList.map(msg => <Mensagem key={msg.id} msg={msg} uid={uid} />);
+  const user = {uid, papel: userRole};
+  const divMsgs = msgList.map(msg => <Mensagem key={msg.id} msg={msg} user={user} />);
   
   return (
     <div style={{maxWidth: 411}}>
@@ -85,13 +85,11 @@ export default function Chat(props) {
 }
 
 function Mensagem(props) {
-  const d = new Date();
-  d.getDate()
+  const user = props.user;
+  const msg = props.msg;
 
   const p = v => v < 10 ? '0' + v : v;
   const dataHora = timestamp => {
-    console.log(props.msg.timestamp && props.msg.timestamp.toDate());
-
     if (!timestamp) return 'aguardando';
     const date = timestamp.toDate();
     return `${p(date.getDate())}/${p(date.getMonth())}/${date.getFullYear()} ` +
@@ -99,18 +97,24 @@ function Mensagem(props) {
   }
 
   const style = {
-    textAlign: props.msg.autor === props.uid ? 'right' : 'left',
-    justifyContent: props.msg.autor === props.uid ? 'flex-end' : 'flex-start',
+    //Alinhamento em função do autor
+    textAlign: props.msg.autor === user.uid ? 'right' : 'left',
+    justifyContent: props.msg.autor === user.uid ? 'flex-end' : 'flex-start',
+
+    //Destaque em função do destinatário
+    background: user.papel === msg.destinatario || user.id === msg.destinatario ? 'cadetblue' : 'white',
     display: 'flex',
   };
 
-  
+  useEffect(() => {
+    console.log(user.papel, msg.destinatario, user.uid)
+  });
   
   return (
     <div style={style}>
-      <div>
-        <div style={{borderStyle: 'dashed', borderWidth: '1px'}}>{props.msg.texto}</div>
-        {dataHora(props.msg.timestamp)}
+      <div style={{borderStyle: 'dashed', borderWidth: '1px'}}>
+        <div>{props.msg.texto}</div>
+        {`Entregue: ${dataHora(props.msg.timestamp)}`}
       </div>
     </div>
   );
