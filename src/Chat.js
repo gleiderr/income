@@ -106,25 +106,31 @@ function Mensagem(props) {
     return `${dia}/${mes}/${ano} ${hora}:${minuto}`;
   }
 
+  const destinatario = () => user.papel === msg.destinatario[0] || user.uid === msg.destinatario[0];
+
   const style = {
     //Alinhamento em função do autor
     textAlign: msg.autor === user.uid ? 'right' : 'left',
     justifyContent: msg.autor === user.uid ? 'flex-end' : 'flex-start',
 
     //Destaque em função do destinatário
-    background: user.papel === msg.destinatario[0] || user.uid === msg.destinatario[0] ? 'cadetblue' : 'white',
+    background: destinatario() ? 'cadetblue' : 'white',
     display: 'flex',
+
+    wordBreak: 'break-all'
   };
 
   //Marca mensagem como lida;
   useEffect(() => {
-    if (user.uid && !msg.leituras[user.uid]) { //logado e não lido
+    //não lido e destinatário
+    const lido = user.uid && msg.leituras && msg.leituras[user.uid];
+    if (!lido && destinatario()) {
       const timestamp = firebase.firestore.FieldValue.serverTimestamp();
       msgsRef.doc(msg.id).update({[`leituras.${user.uid}`]: timestamp})
         .then(() => console.log('Msg marcada como lida'))
         .catch((error => console.log("Msg não marcada como lida", error)));
     }
-  }, []);
+  }, [user.papel, user.uid]);
   
   return (
     <div style={style}>
