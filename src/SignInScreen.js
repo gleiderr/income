@@ -9,18 +9,6 @@ try {
   firebase_init();
 }
 
-/*const firebaseConfig = {
-  apiKey: "AIzaSyCI77PrVU6FyFQN9OQhF8uo2ypHZQTQqSM",
-  authDomain: "gleider-dev.firebaseapp.com",
-  databaseURL: "https://gleider-dev.firebaseio.com",
-  projectId: "gleider-dev",
-  storageBucket: "",
-  messagingSenderId: "868861057308",
-  appId: "1:868861057308:web:72ab5d4b1e875ce7"
-};
-// Initialize Firebase
-firebase.initializeApp(firebaseConfig);*/
-
 const uiConfig = {
   // Popup signin flow rather than redirect flow.
   signInFlow: "popup",
@@ -39,11 +27,14 @@ const uiConfig = {
   }
 };
 
+const db = firebase.firestore();
+
 export function SignInChat(props) {
+  const [uid, setId] = useState(undefined);
 
   useEffect(() => {
     return firebase.auth().onAuthStateChanged(user => props.setLogin(!!user));
-  });
+  }, []);
 
   if (!props.logged) {
     return (

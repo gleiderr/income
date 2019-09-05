@@ -48,8 +48,7 @@ export default function Chat(props) {
     if (evt.key === "Enter" && texto.length > 0) {
       const timestamp = firebase.firestore.FieldValue.serverTimestamp();
       const destinatario = userRole === 'administrador' ? ['comum'] : ['administrador'];
-      const nomeAutor = user_name;
-      msgsRef.add({texto, timestamp, autor: uid, destinatario, nomeAutor})
+      msgsRef.add({texto, timestamp, autor: uid, destinatario})
         .catch(err => console.error(err));
        
       evt.target.value = ''; //Limpa o campo
@@ -59,9 +58,14 @@ export default function Chat(props) {
   //Atualiza papel do usuário
   useEffect(() => {
     if (uid) {
-      return db.collection('usuários').doc(uid).onSnapshot(doc => 
-        setRole(doc.data() ? doc.data().papel : 'comum')
-      );
+      return db.collection('usuários').doc(uid).onSnapshot(doc => {
+        if (!doc.metadata.fromCache) {
+          if (doc.data() === undefined) {
+            doc.ref.set({papel: 'comum'});
+          }
+          setRole(doc.data() ? doc.data().papel : 'comum')
+        }
+      });
     } else {
       setRole('desconectado');
     }
@@ -135,7 +139,7 @@ function Mensagem(props) {
   return (
     <div style={style}>
       <div style={{borderStyle: 'dashed', borderWidth: '1px'}}>
-        <div>{msg.nomeAutor}:</div>
+        <div>{msg.autor}:</div>
         <div>{msg.texto}</div>
         <div>{`Entregue: ${dataHora(msg.timestamp)}`}</div>
         <div>{msg.leituras && JSON.stringify(msg.leituras)}</div>
