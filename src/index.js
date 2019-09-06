@@ -19,70 +19,76 @@ const timestamp = firebase.firestore.FieldValue.serverTimestamp();
 
 function Income(props) {
   //Props
-  const {sendMsg, userProfile} = props;
+  const {sendMsg, userProfile, onLoginChange, msgsListener, onMsgReaded} = props;
 
   const nenhumUsuário = {
     uid: undefined,
     nome: undefined,
-    role: 'desconectado',
+    papel: 'desconectado',
   }
 
   //Estados
-  const [user, changeUser] = useState(nenhumUsuário);
-  const [destinatario, changeDestinatario] = useState(undefined);
+  const [user, setUser] = useState(nenhumUsuário);
+  const [destinatario, setDestinatario] = useState(undefined);
   const [alertas, setAlertas] = useState([]);
+  const [contexto, setContexto] = useState('');
 
+  
   //Id do usuário
-  useEffect(() => {
-    return firebase.auth().onAuthStateChanged(user => {
-      if (user) changeUser({uid: user.uid, nome: user.displayName});
-    });
-  }, []);
-
+  useEffect(() => onLoginChange(setUser), [onLoginChange]);
+  
   //Atualiza papel do usuário
   useEffect(() => {
     if (user.uid) {
-      return userProfile(user, changeUser);
+      return userProfile(user, setUser);
     } else {
-      changeUser(nenhumUsuário);
+      setUser(nenhumUsuário);
     }
   }, [user, user.id, nenhumUsuário, userProfile]);
-
+  
   //Destinatário
   useEffect(() => {
-    if (!destinatario && !!user.papel) {
-      changeDestinatario(user.papel === 'administrador' ? 'comum' : 'administrador');
+    if (!user.papel) {
+      setDestinatario(undefined);
+    } else if (!destinatario) {
+      setDestinatario(user.papel === 'administrador' ? 'comum' : 'administrador');
     }
-  }, [user.papel, destinatario])
-
+  }, [user.papel, destinatario]);
+  
   //Funções
-  const onSend = (texto) => sendMsg(texto, user.uid, destinatario)
-                            .catch((alerta) => {
-                              setAlertas((alertas) => [alerta, ...alertas]);
-                              return Promise.reject('Não enviada');
-                            });
-
-  return <Chat context='Teste' 
-              onSend={onSend} 
+  const onSend = (texto) => sendMsg(texto, user.uid, destinatario, contexto)
+                              .catch((alerta) => {
+                                setAlertas((alertas) => [alerta, ...alertas]);
+                                return Promise.reject('Não enviada');
+                              });
+                              
+  return <Chat sendMsg={onSend}
+              msgsListener={(setMsgs) => msgsListener(contexto, user, setMsgs)}
+              onMsgReaded={(msg) => onMsgReaded(msg, user, contexto)}
               alertas={alertas}
-        />
+        />;
 }
 
 function sendMsg(texto, autor, destinatario, contexto) {
   if (!autor || !destinatario) {
     return Promise.reject(<div>Necessário conectar para enviar mensagens</div>);
   }
-  
+
+  texto = texto.trim();
   if (texto.length > 0) {
     return db.collection('conversas').doc(contexto)
-            .collection('msgs')
-            .add({texto, timestamp, autor, destinatario})
-            .catch(error => Promise.reject(<div>error</div>));
+          .collection('msgs')
+          .add({texto, timestamp, autor, destinatario})
+          .catch(error => Promise.reject(<div>error</div>));
+  } else {
+    return Promise.resolve();
   }
 }
 
-function onLoginChange(f) {
-  return firebase.auth().onAuthStateChanged(user => {f({uid: user && user.uid});});
+function onLoginChange(setUser) {
+  return firebase.auth().onAuthStateChanged(user => {
+    if (user) setUser({uid: user.uid, nome: user.displayName});
+  });
 }
 
 function userProfile({uid, nome}, changeUser) {
@@ -100,9 +106,42 @@ function userProfile({uid, nome}, changeUser) {
   }, error => console.error(error));
 }
 
-ReactDOM.render(<Income sendMsg={sendMsg} 
-                      onLoginChange={onLoginChange}
-                      userProfile={userProfile}
+function msgsListener(contexto, user, setMsgs) {
+  const msgsRef = db.collection('conversas').doc(contexto).collection('msgs');
+  const msgsQuery = msgsRef.orderBy('timestamp');
+  const destinatario = (msg) => user.papel === msg.destinatario[0] || user.uid === msg.destinatario[0];
+  return msgsQuery.onSnapshot( docs => {
+    const data = [];
+    docs.forEach(doc => {
+      data.push({
+        ...doc.data(), 
+        id: doc.id,
+        minha: doc.data().autor === user.uid,
+        para_mim: destinatario(doc.data()),
+      });
+    });
+    setMsgs(data);
+  },
+  error => console.log(error));
+}
+
+function onMsgReaded(msg, user, contexto) {
+  const msgsRef = db.collection('conversas').doc(contexto).collection('msgs');
+  //não lido e destinatário
+  const destinatario = () => user.papel === msg.destinatario[0] || user.uid === msg.destinatario[0];
+  const lido = user.uid && msg.leituras && msg.leituras[user.uid];
+  if (!lido && destinatario()) {
+    msgsRef.doc(msg.id).update({[`leituras.${user.uid}`]: timestamp})
+      .then(() => console.log('Msg marcada como lida'))
+      .catch((error => console.log("Msg não marcada como lida", error)));
+  }
+}
+
+ReactDOM.render(<Income sendMsg={sendMsg}
+                        msgsListener={msgsListener}
+                        onMsgReaded={onMsgReaded}
+                        onLoginChange={onLoginChange}
+                        userProfile={userProfile}
                />, document.querySelector("#root"));
 
 // If you want your app to work offline and load faster, you can change
