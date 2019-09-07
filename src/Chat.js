@@ -26,19 +26,22 @@ export default function Chat(props) {
   const [msgList, setMsgs] = useState([]);
   const [userRole, setRole] = useState('normal');
   const [logged, setLogin] = useState(false);
-                    
-  const keyDownHandle = evt => {    
+
+  const keyDownHandle = evt => {
     if (evt.key === "Enter") {
+      evt.persist();
       sendMsg(evt.target.value)
-        .then(() => evt.target.value = ''); //Limpa o campo
+        .then(() => evt.target.value = '') //Limpa o campo
+        .catch(console.log); 
     }
   };
 
   //Atualiza lista de mensagens
-  useEffect(() => { 
+  useEffect(() => {
+    console.log('oi');
     return msgsListener(setMsgs);
   }, [msgsListener, setMsgs]);
-
+  
   const divMsgs = msgList.map(msg => <Mensagem key={msg.id} msg={msg}
                                                onReaded={onMsgReaded} />);
   
