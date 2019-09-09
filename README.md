@@ -1,13 +1,15 @@
-# INCOME (19%)
-Jogo de Invenção e Comunicação
+# INCOME (11%)
+INvention & COmunication gaME
 
 **Características:**
-- Login de usuários (70%)
+- Login de usuários (80%)
 - Chat de contexto (75%)
 - Painel de valores (60%)
 - Layout Responsivo (Celular, desktop e tablet, nessa ordem) (60%)
+- Documentação HTML no banco de dados (50%)
+- ~Documentação MarkDown (50%)~(fazer diretament com HTML no banco de dados agora)
 - ~Contagem de Estrelas e Cliques (50%)~(o que importa realmente é o engajamento na comunicação)
-- ~Edição de projetos pelo administrador (50%)~(fazer diretamente no código fonte)
+- ~Edição de projetos pelo administrador (50%)~(fazer diretamente no banco de dados)
 
 Os percentuais são qualitativos e referem-se ao sentimento probabilidade de entrega.
 A probabilidade geral refere-se ao produto das probabilidades.
