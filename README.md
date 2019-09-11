@@ -1,11 +1,11 @@
-# INCOME (11%)
+# INCOME (18%)
 INvention & COmunication gaME
 
 **Características:**
 - Login de usuários (80%)
 - Chat de contexto (75%)
 - Layout Responsivo (Celular, desktop e tablet, nessa ordem) (60%)
-- Documentação MarkDown (50%) ~(fazer diretament com HTML no banco de dados agora)~
+- Documentação MarkDown (70%) ~(fazer diretament com HTML no banco de dados agora)~
   - https://github.com/showdownjs/showdown
 - CLA. Exemplo: https://cla.developers.google.com/clas (70%)
   
