@@ -3,6 +3,7 @@ import ReactDOM from "react-dom";
 import firebase from "firebase";
 import firebase_init from "./firebase-local";
 //import SignInScreen from "./SignInScreen";
+import Doc from './Doc';
 import Chat from './Chat';
 //import './index.css';
 //import App from "./App";
@@ -51,14 +52,18 @@ function Income(props) {
   }, [user, nenhumUsuário, userProfile]);
                               
   return (
-    <>
-    {alertas}
-    <Chat sendMsg={(texto) => sendMsg(texto, user.uid, destinatario, contexto)
-                              .catch((alerta) => setAlertas([alerta, ...alertas]))}
-              msgsListener={(setMsgs) => msgsListener(contexto, user, setMsgs)}
-              onMsgReaded={(msg) => onMsgReaded(msg, user, contexto)}
-              alertas={alertas}/>
-    </>
+    <div style={{display: 'flex'}}>
+      <div style={{flexGrow: 1, position: 'relative'}}>
+        <Doc />
+      </div>
+      <div style={{maxWidth: 411, minWidth: 300}}>
+        <Chat sendMsg={(texto) => sendMsg(texto, user.uid, destinatario, contexto)
+                                  .catch((alerta) => setAlertas([alerta, ...alertas]))}
+                  msgsListener={(setMsgs) => msgsListener(contexto, user, setMsgs)}
+                  onMsgReaded={(msg) => onMsgReaded(msg, user, contexto)}
+                  alertas={alertas}/>
+      </div>
+    </div>
   );
 }
 

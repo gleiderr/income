@@ -21,7 +21,7 @@ import { SignInChat } from './SignInScreen';
  * }
  */
 export default function Chat(props) {
-  const {sendMsg, msgsListener, onMsgReaded} = props;
+  const {sendMsg, msgsListener, onMsgReaded, alertas} = props;
 
   const [msgList, setMsgs] = useState([]);
   const [userRole, setRole] = useState('normal');
@@ -46,12 +46,13 @@ export default function Chat(props) {
                                                onReaded={onMsgReaded} />);
   
   return (
-    <div style={{maxWidth: 411}}>
+    <>
       <div>Comunicação ({userRole})</div>
+      {alertas}
       <SignInChat logged={logged} setLogin={status => setLogin(status)}/>
       {divMsgs}
       <input type="text" onKeyDown={keyDownHandle} />
-    </div>
+    </>
   );
 }
 
