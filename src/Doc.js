@@ -1,33 +1,24 @@
 import React, { useState, useEffect, useMemo, useRef } from "react";
 import showdown from 'showdown';
 
-export default function Doc(pros) {
+export default function Doc(props) {
+  const {inventionListener, inventionSave} = props;
   const [view, setView] = useState(false)
   const [markdown, setMarkdown] = useState(
-`# INCOME (11%)
-INvention & COmunication gaME
+``);
 
-**Características:**
-- Login de usuários (80%)
-- Chat de contexto (75%)
-- Painel de valores (60%)
-- Layout Responsivo (Celular, desktop e tablet, nessa ordem) (60%)
-- Documentação MarkDown (50%) ~~(fazer diretament com HTML no banco de dados agora)~~
-  - https://github.com/showdownjs/showdown
-- ~Documentação HTML no banco de dados (50%)~
-- ~Contagem de Estrelas e Cliques (50%)~(o que importa realmente é o engajamento na comunicação)
-- ~Edição de projetos pelo administrador (50%)~(fazer diretamente no banco de dados)
-
-Os percentuais são qualitativos e referem-se ao sentimento probabilidade de entrega.
-A probabilidade geral refere-se ao produto das probabilidades.
-
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).`);
+  useEffect(() => inventionListener(setMarkdown), [inventionListener,setMarkdown])
   
   return (
     <>
-      <button onClick={() => setView(v => !v)} style={{position: 'absolute', right: 0}}>
-        {view ? 'Markdown' : 'Visualisar'}
-      </button>
+      <div style={{position: 'absolute', right: 0}}>
+        <button onClick={() => setView(v => !v)} >
+          {view ? 'Markdown' : 'Visualizar'}
+        </button>
+        <button onClick={() => inventionSave(markdown)} >
+          Salvar
+        </button>
+      </div>
       {view ? <View {...{markdown}} /> : <Markdown {...{markdown, setMarkdown}} />}
     </>
   );

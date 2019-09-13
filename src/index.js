@@ -16,11 +16,13 @@ try {
 }
 
 const db = firebase.firestore();
+const invenções = db.collection('invenções');
 const timestamp = firebase.firestore.FieldValue.serverTimestamp();
 
 function Income(props) {
   //Props
   const {sendMsg, userProfile, onLoginChange, msgsListener, onMsgReaded} = props;
+  const {inventionListener, inventionSave} = props;
 
   const [nenhumUsuário] = useState({
     uid: undefined,
@@ -32,7 +34,7 @@ function Income(props) {
   const [user, setUser] = useState(nenhumUsuário);
   const [destinatario, setDestinatario] = useState(undefined);
   const [alertas, setAlertas] = useState([]);
-  const [contexto, setContexto] = useState('Geral');
+  const [contexto, setContexto] = useState('income');
   
   //Id do usuário
   useEffect(() => {
@@ -54,7 +56,8 @@ function Income(props) {
   return (
     <div style={{display: 'flex'}}>
       <div style={{flexGrow: 1, position: 'relative'}}>
-        <Doc />
+        <Doc inventionSave={(markdown) => inventionSave(markdown, contexto, user)}
+             inventionListener={(setMarkdown) => inventionListener(contexto, setMarkdown)} />
       </div>
       <div style={{maxWidth: 411, minWidth: 300}}>
         <Chat sendMsg={(texto) => sendMsg(texto, user.uid, destinatario, contexto)
@@ -102,7 +105,7 @@ function sendMsg(texto, autor, destinatario, contexto) {
 
   texto = texto.trim();
   if (texto.length > 0) {
-    return db.collection('conversas').doc(contexto)
+    return invenções.doc(contexto)
           .collection('msgs')
           .add({texto, timestamp, autor, destinatarios: [destinatario]})
           .catch(error => Promise.reject(<div>error</div>));
@@ -113,7 +116,7 @@ function sendMsg(texto, autor, destinatario, contexto) {
 
 function msgsListener(contexto, user, setMsgs) {
   //db.collection('conversas').doc(contexto).delete().then(() => console.log('excluído'));
-  const msgsRef = db.collection('conversas').doc(contexto).collection('msgs');
+  const msgsRef = invenções.doc(contexto).collection('msgs');
   const msgsQuery = msgsRef.orderBy('timestamp');
   const destinatario = (msg) => {
     console.log(msg);
@@ -138,7 +141,7 @@ function msgsListener(contexto, user, setMsgs) {
 
 function onMsgReaded(msg, user, contexto) {
   //console.log(msg, user, contexto);
-  const msgsRef = db.collection('conversas').doc(contexto).collection('msgs');
+  const msgsRef = invenções.doc(contexto).collection('msgs');
   //não lido e destinatário
   const lido = user.uid && msg.leituras && msg.leituras[user.uid];
   if (!lido && msg.para_mim) {
@@ -148,11 +151,23 @@ function onMsgReaded(msg, user, contexto) {
   }
 }
 
-ReactDOM.render(<Income sendMsg={sendMsg}
-                        msgsListener={msgsListener}
-                        onMsgReaded={onMsgReaded}
-                        onLoginChange={onLoginChange}
+function inventionListener(invenção, setMarkdown) {
+  return invenções.doc(invenção).onSnapshot( doc => {
+    if(doc.data()) setMarkdown(doc.data().markdown);
+  }, error => console.log(error));
+}
+
+function inventionSave(markdown, invenção, autor) {  
+  return invenções.doc(invenção).set({markdown})
+    .then((a) => console.log('ok', a))
+    .catch(error => Promise.reject(<div>error</div>));
+}
+
+ReactDOM.render(<Income sendMsg={sendMsg} msgsListener={msgsListener}
+                        onMsgReaded={onMsgReaded} onLoginChange={onLoginChange}
                         userProfile={userProfile}
+                        inventionListener={inventionListener}
+                        inventionSave={inventionSave}
                />, document.querySelector("#root"));
 
 // If you want your app to work offline and load faster, you can change
