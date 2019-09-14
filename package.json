@@ -4,6 +4,7 @@
   "private": true,
   "main": "src/index.js",
   "dependencies": {
+    "cucumber": "5.1.0",
     "firebase": "6.4.1",
     "firebaseui": "4.1.0",
     "react": "16.9.0",
@@ -15,7 +16,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "cucumber-js",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
