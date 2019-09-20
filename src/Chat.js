@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from "react";
-import { SignInChat } from './SignInScreen';
+const React = require("react");
+const { useState, useEffect } = React;
+//import { SignInChat } from './SignInScreen';
 
 /**
  * @example Modelo de Dados Mensagens
@@ -20,8 +21,9 @@ import { SignInChat } from './SignInScreen';
  *    papel: 'administrador'
  * }
  */
-export default function Chat(props) {
-  const {sendMsg, msgsListener, onMsgReaded, alertas} = props;
+module.exports = Chat;
+function Chat(props) {
+  const {sendMsg, msgsListener, onMsgReaded, alertas} = props || {};
 
   const [msgList, setMsgs] = useState([]);
   const [userRole, setRole] = useState('normal');
@@ -49,7 +51,7 @@ export default function Chat(props) {
     <>
       <div>Comunicação ({userRole})</div>
       {alertas}
-      <SignInChat logged={logged} setLogin={status => setLogin(status)}/>
+      {/*<SignInChat logged={logged} setLogin={status => setLogin(status)}/>*/}
       {divMsgs}
       <input type="text" onKeyDown={keyDownHandle} />
     </>
