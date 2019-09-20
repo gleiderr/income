@@ -1,11 +1,10 @@
 //https://github.com/NguyenAndrew/Enzyme-Cucumber-React
 //https://github.com/testing-library/react-testing-library
-const { JSDOM } = require('jsdom');
-const React = require('react');
-const ReactDOM = require("react-dom");
-const Chat = require('../../src/Chat');
-const { render } = require('@testing-library/react');
-const {Given, When} = require('cucumber');
+import { JSDOM } from 'jsdom';
+import React from 'react';
+import Chat from '../../src/Chat';
+import { render } from '@testing-library/react';
+import {Given, When} from 'cucumber';
 
 //https://github.com/NguyenAndrew/Enzyme-Cucumber-React
 const {window} = new JSDOM(`<!DOCTYPE html><body></body></html>`);

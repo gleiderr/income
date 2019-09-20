@@ -1,5 +1,4 @@
-const React = require("react");
-const { useState, useEffect } = React;
+import React, { useState, useEffect } from "react";
 //import { SignInChat } from './SignInScreen';
 
 /**
@@ -21,8 +20,8 @@ const { useState, useEffect } = React;
  *    papel: 'administrador'
  * }
  */
-module.exports = Chat;
-function Chat(props) {
+ 
+ export default function Chat(props) {
   const {sendMsg, msgsListener, onMsgReaded, alertas} = props || {};
 
   const [msgList, setMsgs] = useState([]);
