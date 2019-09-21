@@ -97,7 +97,7 @@ function userProfile({uid, nome}, setUser) {
   }, error => console.error(error));
 }
 
-function sendMsg(texto, autor, destinatario, contexto) {
+async function sendMsg(texto, autor, destinatario, contexto) {
   if (!autor || !destinatario) {
     console.log({texto, autor, destinatario, contexto})
     return Promise.reject(<div>Necessário conectar para enviar mensagens</div>);

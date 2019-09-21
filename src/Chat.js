@@ -23,6 +23,7 @@ import React, { useState, useEffect } from "react";
  
  export default function Chat(props) {
   const {sendMsg, msgsListener, onMsgReaded, alertas} = props || {};
+  const {autor, destinatários} = props || {};
 
   const [msgList, setMsgs] = useState([]);
   const [userRole, setRole] = useState('normal');
@@ -31,7 +32,7 @@ import React, { useState, useEffect } from "react";
   const keyDownHandle = evt => {
     if (evt.key === "Enter") {
       evt.persist();
-      sendMsg(evt.target.value)
+      sendMsg(evt.target.value, autor, destinatários)
         .then(() => evt.target.value = '') //Limpa o campo
         .catch(console.log); 
     }

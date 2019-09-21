@@ -11,20 +11,32 @@ const {window} = new JSDOM(`<!DOCTYPE html><body></body></html>`);
 global.window = window;
 global.document = window.document;
 
+const mensagens = [];
+
 /**
+ * O chat espera que cada mensagem tenha a estrura mínima abaixo.
+ * @example
+ * 'auto_id': {
+ *    texto: "minha mensagem",
+ *    timestamp: timestamp,
+ *    autor: 'GleiderID',
+ *    destinatarios: ['DestinatárioID'],
+ *    leituras: { 'DestinatárioID': timestamp }, //objeto para manter flexibilidade
+ *    //projetos: ['ProjetoID'],
+ *    //msgRespondida: 'msgResp'
+ *  }
  * @param {String} texto
- * @returns {Promise<React.Component>} componente react para ser exibido como alerta em caso de erro.
+ * @param {String} autor
+ * @param {String} destinatario
+ * @param {Boolean} error utilizado na simulação de testes
+ * @returns {Promise<React.Component>} Componente react para ser exibido como alerta em caso de erro.
  */
-function sendMsg(texto) {
+async function sendMsg(texto, autor, destinatario, error = false) {
     texto = texto.trim();
-    if (texto.length > 0) {
-      return invenções.doc(contexto)
-            .collection('msgs')
-            .add({texto, timestamp, autor, destinatarios: [destinatario]})
-            .catch(error => Promise.reject(<div>error</div>));
-    } else {
-      return Promise.resolve();
-    }
+    if(error) return Promise.reject(<div>error</div>);
+    
+    mensagens.push({texto, timestamp: null, autor, destinatarios: [destinatario]});
+    return Promise.resolve();
 }
 
 /**
@@ -76,7 +88,9 @@ function onMsgReaded(msg) {
 Given('que o usuário está conectado', function () {
     // Write code here that turns the phrase above into concrete actions
     //const div = document.createElement('div');
-    const a = render(<Chat {...{sendMsg, msgsListener, onMsgReaded, alertas:[]}} />);
+    const a = render(<Chat autor={'usuário'} destinatários={['administrador']}
+                           sendMsg={(...params) => sendMsg(...params, false)}
+                            {...{msgsListener, onMsgReaded, alertas:[]}} />);
 
     return 'pending';
 });
