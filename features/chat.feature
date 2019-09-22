@@ -4,7 +4,7 @@ Funcionalidade: Chat
   #Quando o digitar a mensagem 'oi'
   
   Cenário: Usuário conectado deseja enviar mensagens
-    Dado que o usuário está conectado
+    Dado que o chat está renderizado
 
 
   Cenário: Usuário não conectado deseja enviar mensagens

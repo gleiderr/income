@@ -46,7 +46,7 @@ async function sendMsg(texto, autor, destinatario, error = false) {
  */
 function msgsListener(setMsgs) {
   //db.collection('conversas').doc(contexto).delete().then(() => console.log('excluído'));
-  const msgsRef = invenções.doc(contexto).collection('msgs');
+  /*const msgsRef = invenções.doc(contexto).collection('msgs');
   const msgsQuery = msgsRef.orderBy('timestamp');
   const destinatario = (msg) => {
     console.log(msg);
@@ -66,7 +66,7 @@ function msgsListener(setMsgs) {
     //console.log(data);
     setMsgs(data);
   },
-  error => console.log(error));
+  error => console.log(error));*/
 }
 
 /**
@@ -75,24 +75,22 @@ function msgsListener(setMsgs) {
  */
 function onMsgReaded(msg) {
   //console.log(msg, user, contexto);
-  const msgsRef = invenções.doc(contexto).collection('msgs');
+  /*const msgsRef = invenções.doc(contexto).collection('msgs');
   //não lido e destinatário
   const lido = user.uid && msg.leituras && msg.leituras[user.uid];
   if (!lido && msg.para_mim) {
     msgsRef.doc(msg.id).update({[`leituras.${user.uid}`]: timestamp})
       .then(() => console.log('Msg marcada como lida'))
       .catch((error => console.log("Msg não marcada como lida", error)));
-  }
+  }*/
 }
 
-Given('que o usuário está conectado', function () {
+Given('que o chat está renderizado', function () {
     // Write code here that turns the phrase above into concrete actions
     //const div = document.createElement('div');
-    const a = render(<Chat autor={'usuário'} destinatários={['administrador']}
+    this.chat = render(<Chat autor={'usuário'} destinatários={['administrador']}
                            sendMsg={(...params) => sendMsg(...params, false)}
                             {...{msgsListener, onMsgReaded, alertas:[]}} />);
-
-    return 'pending';
 });
 
 When('o digitar a mensagem {string}', function (string) {
