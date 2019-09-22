@@ -11,6 +11,27 @@ const {window} = new JSDOM(`<!DOCTYPE html><body></body></html>`);
 global.window = window;
 global.document = window.document;
 
+Given('o usuário {string} está conectado', function (usuário) {
+  this.usuário = usuário;
+});
+
+Given('o destinatário {string}', function (destinatário) {
+  this.destinatário = destinatário;
+});
+
+Given('que o chat renderizado', function () {
+    // Write code here that turns the phrase above into concrete actions
+    //const div = document.createElement('div');
+    this.chat = render(<Chat autor={this.usuário} destinatários={[this.destinatário]}
+                           sendMsg={(...params) => sendMsg(...params, false)}
+                            {...{msgsListener, onMsgReaded, alertas:[]}} />);
+});
+
+When('o digitar a mensagem {string}', function (string) {
+    // Write code here that turns the phrase above into concrete actions
+    return 'pending';
+});
+
 const mensagens = [];
 
 /**
@@ -84,24 +105,3 @@ function onMsgReaded(msg) {
       .catch((error => console.log("Msg não marcada como lida", error)));
   }*/
 }
-
-Given('o usuário {string} está conectado', function (usuário) {
-  this.usuário = usuário;
-});
-
-Given('o destinatário {string}', function (destinatário) {
-  this.destinatário = destinatário;
-});
-
-Given('que o chat renderizado', function () {
-    // Write code here that turns the phrase above into concrete actions
-    //const div = document.createElement('div');
-    this.chat = render(<Chat autor={this.usuário} destinatários={[this.destinatário]}
-                           sendMsg={(...params) => sendMsg(...params, false)}
-                            {...{msgsListener, onMsgReaded, alertas:[]}} />);
-});
-
-When('o digitar a mensagem {string}', function (string) {
-    // Write code here that turns the phrase above into concrete actions
-    return 'pending';
-});
