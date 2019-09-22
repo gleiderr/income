@@ -40,7 +40,6 @@ import React, { useState, useEffect } from "react";
 
   //Atualiza lista de mensagens
   useEffect(() => {
-    console.log('oi');
     return msgsListener(setMsgs);
   }, [msgsListener, setMsgs]);
   
