@@ -85,10 +85,18 @@ function onMsgReaded(msg) {
   }*/
 }
 
-Given('que o chat está renderizado', function () {
+Given('o usuário {string} está conectado', function (usuário) {
+  this.usuário = usuário;
+});
+
+Given('o destinatário {string}', function (destinatário) {
+  this.destinatário = destinatário;
+});
+
+Given('que o chat renderizado', function () {
     // Write code here that turns the phrase above into concrete actions
     //const div = document.createElement('div');
-    this.chat = render(<Chat autor={'usuário'} destinatários={['administrador']}
+    this.chat = render(<Chat autor={this.usuário} destinatários={[this.destinatário]}
                            sendMsg={(...params) => sendMsg(...params, false)}
                             {...{msgsListener, onMsgReaded, alertas:[]}} />);
 });
