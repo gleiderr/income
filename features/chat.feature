@@ -3,10 +3,13 @@ Funcionalidade: Chat
   Eu desejo enviar mensagens espontaneamente, responder mensagens, receber respostas e ler mensagens de outros. Tudo isso da forma mais ágil possível.
   #Quando o digitar a mensagem 'oi'
   
-  Cenário: Usuário conectado deseja enviar mensagens
-    Dado o usuário 'a' está conectado
+  Cenário: Usuário conectado deseja enviar mensagens ao desenvolvedor utilizando "Enter"
+    Dado o usuário 'a' conectado
     E o destinatário 'desenvolvedor'
-    E que o chat renderizado
+    E o chat renderizado
+    Quando o usuário digitar a mensagem 'Olá, bom dia!'
+    E teclar 'Enter'
+    Então o texto digitado deve estar limpo
 
 
   Cenário: Usuário não conectado deseja enviar mensagens

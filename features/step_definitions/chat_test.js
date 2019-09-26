@@ -5,8 +5,8 @@ import { JSDOM } from 'jsdom';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Chat from '../../src/Chat';
-import { render } from '@testing-library/react';
-import {Given, When} from 'cucumber';
+import {Given, When, Then, } from 'cucumber';
+import assert from 'assert';
 
 //https://github.com/NguyenAndrew/Enzyme-Cucumber-React
 const {window} = new JSDOM(`<!DOCTYPE html><body></body></html>`);
@@ -15,6 +15,8 @@ global.document = window.document;
 
 const container = document.createElement('div');
 document.body.appendChild(container);
+
+Given('o usuário {string} conectado', function (usuário) {
   this.usuário = usuário;
 });
 
@@ -44,9 +46,8 @@ When('teclar {string}', function (string) {
   Simulate.keyDown(this.input, {'key': 'Enter'});
 });
 
-When('o digitar a mensagem {string}', function (string) {
-    // Write code here that turns the phrase above into concrete actions
-    return 'pending';
+Then('o texto digitado deve estar limpo', function () {
+  assert.strictEqual(this.input.value, '', 'Texto não limpo');
 });
 
 const mensagens = [];
