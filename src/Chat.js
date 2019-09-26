@@ -1,5 +1,18 @@
 import React, { useState, useEffect } from "react";
 import { SignInChat } from './SignInScreen';
+import '@material/react-card/dist/card.css';
+import './shadow.css';
+import './color.css';
+import Card, {
+  CardPrimaryContent,
+  CardMedia,
+  CardActions,
+  CardActionButtons,
+  CardActionIcons, 
+} from "@material/react-card";
+
+import '@material/react-list/dist/list.css';
+import List, {ListItem, ListItemGraphic, ListItemText, ListItemMeta } from '@material/react-list';
 
 /**
  * @example Modelo de Dados Mensagens
@@ -42,17 +55,29 @@ export default function Chat(props) {
     return msgsListener(setMsgs);
   }, [msgsListener, setMsgs]);
   
-  const divMsgs = msgList.map(msg => <Mensagem key={msg.id} msg={msg}
-                                               onReaded={onMsgReaded} />);
+  /*const divMsgs = msgList.map(msg => <Mensagem key={msg.id} msg={msg}
+                                               onReaded={onMsgReaded} />);*/
   
   return (
     <>
       <div>Comunicação ({userRole})</div>
       {alertas}
       <SignInChat logged={logged} setLogin={status => setLogin(status)}/>
-      {divMsgs}
+      <MessageList {...{msgList, onReaded: onMsgReaded}}/>
+
       <input type="text" onKeyDown={keyDownHandle} />
     </>
+  );
+}
+
+function MessageList({msgList, onReaded}) {
+  const divMsgs = msgList.map(msg => <Mensagem key={msg.id} msg={msg}
+    onReaded={onReaded} />)
+  
+  return (
+    <div>
+      {divMsgs}
+    </div>
   );
 }
 
@@ -83,14 +108,24 @@ function Mensagem(props) {
   //Marca mensagem como lida;
   useEffect(() => onReaded(msg), [onReaded, msg]);
   
+  //<div style={style}></div>
+  //<div style={{borderStyle: 'dashed', borderWidth: '1px'}}>
   return (
-    <div style={style}>
-      <div style={{borderStyle: 'dashed', borderWidth: '1px'}}>
+    <Card outlined={false} style={{margin: '8px', maxWidth: 'fit-content'}} className={'income-theme'}>
+      <CardPrimaryContent>
         <div>{msg.autor}:</div>
         <div>{msg.texto}</div>
         <div>{`Entregue: ${dataHora(msg.timestamp)}`}</div>
-        <div>{msg.leituras && JSON.stringify(msg.leituras)}</div>
-      </div>
-    </div>
+        <div>{msg.leituras && `Lido: ${dataHora(Object.values(msg.leituras)[0])}`}</div>
+      </CardPrimaryContent>
+    </Card>
   );
+
+  /*return (
+    <ListItem>
+      <ListItemText primaryText={msg.texto}
+                    secondaryText={msg.autor} />
+      <ListItemMeta meta={`Entregue: ${dataHora(msg.timestamp)}`}/>
+    </ListItem>
+  )*/
 }

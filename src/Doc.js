@@ -3,7 +3,7 @@ import showdown from 'showdown';
 
 export default function Doc(props) {
   const {inventionListener, inventionSave} = props;
-  const [view, setView] = useState(false)
+  const [view, setView] = useState(true)
   const [markdown, setMarkdown] = useState(
 ``);
 
