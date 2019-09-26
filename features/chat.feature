@@ -1,7 +1,6 @@
 #language: pt
 Funcionalidade: Chat
   Eu desejo enviar mensagens espontaneamente, responder mensagens, receber respostas e ler mensagens de outros. Tudo isso da forma mais ágil possível.
-  #Quando o digitar a mensagem 'oi'
   
   Cenário: Usuário conectado deseja enviar mensagens ao desenvolvedor utilizando "Enter"
     Dado o usuário 'a' conectado
