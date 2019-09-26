@@ -51,9 +51,16 @@ Then('o texto digitado deve ser limpo', function () {
   assert.strictEqual(this.input.value, '', 'Texto não limpo');
 });
 
-Then('a mensagem deve ser exibida para o usuário', function () {
-  // Write code here that turns the phrase above into concrete actions
-  return 'pending';
+Then('uma mensagem deve ser exibida para o usuário', function () {
+  this.mensagens = document.querySelectorAll('[data-testid="mensagem"]');
+  this.mensagem = this.mensagens[0];
+
+  assert.strictEqual(this.mensagens.length, 1, "Nenhuma mensagem renderizada");
+});
+
+Then('o campo {string} deve ser igual a {string}', function (campo, conteúdo) {
+  const {innerHTML} = this.mensagem.querySelector(`[data-testid="${campo}"]`);
+  assert.strictEqual(innerHTML, conteúdo, `${campo} diferente de ${conteúdo}`);
 });
 
 const mensagens = [];
@@ -91,22 +98,24 @@ async function sendMsg(texto, autor, destinatario, error = false) {
  * @callback setMsgs
  */
 function msgsListener(setMsgs) {
-  //db.collection('conversas').doc(contexto).delete().then(() => console.log('excluído'));
-  /*const msgsRef = invenções.doc(contexto).collection('msgs');
-  const msgsQuery = msgsRef.orderBy('timestamp');
-  const destinatario = (msg) => {
+  setMsgs([
+    {
+      texto: "Olá, bom dia!",
+    }
+  ])
+  /*const destinatario = (msg) => {
     console.log(msg);
     return user.papel === msg.destinatarios[0] || user.uid === msg.destinatarios[0];
-  }
-  return msgsQuery.onSnapshot( docs => {
+  }*/
+  /*return msgsQuery.onSnapshot( docs => {
     //console.log('msgsListener');
     const data = [];
     docs.forEach(doc => {
       data.push({
         ...doc.data(), 
         id: doc.id,
-        minha: doc.data().autor === user.uid,
-        para_mim: destinatario(doc.data()),
+        //minha: doc.data().autor === user.uid,
+        //para_mim: destinatario(doc.data()),
       });
     });
     //console.log(data);

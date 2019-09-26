@@ -106,11 +106,15 @@ function Mensagem(props) {
   //<div style={style}></div>
   //<div style={{borderStyle: 'dashed', borderWidth: '1px'}}>
   return (
-    <Card outlined={false} style={{margin: '8px', maxWidth: 'fit-content'}} className={'income-theme'}>
+    <Card outlined={false} style={{margin: '8px', maxWidth: 'fit-content'}}     
+          className={'income-theme'} data-testid="mensagem">
       <CardPrimaryContent>
-        <div>{msg.autor}:</div>
-        <div>{msg.texto}</div>
-        <div>{`Entregue: ${dataHora(msg.timestamp)}`}</div>
+        <div data-testid="autor">{msg.autor}</div>
+        <div data-testid="texto">{msg.texto}</div>
+        <div>
+          <span>Entregue: </span> 
+          <span data-testid="entrega">{dataHora(msg.timestamp)}</span>
+        </div>
         <div>{msg.leituras && `Lido: ${dataHora(Object.values(msg.leituras)[0])}`}</div>
       </CardPrimaryContent>
     </Card>

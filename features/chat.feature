@@ -10,7 +10,10 @@ Funcionalidade: Chat
     Quando o usuário digitar a mensagem 'Olá, bom dia!'
     E teclar 'Enter'
     Então o texto digitado deve ser limpo
-    E a mensagem deve ser exibida para o usuário
+    E uma mensagem deve ser exibida para o usuário
+    E o campo "autor" deve ser igual a ''
+    E o campo "texto" deve ser igual a 'Olá, bom dia!'
+    E o campo "entrega" deve ser igual a 'aguardando'
 
 
   Cenário: Usuário não conectado deseja enviar mensagens
