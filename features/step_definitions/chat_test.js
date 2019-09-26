@@ -1,7 +1,9 @@
 //https://github.com/NguyenAndrew/Enzyme-Cucumber-React
 //https://github.com/testing-library/react-testing-library
+//import { render, fireEvent } from '@testing-library/react';
 import { JSDOM } from 'jsdom';
 import React from 'react';
+import ReactDOM from 'react-dom';
 import Chat from '../../src/Chat';
 import { render } from '@testing-library/react';
 import {Given, When} from 'cucumber';
@@ -11,7 +13,8 @@ const {window} = new JSDOM(`<!DOCTYPE html><body></body></html>`);
 global.window = window;
 global.document = window.document;
 
-Given('o usuário {string} está conectado', function (usuário) {
+const container = document.createElement('div');
+document.body.appendChild(container);
   this.usuário = usuário;
 });
 
@@ -19,12 +22,26 @@ Given('o destinatário {string}', function (destinatário) {
   this.destinatário = destinatário;
 });
 
-Given('que o chat renderizado', function () {
-    // Write code here that turns the phrase above into concrete actions
-    //const div = document.createElement('div');
-    this.chat = render(<Chat autor={this.usuário} destinatários={[this.destinatário]}
+Given('o chat renderizado', function () {
+  act(() => {
+    ReactDOM.render(<Chat autor={this.usuário} destinatários={[this.destinatário]}
+      sendMsg={(...params) => sendMsg(...params, false)}
+      {...{msgsListener, onMsgReaded, alertas:[]}} />, container);
+  })
+  /*this.chat = render(<Chat autor={this.usuário} destinatários={[this.destinatário]}
                            sendMsg={(...params) => sendMsg(...params, false)}
-                            {...{msgsListener, onMsgReaded, alertas:[]}} />);
+                          {...{msgsListener, onMsgReaded, alertas:[]}} />);*/
+  
+});
+
+When('o usuário digitar a mensagem {string}', function (mensagem) {
+  this.input = document.querySelector('input');
+  this.input.value = mensagem;
+  Simulate.change(this.input);
+});
+
+When('teclar {string}', function (string) {
+  Simulate.keyDown(this.input, {'key': 'Enter'});
 });
 
 When('o digitar a mensagem {string}', function (string) {
