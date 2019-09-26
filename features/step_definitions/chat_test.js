@@ -94,7 +94,7 @@ async function sendMsg(texto, autor, destinatario, error = false) {
 
 /**
  * Recebe função setMsgs que recebe nova lista de mensagens.
- * Deve retornar função para deseescrever sistema de auditoria de mensagens.
+ * Deve retornar função para cancelar a inscrição do "listener" no servidor.
  * @callback setMsgs
  */
 function msgsListener(setMsgs) {
