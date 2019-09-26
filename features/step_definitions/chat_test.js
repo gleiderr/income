@@ -7,6 +7,7 @@ import ReactDOM from 'react-dom';
 import Chat from '../../src/Chat';
 import {Given, When, Then, } from 'cucumber';
 import assert from 'assert';
+import { Simulate, act } from 'react-dom/test-utils';
 
 //https://github.com/NguyenAndrew/Enzyme-Cucumber-React
 const {window} = new JSDOM(`<!DOCTYPE html><body></body></html>`);
