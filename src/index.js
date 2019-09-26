@@ -8,6 +8,10 @@ import {Cell, Grid, Row} from '@material/react-layout-grid';
 import Doc from './Doc';
 import Chat from './Chat';
 import './index.css';
+import '@material/react-card/dist/card.css';
+import '@material/react-list/dist/list.css';
+import './shadow.css';
+import './color.css';
 //import App from "./App";
 //import * as serviceWorker from "./serviceWorker";
 

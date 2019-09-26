@@ -1,8 +1,5 @@
 import React, { useState, useEffect } from "react";
 //import { SignInChat } from './SignInScreen';
-import '@material/react-card/dist/card.css';
-import './shadow.css';
-import './color.css';
 import Card, {
   CardPrimaryContent,
   CardMedia,
@@ -10,8 +7,6 @@ import Card, {
   CardActionButtons,
   CardActionIcons, 
 } from "@material/react-card";
-
-import '@material/react-list/dist/list.css';
 import List, {ListItem, ListItemGraphic, ListItemText, ListItemMeta } from '@material/react-list';
 
 /**
