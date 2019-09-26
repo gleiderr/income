@@ -2,10 +2,12 @@ import React, { useState, useEffect, useRef } from "react";
 import ReactDOM from "react-dom";
 import firebase from "firebase";
 import firebase_init from "./firebase-local";
+import '@material/react-layout-grid/dist/layout-grid.css';
+import {Cell, Grid, Row} from '@material/react-layout-grid';
 //import SignInScreen from "./SignInScreen";
 import Doc from './Doc';
 import Chat from './Chat';
-//import './index.css';
+import './index.css';
 //import App from "./App";
 //import * as serviceWorker from "./serviceWorker";
 
@@ -54,19 +56,21 @@ function Income(props) {
   }, [user, nenhumUsuário, userProfile]);
                               
   return (
-    <div style={{display: 'flex'}}>
-      <div style={{flexGrow: 1, position: 'relative'}}>
-        <Doc inventionSave={(markdown) => inventionSave(markdown, contexto, user)}
-             inventionListener={(setMarkdown) => inventionListener(contexto, setMarkdown)} />
-      </div>
-      <div style={{maxWidth: 411, minWidth: 300}}>
-        <Chat sendMsg={(texto) => sendMsg(texto, user.uid, destinatario, contexto)
-                                  .catch((alerta) => setAlertas([alerta, ...alertas]))}
-                  msgsListener={(setMsgs) => msgsListener(contexto, user, setMsgs)}
-                  onMsgReaded={(msg) => onMsgReaded(msg, user, contexto)}
-                  alertas={alertas}/>
-      </div>
-    </div>
+    <Grid style={{padding: 0}}>
+      <Row style={{gridGap: '8px'}}>
+        <Cell phoneColumns={12} tabletColumns={12} desktopColumns={8} style={{height: '100vh', overflow: 'auto', padding: '8px'}}>
+          <Doc inventionSave={(markdown) => inventionSave(markdown, contexto, user)}
+                inventionListener={(setMarkdown) => inventionListener(contexto, setMarkdown)} /> 
+        </Cell>
+        <Cell phoneColumns={12} tabletColumns={12} desktopColumns={4} style={{height: '100vh', overflow: 'auto', padding: '8px'}}>
+          <Chat sendMsg={(texto) => sendMsg(texto, user.uid, destinatario, contexto)
+                                      .catch((alerta) => setAlertas([alerta, ...alertas]))}
+                      msgsListener={(setMsgs) => msgsListener(contexto, user, setMsgs)}
+                      onMsgReaded={(msg) => onMsgReaded(msg, user, contexto)}
+                      alertas={alertas}/>
+        </Cell>
+      </Row>
+    </Grid>
   );
 }
 
