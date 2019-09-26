@@ -32,7 +32,7 @@ Given('o chat renderizado', function () {
       {...{msgsListener, onMsgReaded, alertas:[]}} />, container);
   })
   /*this.chat = render(<Chat autor={this.usuário} destinatários={[this.destinatário]}
-                           sendMsg={(...params) => sendMsg(...params, false)}
+                          sendMsg={(...params) => sendMsg(...params, false)}
                           {...{msgsListener, onMsgReaded, alertas:[]}} />);*/
   
 });
@@ -47,8 +47,13 @@ When('teclar {string}', function (string) {
   Simulate.keyDown(this.input, {'key': 'Enter'});
 });
 
-Then('o texto digitado deve estar limpo', function () {
+Then('o texto digitado deve ser limpo', function () {
   assert.strictEqual(this.input.value, '', 'Texto não limpo');
+});
+
+Then('a mensagem deve ser exibida para o usuário', function () {
+  // Write code here that turns the phrase above into concrete actions
+  return 'pending';
 });
 
 const mensagens = [];
@@ -72,6 +77,7 @@ const mensagens = [];
  * @returns {Promise<React.Component>} Componente react para ser exibido como alerta em caso de erro.
  */
 async function sendMsg(texto, autor, destinatario, error = false) {
+    console.log(texto, autor, destinatario);
     texto = texto.trim();
     if(error) return Promise.reject(<div>error</div>);
     

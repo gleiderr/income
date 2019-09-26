@@ -9,7 +9,8 @@ Funcionalidade: Chat
     E o chat renderizado
     Quando o usuário digitar a mensagem 'Olá, bom dia!'
     E teclar 'Enter'
-    Então o texto digitado deve estar limpo
+    Então o texto digitado deve ser limpo
+    E a mensagem deve ser exibida para o usuário
 
 
   Cenário: Usuário não conectado deseja enviar mensagens
