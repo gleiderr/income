@@ -2,9 +2,10 @@
 Funcionalidade: Chat
   Eu desejo enviar e responder mensagens, receber respostas e ler mensagens de outros. Tudo isso da forma mais simples possível.
   
-  Esquema do Cenário: Usuário conectado deseja enviar mensagens ao desenvolvedor utilizando "Enter"
+  Esquema do Cenário: Usuário deseja enviar mensagens ao desenvolvedor utilizando "Enter"
     Dado o remetente '<remetente>'
     E o destinatário 'desenvolvedor'
+    E nenhuma mensagem enviada
     E o chat renderizado
     Quando o usuário digitar a mensagem '<mensagem>'
     E teclar 'Enter'
@@ -17,8 +18,7 @@ Funcionalidade: Chat
     Exemplos:
     | remetente | mensagem          |
     | joão      | Olá, bom dia!     |
-    #| pedro     | Boa tarde pessoas |
-
+    | pedro     | Boa tarde pessoas |
 
 
   #Cenário: Usuário não conectado deseja enviar mensagens

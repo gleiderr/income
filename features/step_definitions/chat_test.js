@@ -5,7 +5,7 @@ import { JSDOM } from 'jsdom';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Chat from '../../src/Chat';
-import {Given, When, Then, } from 'cucumber';
+import {Given, When, Then, Before, After} from 'cucumber';
 import assert from 'assert';
 import { Simulate, act } from 'react-dom/test-utils';
 
@@ -14,8 +14,20 @@ const {window} = new JSDOM(`<!DOCTYPE html><body></body></html>`);
 global.window = window;
 global.document = window.document;
 
-const container = document.createElement('div');
-document.body.appendChild(container);
+let mensagens;
+let updateMsgs = undefined;
+
+let container = undefined;
+Before(function() {  
+  container = document.createElement('div');
+  document.body.appendChild(container);
+});
+
+After(function() {
+  ReactDOM.unmountComponentAtNode(container);
+  container.remove();
+  container = undefined;
+});
 
 Given('o remetente {string}', function (usuário) {
   this.usuário = usuário;
@@ -23,6 +35,10 @@ Given('o remetente {string}', function (usuário) {
 
 Given('o destinatário {string}', function (destinatário) {
   this.destinatário = destinatário;
+});
+
+Given('nenhuma mensagem enviada', function () {
+  mensagens = [];
 });
 
 Given('o chat renderizado', function () {
@@ -60,9 +76,6 @@ Then('o campo {string} deve ser igual a {string}', function (campo, conteúdo) {
   const {innerHTML} = this.mensagem.querySelector(`[data-testid="${campo}"]`);
   assert.strictEqual(innerHTML, conteúdo, `${campo} diferente de ${conteúdo}`);
 });
-
-const mensagens = [];
-let updateMsgs = undefined;
 
 /**
  * O chat espera que cada mensagem tenha a estrura mínima abaixo.
@@ -103,19 +116,19 @@ async function sendMsg(texto, autor, destinatario) {
  * @callback [setMsgs] recebe nova lista de mensagens.
  */
 function msgsListener(setMsgs, leitor) {
-  console.log('msgsListener');
-    updateMsgs = () => {
-      console.log('updateMsgs');
-      console.table(mensagens);
+  //console.log('msgsListener', {leitor});
+  updateMsgs = () => {
+    //console.log('updateMsgs');
+    //console.table(mensagens);
 
-      setMsgs(mensagens.map((m, index) => ({
-        id: index, 
-        autor: m.autor === leitor ? '' : m.autor,
-        texto: m.texto, 
-        timestamp: m.timestamp, 
-        destinatarios: m.destinatarios
-      })));
-    }
+    setMsgs(mensagens.map((m, index) => ({
+      id: index, 
+      autor: m.autor === leitor ? '' : m.autor,
+      texto: m.texto, 
+      timestamp: m.timestamp, 
+      destinatarios: m.destinatarios
+    })));
+  }
   updateMsgs();
 }
 
