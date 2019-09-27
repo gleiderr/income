@@ -15,18 +15,18 @@ global.window = window;
 global.document = window.document;
 
 let mensagens;
-let updateMsgs = undefined;
+let listeners = {};
 
-let container = undefined;
-Before(function() {  
-  container = document.createElement('div');
-  document.body.appendChild(container);
-});
+Before(function (params) {
+  this.containers = {};  
+  listeners = {};
+})
 
 After(function() {
-  ReactDOM.unmountComponentAtNode(container);
-  container.remove();
-  container = undefined;
+  for (const container of Object.values(this.containers)) {
+      ReactDOM.unmountComponentAtNode(container);
+      container.remove();
+  }
 });
 
 Given('o remetente {string}', function (usuário) {
@@ -41,16 +41,21 @@ Given('nenhuma mensagem enviada', function () {
   mensagens = [];
 });
 
-Given('o chat renderizado', function () {
+Given('chat renderizado ao {string}', function (usuário) {
+  const new_container = document.createElement('div');
+  this.containers[usuário] = new_container;
+  document.body.appendChild(new_container);
+
+  const callbacks = {sendMsg, msgsListener, onMsgReaded};
+  const chat = <Chat autor={usuário} destinatários={[this.destinatário]}                    alertas={[]} {...callbacks} />;
+
   act(() => {
-    ReactDOM.render(<Chat autor={this.usuário} destinatários={[this.destinatário]}
-      sendMsg={(...params) => sendMsg(...params, false)}
-      {...{msgsListener, onMsgReaded, alertas:[]}} />, container);
-  });  
+    ReactDOM.render(chat, new_container);
+  });
 });
 
-When('o usuário digitar a mensagem {string}', function (mensagem) {
-  this.input = document.querySelector('input');
+When('o {string} digitar a mensagem {string}', function (remetente, mensagem) {
+  this.input = this.containers[remetente].querySelector('input');
   this.input.value = mensagem;
   Simulate.change(this.input);
 });
@@ -65,10 +70,11 @@ Then('o texto digitado deve ser limpo', function () {
   assert.strictEqual(this.input.value, '', 'Texto não limpo');
 });
 
-Then('uma mensagem deve ser exibida para o usuário', function () {
-  this.mensagens = document.querySelectorAll('[data-testid="mensagem"]');
+Then('uma mensagem deve ser exibida para o {string}', function (usuário) {
+  const container = this.containers[usuário];
+  this.mensagens = container.querySelectorAll('[data-testid="mensagem"]');
   this.mensagem = this.mensagens[0];
-
+  
   assert.strictEqual(this.mensagens.length, 1, "Zero ou mais que uma mensagem renderizada");
 });
 
@@ -105,7 +111,11 @@ async function sendMsg(texto, autor, destinatario) {
       timestamp: null, 
     });
 
-    updateMsgs();
+    //listeners[autor]();
+    const lis = Object.values(listeners);
+    for (const listener of lis) {
+      listener();
+    }
 
     return Promise.resolve();
 }
@@ -116,8 +126,8 @@ async function sendMsg(texto, autor, destinatario) {
  * @callback [setMsgs] recebe nova lista de mensagens.
  */
 function msgsListener(setMsgs, leitor) {
-  //console.log('msgsListener', {leitor});
-  updateMsgs = () => {
+  //console.log('msgsListener', {leitor}, );
+  listeners[leitor] = () => {
     //console.log('updateMsgs');
     //console.table(mensagens);
 
@@ -128,8 +138,9 @@ function msgsListener(setMsgs, leitor) {
       timestamp: m.timestamp, 
       destinatarios: m.destinatarios
     })));
-  }
-  updateMsgs();
+  };
+
+  listeners[leitor]();
 }
 
 /**
