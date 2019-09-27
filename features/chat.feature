@@ -14,8 +14,11 @@ Funcionalidade: Chat
     E o campo "texto" deve ser igual a 'Olá, bom dia!'
     E o campo "entrega" deve ser igual a 'aguardando'
 
+    #| pedro     | Boa tarde pessoas |
 
-  Cenário: Usuário não conectado deseja enviar mensagens
-  Cenário: Usuário deseja ler mensagens
-  Cenário: Todo usuário deseja saber quando uma mensagem foi lida pelo destinatário
-  Cenário: Todo usuário deseja ler mensagens de seu interesse
+
+
+  #Cenário: Usuário não conectado deseja enviar mensagens
+  #Cenário: Usuário deseja ler mensagens
+  #Cenário: Todo usuário deseja saber quando uma mensagem foi lida pelo destinatário
+  #Cenário: Todo usuário deseja ler mensagens de seu interesse
