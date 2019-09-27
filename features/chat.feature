@@ -1,6 +1,6 @@
 #language: pt
 Funcionalidade: Chat
-  Eu desejo enviar mensagens espontaneamente, responder mensagens, receber respostas e ler mensagens de outros. Tudo isso da forma mais ágil possível.
+  Eu desejo enviar e responder mensagens, receber respostas e ler mensagens de outros. Tudo isso da forma mais simples possível.
   
   Esquema do Cenário: Usuário conectado deseja enviar mensagens ao desenvolvedor utilizando "Enter"
     Dado o remetente '<remetente>'
