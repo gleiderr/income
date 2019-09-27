@@ -17,7 +17,7 @@ global.document = window.document;
 const container = document.createElement('div');
 document.body.appendChild(container);
 
-Given('o usuário {string} conectado', function (usuário) {
+Given('o remetente {string}', function (usuário) {
   this.usuário = usuário;
 });
 
@@ -30,11 +30,7 @@ Given('o chat renderizado', function () {
     ReactDOM.render(<Chat autor={this.usuário} destinatários={[this.destinatário]}
       sendMsg={(...params) => sendMsg(...params, false)}
       {...{msgsListener, onMsgReaded, alertas:[]}} />, container);
-  })
-  /*this.chat = render(<Chat autor={this.usuário} destinatários={[this.destinatário]}
-                          sendMsg={(...params) => sendMsg(...params, false)}
-                          {...{msgsListener, onMsgReaded, alertas:[]}} />);*/
-  
+  });  
 });
 
 When('o usuário digitar a mensagem {string}', function (mensagem) {
@@ -44,7 +40,9 @@ When('o usuário digitar a mensagem {string}', function (mensagem) {
 });
 
 When('teclar {string}', function (string) {
-  Simulate.keyDown(this.input, {'key': 'Enter'});
+  act(() => {
+    Simulate.keyDown(this.input, {'key': 'Enter'});
+  });
 });
 
 Then('o texto digitado deve ser limpo', function () {
@@ -55,7 +53,7 @@ Then('uma mensagem deve ser exibida para o usuário', function () {
   this.mensagens = document.querySelectorAll('[data-testid="mensagem"]');
   this.mensagem = this.mensagens[0];
 
-  assert.strictEqual(this.mensagens.length, 1, "Nenhuma mensagem renderizada");
+  assert.strictEqual(this.mensagens.length, 1, "Zero ou mais que uma mensagem renderizada");
 });
 
 Then('o campo {string} deve ser igual a {string}', function (campo, conteúdo) {
@@ -64,6 +62,7 @@ Then('o campo {string} deve ser igual a {string}', function (campo, conteúdo) {
 });
 
 const mensagens = [];
+let updateMsgs = undefined;
 
 /**
  * O chat espera que cada mensagem tenha a estrura mínima abaixo.
@@ -83,45 +82,41 @@ const mensagens = [];
  * @param {Boolean} error utilizado na simulação de testes
  * @returns {Promise<React.Component>} Componente react para ser exibido como alerta em caso de erro.
  */
-async function sendMsg(texto, autor, destinatario, error = false) {
-    console.log(texto, autor, destinatario);
+async function sendMsg(texto, autor, destinatario) {
+    //console.log(texto, autor, destinatario);
     texto = texto.trim();
-    if(error) return Promise.reject(<div>error</div>);
     
-    mensagens.push({texto, timestamp: null, autor, destinatarios: [destinatario]});
+    mensagens.push({
+      texto, autor, 
+      destinatarios: [destinatario],
+      timestamp: null, 
+    });
+
+    updateMsgs();
+
     return Promise.resolve();
 }
 
 /**
- * Recebe função setMsgs que recebe nova lista de mensagens.
  * Deve retornar função para cancelar a inscrição do "listener" no servidor.
- * @callback setMsgs
+ * @param {String} leitor - nome do usuário que está logado no chat
+ * @callback [setMsgs] recebe nova lista de mensagens.
  */
-function msgsListener(setMsgs) {
-  setMsgs([
-    {
-      texto: "Olá, bom dia!",
+function msgsListener(setMsgs, leitor) {
+  console.log('msgsListener');
+    updateMsgs = () => {
+      console.log('updateMsgs');
+      console.table(mensagens);
+
+      setMsgs(mensagens.map((m, index) => ({
+        id: index, 
+        autor: m.autor === leitor ? '' : m.autor,
+        texto: m.texto, 
+        timestamp: m.timestamp, 
+        destinatarios: m.destinatarios
+      })));
     }
-  ])
-  /*const destinatario = (msg) => {
-    console.log(msg);
-    return user.papel === msg.destinatarios[0] || user.uid === msg.destinatarios[0];
-  }*/
-  /*return msgsQuery.onSnapshot( docs => {
-    //console.log('msgsListener');
-    const data = [];
-    docs.forEach(doc => {
-      data.push({
-        ...doc.data(), 
-        id: doc.id,
-        //minha: doc.data().autor === user.uid,
-        //para_mim: destinatario(doc.data()),
-      });
-    });
-    //console.log(data);
-    setMsgs(data);
-  },
-  error => console.log(error));*/
+  updateMsgs();
 }
 
 /**

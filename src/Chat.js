@@ -48,7 +48,7 @@ import List, {ListItem, ListItemGraphic, ListItemText, ListItemMeta } from '@mat
 
   //Atualiza lista de mensagens
   useEffect(() => {
-    return msgsListener(setMsgs);
+    return msgsListener(setMsgs, autor);
   }, [msgsListener, setMsgs]);
   
   /*const divMsgs = msgList.map(msg => <Mensagem key={msg.id} msg={msg}
@@ -68,7 +68,7 @@ import List, {ListItem, ListItemGraphic, ListItemText, ListItemMeta } from '@mat
 function MessageList({msgList, onReaded}) {
   const divMsgs = msgList.map(msg => <Mensagem key={msg.id} msg={msg}
     onReaded={onReaded} />)
-  
+
   return (
     <div>
       {divMsgs}
