@@ -16,10 +16,12 @@ global.document = window.document;
 
 let mensagens;
 let listeners = {};
+let data_hora;
 
 Before(function (params) {
   this.containers = {};  
   listeners = {};
+  data_hora = undefined;
 })
 
 After(function() {
@@ -66,6 +68,12 @@ When('teclar {string}', function (string) {
   });
 });
 
+When('data-hora igual a {string}', function (p_data_hora) {
+  data_hora = p_data_hora;
+  console.log({data_hora});
+  
+});
+
 Then('o texto digitado deve ser limpo', function () {
   assert.strictEqual(this.input.value, '', 'Texto não limpo');
 });
@@ -78,7 +86,7 @@ Then('uma mensagem deve ser exibida para o {string}', function (usuário) {
   assert.strictEqual(this.mensagens.length, 1, "Zero ou mais que uma mensagem renderizada");
 });
 
-Then('o campo {string} deve ser igual a {string}', function (campo, conteúdo) {
+Then('nessa mensagem {string} contém {string}', function (campo, conteúdo) {
   const {innerHTML} = this.mensagem.querySelector(`[data-testid="${campo}"]`);
   assert.strictEqual(innerHTML, conteúdo, `${campo} diferente de ${conteúdo}`);
 });
@@ -111,13 +119,16 @@ async function sendMsg(texto, autor, destinatario) {
       timestamp: null, 
     });
 
-    //listeners[autor]();
-    const lis = Object.values(listeners);
-    for (const listener of lis) {
-      listener();
-    }
+    callListeners();
 
     return Promise.resolve();
+}
+
+function callListeners() {
+  const lis = Object.values(listeners);
+  for (const listener of lis) {
+    listener();
+  }
 }
 
 /**
@@ -147,8 +158,16 @@ function msgsListener(setMsgs, leitor) {
  * Função a ser executada quando uma mensagem é lida.
  * Recebe objeto da mensagem lida
  */
-function onMsgReaded(msg) {
-  //console.log(msg, user, contexto);
+function onMsgReaded(msg, leitor) {
+  if (!mensagens[msg.id].leituras) {
+    mensagens[msg.id].leituras = {};
+  }
+  mensagens[msg.id].leituras[leitor] = data_hora;
+
+  callListeners();  
+  
+  console.log('onMsgReaded', mensagens[msg.id]);
+
   /*const msgsRef = invenções.doc(contexto).collection('msgs');
   //não lido e destinatário
   const lido = user.uid && msg.leituras && msg.leituras[user.uid];

@@ -59,15 +59,16 @@ import List, {ListItem, ListItemGraphic, ListItemText, ListItemMeta } from '@mat
       <div>Comunicação ({userRole})</div>
       {alertas}
       {/*<SignInChat logged={logged} setLogin={status => setLogin(status)}/>*/}
-      <MessageList {...{msgList, onReaded: onMsgReaded}}/>
+      <MessageList {...{msgList, onReaded: onMsgReaded, usuário: autor}}/>
       <input type="text" onKeyDown={keyDownHandle} />
     </>
   );
 }
 
-function MessageList({msgList, onReaded}) {
-  const divMsgs = msgList.map(msg => <Mensagem key={msg.id} msg={msg}
-    onReaded={onReaded} />)
+function MessageList({msgList, onReaded, usuário}) {
+  const divMsgs = msgList.map(msg => 
+    <Mensagem key={msg.id} msg={msg} onReaded={onReaded} usuário={usuário} />
+  );
 
   return (
     <div>
@@ -76,8 +77,8 @@ function MessageList({msgList, onReaded}) {
   );
 }
 
-function Mensagem(props) {
-  const {msg, onReaded} = props;
+function Mensagem({msg, onReaded, usuário}) {
+  const [lida, ler] = useState(msg.leituras && msg.leituras[usuário]);
 
   const p = v => v < 10 ? '0' + v : v;
   const dataHora = timestamp => {
@@ -101,7 +102,12 @@ function Mensagem(props) {
   };
 
   //Marca mensagem como lida;
-  useEffect(() => onReaded(msg), [onReaded, msg]);
+  useEffect(() => {
+    if (msg.autor && !lida) {
+      onReaded(msg, usuário);
+      ler(true);
+    }
+  }, [onReaded, msg, usuário, lida]);
   
   //<div style={style}></div>
   //<div style={{borderStyle: 'dashed', borderWidth: '1px'}}>
@@ -115,7 +121,9 @@ function Mensagem(props) {
           <span>Entregue: </span> 
           <span data-testid="entrega">{dataHora(msg.timestamp)}</span>
         </div>
-        <div>{msg.leituras && `Lido: ${dataHora(Object.values(msg.leituras)[0])}`}</div>
+        <div data-testid="leitura">
+          {msg.leituras && `Lido: ${Object.values(msg.leituras)[0]}`}
+        </div>
       </CardPrimaryContent>
     </Card>
   );

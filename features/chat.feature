@@ -11,9 +11,9 @@ Funcionalidade: Chat
     E teclar 'Enter'
     Então o texto digitado deve ser limpo
     E uma mensagem deve ser exibida para o '<remetente>'
-    E o campo "autor" deve ser igual a ''
-    E o campo "texto" deve ser igual a '<mensagem>'
-    E o campo "entrega" deve ser igual a 'aguardando'
+    E nessa mensagem "autor" contém ''
+    E nessa mensagem "texto" contém '<mensagem>'
+    E nessa mensagem "entrega" contém 'aguardando'
 
     Exemplos:
     | remetente | mensagem          |
@@ -24,12 +24,14 @@ Funcionalidade: Chat
     Dado o remetente '<remetente>'
     E o destinatário 'desenvolvedor'
     E nenhuma mensagem enviada
+    E data-hora igual a '17/11/2019  às 14:30'
     E chat renderizado ao '<remetente>'
     E chat renderizado ao 'desenvolvedor'
     Quando o '<remetente>' digitar a mensagem '<mensagem>'
     E teclar 'Enter'
     Então uma mensagem deve ser exibida para o 'desenvolvedor'
-    Então uma mensagem deve ser exibida para o '<remetente>'
+    E uma mensagem deve ser exibida para o '<remetente>'
+    E nessa mensagem "leitura" contém 'desenvolvedor leu em 17/11/2019 às 14:30'
 
   Exemplos:
     | remetente | mensagem          |
