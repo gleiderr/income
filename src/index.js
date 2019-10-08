@@ -2,16 +2,21 @@ import React, { useState, useEffect, useRef } from "react";
 import ReactDOM from "react-dom";
 import firebase from "firebase";
 import firebase_init from "./firebase-local";
+
 import '@material/react-layout-grid/dist/layout-grid.css';
-import {Cell, Grid, Row} from '@material/react-layout-grid';
-//import SignInScreen from "./SignInScreen";
-import Doc from './Doc';
-import Chat from './Chat';
-import './index.css';
 import '@material/react-card/dist/card.css';
 import '@material/react-list/dist/list.css';
+import '@material/react-typography/dist/typography.css';
+
+import './index.css';
 import './shadow.css';
 import './color.css';
+
+import {Cell, Grid, Row} from '@material/react-layout-grid';
+import {Body1} from '@material/react-typography';
+import { SignInChat } from './SignInScreen';
+import Doc from './Doc';
+import Chat from './Chat';
 //import App from "./App";
 //import * as serviceWorker from "./serviceWorker";
 
@@ -41,6 +46,7 @@ function Income(props) {
   const [destinatario, setDestinatario] = useState(undefined);
   const [alertas, setAlertas] = useState([]);
   const [contexto, setContexto] = useState('income');
+  const [logged, setLogin] = useState(false);
   
   //Id do usuário
   useEffect(() => {
@@ -60,21 +66,24 @@ function Income(props) {
   }, [user, nenhumUsuário, userProfile]);
                               
   return (
-    <Grid style={{padding: 0}}>
-      <Row style={{gridGap: '8px'}}>
-        <Cell phoneColumns={12} tabletColumns={12} desktopColumns={8} style={{height: '100vh', overflow: 'auto', padding: '8px'}}>
-          <Doc inventionSave={(markdown) => inventionSave(markdown, contexto, user)}
-                inventionListener={(setMarkdown) => inventionListener(contexto, setMarkdown)} /> 
-        </Cell>
-        <Cell phoneColumns={12} tabletColumns={12} desktopColumns={4} style={{height: '100vh', overflow: 'auto', padding: '8px'}}>
-          <Chat sendMsg={(texto) => sendMsg(texto, user.uid, destinatario, contexto)
-                                      .catch((alerta) => setAlertas([alerta, ...alertas]))}
-                      msgsListener={(setMsgs) => msgsListener(contexto, user, setMsgs)}
-                      onMsgReaded={(msg) => onMsgReaded(msg, user, contexto)}
-                      alertas={alertas}/>
-        </Cell>
-      </Row>
-    </Grid>
+    <Body1 tag={'div'}>
+      <Grid style={{padding: 0}}>
+        <Row style={{gridGap: '8px'}}>
+          <Cell phoneColumns={12} tabletColumns={12} desktopColumns={8} style={{height: '100vh', overflow: 'auto', padding: '8px'}}>
+            <Doc inventionSave={(markdown) => inventionSave(markdown, contexto, user)}
+                  inventionListener={(setMarkdown) => inventionListener(contexto, setMarkdown)} /> 
+          </Cell>
+          <Cell phoneColumns={12} tabletColumns={12} desktopColumns={4} style={{height: '100vh', overflow: 'auto', padding: '8px'}}>
+            <SignInChat logged={logged} setLogin={status => setLogin(status)}/>
+            <Chat sendMsg={(texto) => sendMsg(texto, user.uid, destinatario, contexto)
+                                        .catch((alerta) => setAlertas([alerta, ...alertas]))}
+                        msgsListener={(setMsgs) => msgsListener(contexto, user, setMsgs)}
+                        onMsgReaded={(msg) => onMsgReaded(msg, user, contexto)}
+                        alertas={alertas}/>
+          </Cell>
+        </Row>
+      </Grid>
+    </Body1>
   );
 }
 

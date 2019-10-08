@@ -55,13 +55,15 @@ import List, {ListItem, ListItemGraphic, ListItemText, ListItemMeta } from '@mat
                                                onReaded={onMsgReaded} />);*/
   
   return (
-    <>
-      <div>Comunicação ({userRole})</div>
+    <div style={{'--maxHeight': '100vh', '--inputHeight': '1rem'}}>
+      {/*<div>Comunicação ({userRole})</div>*/}
       {alertas}
       {/*<SignInChat logged={logged} setLogin={status => setLogin(status)}/>*/}
-      <MessageList {...{msgList, onReaded: onMsgReaded, usuário: autor}}/>
-      <input type="text" onKeyDown={keyDownHandle} />
-    </>
+      <MessageList {...{msgList, onReaded: onMsgReaded, usuário: autor}} />
+      <input type="text" 
+        style={{height: 'var(--inputHeight, 15)'}} 
+        onKeyDown={keyDownHandle} />
+    </div>
   );
 }
 
@@ -71,7 +73,9 @@ function MessageList({msgList, onReaded, usuário}) {
   );
 
   return (
-    <div>
+    <div style={{
+      height: 'calc(var(--maxHeight) - var(--inputHeight, 15))',
+      overflow: 'auto'}}>
       {divMsgs}
     </div>
   );
