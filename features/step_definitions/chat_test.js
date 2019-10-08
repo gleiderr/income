@@ -147,7 +147,8 @@ function msgsListener(setMsgs, leitor) {
       autor: m.autor === leitor ? '' : m.autor,
       texto: m.texto, 
       timestamp: m.timestamp, 
-      destinatarios: m.destinatarios
+      leituras: m.leituras,
+      destinatarios: m.destinatarios,
     })));
   };
 
@@ -166,7 +167,7 @@ function onMsgReaded(msg, leitor) {
 
   callListeners();  
   
-  console.log('onMsgReaded', mensagens[msg.id]);
+  //console.log('onMsgReaded', mensagens[msg.id]);
 
   /*const msgsRef = invenções.doc(contexto).collection('msgs');
   //não lido e destinatário

@@ -24,7 +24,7 @@ Funcionalidade: Chat
     Dado o remetente '<remetente>'
     E o destinatário 'desenvolvedor'
     E nenhuma mensagem enviada
-    E data-hora igual a '17/11/2019  às 14:30'
+    E data-hora igual a '17/11/2019 às 14:30'
     E chat renderizado ao '<remetente>'
     E chat renderizado ao 'desenvolvedor'
     Quando o '<remetente>' digitar a mensagem '<mensagem>'

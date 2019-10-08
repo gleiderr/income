@@ -122,7 +122,7 @@ function Mensagem({msg, onReaded, usuário}) {
           <span data-testid="entrega">{dataHora(msg.timestamp)}</span>
         </div>
         <div data-testid="leitura">
-          {msg.leituras && `Lido: ${Object.values(msg.leituras)[0]}`}
+          {msg.leituras && `${msg.destinatarios[0]} leu em ${Object.values(msg.leituras)[0]}`}
         </div>
       </CardPrimaryContent>
     </Card>
