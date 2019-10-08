@@ -76,7 +76,7 @@ const projetos = [
     stars: Math.round(Math.random() * 200)
   },
   {
-    título: "Sistema de Planejamento de provas",
+    título: "Sistema de Confecção de provas",
     stars: Math.round(Math.random() * 200)
   },
   {

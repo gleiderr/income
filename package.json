@@ -8,6 +8,7 @@
     "@material/react-card": "0.15.0",
     "@material/react-layout-grid": "0.15.0",
     "@material/react-list": "0.15.0",
+    "@material/react-typography": "0.15.0",
     "cucumber": "5.1.0",
     "firebase": "6.4.1",
     "firebaseui": "4.1.0",
