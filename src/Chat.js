@@ -84,15 +84,6 @@ function MessageList({msgList, onReaded, usuário}) {
 function Mensagem({msg, onReaded, usuário}) {
   const [lida, ler] = useState(msg.leituras && msg.leituras[usuário]);
 
-  const p = v => v < 10 ? '0' + v : v;
-  const dataHora = timestamp => {
-    if (!timestamp) return 'aguardando';
-    const date = timestamp.toDate();
-    const [ dia, mes, ano ] = [p(date.getDate()), p(date.getMonth()), date.getFullYear()];
-    const [ hora, minuto ] = [p(date.getHours()), p(date.getMinutes())];
-    return `${dia}/${mes}/${ano} ${hora}:${minuto}`;
-  }
-
   const style = {
     //Alinhamento em função do autor
     textAlign: msg.minha ? 'right' : 'left',
@@ -113,8 +104,8 @@ function Mensagem({msg, onReaded, usuário}) {
     }
   }, [onReaded, msg, usuário, lida]);
   
-  //<div style={style}></div>
-  //<div style={{borderStyle: 'dashed', borderWidth: '1px'}}>
+  //console.log(msg);
+
   return (
     <Card outlined={false} style={{margin: '8px', maxWidth: 'fit-content'}}     
           className={'income-theme'} data-testid="mensagem">
@@ -123,7 +114,7 @@ function Mensagem({msg, onReaded, usuário}) {
         <div data-testid="texto">{msg.texto}</div>
         <div>
           <span>Entregue: </span> 
-          <span data-testid="entrega">{dataHora(msg.timestamp)}</span>
+          <span data-testid="entrega">{msg.timestamp}</span>
         </div>
         <div data-testid="leitura">
           {msg.leituras && `${msg.destinatarios[0]} leu em ${Object.values(msg.leituras)[0]}`}

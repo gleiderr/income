@@ -7,6 +7,8 @@ import '@material/react-layout-grid/dist/layout-grid.css';
 import '@material/react-card/dist/card.css';
 import '@material/react-list/dist/list.css';
 import '@material/react-typography/dist/typography.css';
+import "@material/react-switch/dist/switch.css";
+import '@material/react-button/dist/button.css';
 
 import './index.css';
 import './shadow.css';
@@ -135,10 +137,29 @@ function msgsListener(contexto, user, setMsgs) {
   //db.collection('conversas').doc(contexto).delete().then(() => console.log('excluído'));
   const msgsRef = invenções.doc(contexto).collection('msgs');
   const msgsQuery = msgsRef.orderBy('timestamp');
+  
   const destinatario = (msg) => {
-    console.log(msg);
     return user.papel === msg.destinatarios[0] || user.uid === msg.destinatarios[0];
   }
+
+  const dataHora = timestamp => {
+    if (!timestamp) return 'aguardando';
+    
+    const p = v => v < 10 ? '0' + v : v;
+    
+    const date = timestamp.toDate();
+    const [ dia, mes, ano ] = [p(date.getDate()), p(date.getMonth()), date.getFullYear()];
+    const [ hora, minuto ] = [p(date.getHours()), p(date.getMinutes())];
+    return `${dia}/${mes}/${ano} ${hora}:${minuto}`;
+  }
+
+  const leituras = data => {
+    return data.destinatarios.reduce((prev, destinatario) => {
+      prev[destinatario] = data.leituras && dataHora(Object.values(data.leituras)[0]);
+      return prev;
+    }, {});
+  }
+
   return msgsQuery.onSnapshot( docs => {
     //console.log('msgsListener');
     const data = [];
@@ -148,6 +169,8 @@ function msgsListener(contexto, user, setMsgs) {
         id: doc.id,
         minha: doc.data().autor === user.uid,
         para_mim: destinatario(doc.data()),
+        timestamp: dataHora(doc.data().timestamp),
+        leituras: leituras(doc.data()),
       });
     });
     //console.log(data);
@@ -174,7 +197,10 @@ function inventionListener(invenção, setMarkdown) {
   }, error => console.log(error));
 }
 
-function inventionSave(markdown, invenção, autor) {  
+function inventionSave(markdown, invenção, autor) {
+  invenções.doc(invenção).collection('historico').add({
+    markdown, timestamp
+  });
   return invenções.doc(invenção).set({markdown})
     .then((a) => console.log('ok', a))
     .catch(error => Promise.reject(<div>error</div>));
