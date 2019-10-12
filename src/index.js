@@ -44,7 +44,16 @@ function Income(props) {
   const [alertas, setAlertas] = useState([]);
   const [contexto, setContexto] = useState('income');
   const [logged, setLogin] = useState(false);
-                              
+
+  const callbacks = {
+    sendMsg: (texto) => sendMsg(texto, user.uid, destinatario, contexto)
+                        .catch((alerta) => setAlertas([alerta, ...alertas])), 
+    msgsListener: (setMsgs) => msgsListener(contexto, user, setMsgs), 
+    onMsgReaded: (msg) => onMsgReaded(msg, user, contexto)
+  };
+  const chat = <Chat autor={user && user.id} destinatários={[destinatario]} 
+                     alertas={[]} {...callbacks} />;
+
   return (
     <Body1 tag={'div'}>
       <Grid style={{padding: 0}}>
@@ -58,11 +67,7 @@ function Income(props) {
               user={user} setUser={setUser}
               logged={logged} setLogin={status => setLogin(status)}/>
             
-            <Chat sendMsg={(texto) => sendMsg(texto, user.uid, destinatario, contexto)
-                                      .catch((alerta) => setAlertas([alerta, ...alertas]))}
-                      msgsListener={(setMsgs) => msgsListener(contexto, user, setMsgs)}
-                      onMsgReaded={(msg) => onMsgReaded(msg, user, contexto)}
-                      alertas={alertas}/>
+            {chat}
           </Cell>
         </Row>
       </Grid>
