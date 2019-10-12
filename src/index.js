@@ -16,7 +16,7 @@ import './shadow.css';
 import './color.css';
 
 import {Cell, Grid, Row} from '@material/react-layout-grid';
-import {Body1, Body2} from '@material/react-typography';
+import {Body1} from '@material/react-typography';
 import { SignInChat } from './SignInScreen';
 import Doc from './Doc';
 import Chat from './Chat';
