@@ -48,10 +48,7 @@ import TextField, {HelperText, Input} from '@material/react-text-field';
   //Atualiza lista de mensagens
   useEffect(() => {
     return msgsListener(setMsgs, autor);
-  }, [msgsListener, setMsgs]);
-  
-  /*const divMsgs = msgList.map(msg => <Mensagem key={msg.id} msg={msg}
-                                               onReaded={onMsgReaded} />);*/
+  }, [msgsListener, setMsgs, autor]);
   
   return (
     <>
