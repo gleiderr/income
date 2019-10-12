@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import firebase from "firebase";
 import firebase_init from "./firebase-local";
 import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
+import { Button } from '@material/react-button';
 
 try {
   firebase.app();
@@ -27,36 +28,53 @@ const uiConfig = {
   }
 };
 
-const db = firebase.firestore();
-
-export function SignInChat(props) {
-  const [uid, setId] = useState(undefined);
+export function SignInChat({ onLoginChange, userProfile, user, setUser, logged, setLogin, setDestinatario }) {
+  const [nenhumUsuário] = useState({
+    uid: undefined,
+    nome: undefined,
+    papel: 'desconectado',
+  });
+  
+  useEffect(() => {
+    return firebase.auth().onAuthStateChanged(user => setLogin(!!user));
+  }, [setLogin]);
 
   useEffect(() => {
-    return firebase.auth().onAuthStateChanged(user => props.setLogin(!!user));
-  }, []);
+    setUser(nenhumUsuário);
+    return onLoginChange(setUser, nenhumUsuário)
+  }, [onLoginChange, setUser, nenhumUsuário]);
 
-  if (!props.logged) {
+  //Atualiza perfil do usuário
+  useEffect(() => {
+    if (user && user.uid) {
+      const unsubscribe = userProfile(user, setUser);
+      setDestinatario(user.papel === 'administrador' ? 'comum' : 'administrador');
+      return unsubscribe;
+    } else {
+      setUser(nenhumUsuário);
+      setDestinatario(undefined);
+    }
+  }, [user, setDestinatario, setUser, nenhumUsuário, userProfile]);
+
+  if (!logged) {
     return (
-      <>
-        <div>Faça seu login com um dos métodos abaixo:</div>
+      <div>
+        <div>Conecte-se para enviar mensagens</div>
         <StyledFirebaseAuth
           uiConfig={uiConfig}
           firebaseAuth={firebase.auth()}
         />
-      </>
+      </div>
+    );
+  } else {
+    return (
+      <div style={{display: 'flex'}}>
+        <div style={{flex: 1}}>
+          {firebase.auth().currentUser.displayName}
+        </div>
+        <Button  outlined
+          onClick={() => firebase.auth().signOut()}>Desconectar</Button>
+      </div>
     );
   }
-
-  return (
-    <>
-      <div>Olá {firebase.auth().currentUser.displayName}! Tudo bem?</div>
-      <div>
-        Você está conectado! 
-        <button onClick={() => firebase.auth().signOut()}>Sair</button>
-      </div>
-      
-      
-    </>
-  );
 }

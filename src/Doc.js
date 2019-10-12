@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useMemo, useRef } from "react";
 import showdown from 'showdown';
+import Switch from '@material/react-switch';
+import Button from '@material/react-button';
 
 export default function Doc(props) {
   const {inventionListener, inventionSave} = props;
@@ -10,13 +12,15 @@ export default function Doc(props) {
   
   return (
     <>
-      <div style={{position: 'absolute', right: 0}}>
-        <button onClick={() => setView(v => !v)} >
-          {view ? 'Markdown' : 'Visualizar'}
-        </button>
-        <button onClick={() => inventionSave(markdown)} >
+      <div>
+        <label htmlFor='my-switch' style={{marginRight: '12px'}}>Visualizar</label>
+        <Switch checked={view} nativeControlId='my-switch'
+          onChange={(e) => setView(e.target.checked)} />
+        <Button raised 
+          style={{float: 'right'}}
+          onClick={() => inventionSave(markdown)} >
           Salvar
-        </button>
+        </Button>
       </div>
       {view ? <View {...{markdown}} /> : <Markdown {...{markdown, setMarkdown}} />}
     </>
@@ -28,11 +32,14 @@ function Markdown(props) {
   return (
     <div contentEditable suppressContentEditableWarning
       onBlur={(evt) => setMarkdown(evt.target.innerText)}
-      style={{whiteSpace:'pre-wrap', 
-              WebkitUserModify: 'read-write', 
-              overflowWrap: 'break-word', 
-              lineBreak: 'after-white-space', 
-              fontFamily: 'monospace'}}>
+      style={{
+        whiteSpace:'pre-wrap', 
+        WebkitUserModify: 'read-write', 
+        overflowWrap: 'break-word', 
+        lineBreak: 'after-white-space',
+        lineHeight: '1em',
+        fontFamily: 'monospace'
+      }}>
       {markdown}
     </div>
   );

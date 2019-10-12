@@ -1,5 +1,5 @@
 {
-  "name": "outline",
+  "name": "income",
   "version": "0.1.0",
   "private": true,
   "main": "src/index.js",
@@ -8,6 +8,8 @@
     "@material/react-card": "0.15.0",
     "@material/react-layout-grid": "0.15.0",
     "@material/react-list": "0.15.0",
+    "@material/react-switch": "0.15.0",
+    "@material/react-text-field": "0.15.0",
     "@material/react-typography": "0.15.0",
     "cucumber": "5.1.0",
     "firebase": "6.4.1",

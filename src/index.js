@@ -7,13 +7,16 @@ import '@material/react-layout-grid/dist/layout-grid.css';
 import '@material/react-card/dist/card.css';
 import '@material/react-list/dist/list.css';
 import '@material/react-typography/dist/typography.css';
+import "@material/react-switch/dist/switch.css";
+import '@material/react-button/dist/button.css';
+import '@material/react-text-field/dist/text-field.css';
 
 import './index.css';
 import './shadow.css';
 import './color.css';
 
 import {Cell, Grid, Row} from '@material/react-layout-grid';
-import {Body1} from '@material/react-typography';
+import {Body1, Body2} from '@material/react-typography';
 import { SignInChat } from './SignInScreen';
 import Doc from './Doc';
 import Chat from './Chat';
@@ -35,51 +38,31 @@ function Income(props) {
   const {sendMsg, userProfile, onLoginChange, msgsListener, onMsgReaded} = props;
   const {inventionListener, inventionSave} = props;
 
-  const [nenhumUsuário] = useState({
-    uid: undefined,
-    nome: undefined,
-    papel: 'desconectado',
-  })
-
   //Estados
-  const [user, setUser] = useState(nenhumUsuário);
+  const [user, setUser] = useState(undefined);
   const [destinatario, setDestinatario] = useState(undefined);
   const [alertas, setAlertas] = useState([]);
   const [contexto, setContexto] = useState('income');
   const [logged, setLogin] = useState(false);
-  
-  //Id do usuário
-  useEffect(() => {
-    return onLoginChange(setUser, nenhumUsuário)
-  }, [onLoginChange, nenhumUsuário]);
-  
-  //Atualiza perfil do usuário
-  useEffect(() => {
-    if (user.uid) {
-      const unsubscribe = userProfile(user, setUser);
-      setDestinatario(user.papel === 'administrador' ? 'comum' : 'administrador');
-      return unsubscribe;
-    } else {
-      setUser(nenhumUsuário);
-      setDestinatario(undefined);
-    }
-  }, [user, nenhumUsuário, userProfile]);
                               
   return (
     <Body1 tag={'div'}>
       <Grid style={{padding: 0}}>
-        <Row style={{gridGap: '8px'}}>
+        <Row style={{gridGap: '0px'}}>
           <Cell phoneColumns={12} tabletColumns={12} desktopColumns={8} style={{height: '100vh', overflow: 'auto', padding: '8px'}}>
             <Doc inventionSave={(markdown) => inventionSave(markdown, contexto, user)}
                   inventionListener={(setMarkdown) => inventionListener(contexto, setMarkdown)} /> 
           </Cell>
-          <Cell phoneColumns={12} tabletColumns={12} desktopColumns={4} style={{height: '100vh', overflow: 'auto', padding: '8px'}}>
-            <SignInChat logged={logged} setLogin={status => setLogin(status)}/>
+          <Cell phoneColumns={12} tabletColumns={12} desktopColumns={4} style={{height: '100vh', display: 'flex', flexDirection: 'column'}}>
+            <SignInChat onLoginChange={onLoginChange} userProfile={userProfile} setDestinatario={setDestinatario}
+              user={user} setUser={setUser}
+              logged={logged} setLogin={status => setLogin(status)}/>
+            
             <Chat sendMsg={(texto) => sendMsg(texto, user.uid, destinatario, contexto)
-                                        .catch((alerta) => setAlertas([alerta, ...alertas]))}
-                        msgsListener={(setMsgs) => msgsListener(contexto, user, setMsgs)}
-                        onMsgReaded={(msg) => onMsgReaded(msg, user, contexto)}
-                        alertas={alertas}/>
+                                      .catch((alerta) => setAlertas([alerta, ...alertas]))}
+                      msgsListener={(setMsgs) => msgsListener(contexto, user, setMsgs)}
+                      onMsgReaded={(msg) => onMsgReaded(msg, user, contexto)}
+                      alertas={alertas}/>
           </Cell>
         </Row>
       </Grid>
@@ -135,10 +118,29 @@ function msgsListener(contexto, user, setMsgs) {
   //db.collection('conversas').doc(contexto).delete().then(() => console.log('excluído'));
   const msgsRef = invenções.doc(contexto).collection('msgs');
   const msgsQuery = msgsRef.orderBy('timestamp');
+  
   const destinatario = (msg) => {
-    console.log(msg);
     return user.papel === msg.destinatarios[0] || user.uid === msg.destinatarios[0];
   }
+
+  const dataHora = timestamp => {
+    if (!timestamp) return 'aguardando';
+    
+    const p = v => v < 10 ? '0' + v : v;
+    
+    const date = timestamp.toDate();
+    const [ dia, mes, ano ] = [p(date.getDate()), p(date.getMonth()), date.getFullYear()];
+    const [ hora, minuto ] = [p(date.getHours()), p(date.getMinutes())];
+    return `${dia}/${mes}/${ano} ${hora}:${minuto}`;
+  }
+
+  const leituras = data => {
+    return data.destinatarios.reduce((prev, destinatario) => {
+      prev[destinatario] = data.leituras && dataHora(Object.values(data.leituras)[0]);
+      return prev;
+    }, {});
+  }
+
   return msgsQuery.onSnapshot( docs => {
     //console.log('msgsListener');
     const data = [];
@@ -148,6 +150,8 @@ function msgsListener(contexto, user, setMsgs) {
         id: doc.id,
         minha: doc.data().autor === user.uid,
         para_mim: destinatario(doc.data()),
+        timestamp: dataHora(doc.data().timestamp),
+        leituras: leituras(doc.data()),
       });
     });
     //console.log(data);
@@ -174,7 +178,10 @@ function inventionListener(invenção, setMarkdown) {
   }, error => console.log(error));
 }
 
-function inventionSave(markdown, invenção, autor) {  
+function inventionSave(markdown, invenção, autor) {
+  invenções.doc(invenção).collection('historico').add({
+    markdown, timestamp
+  });
   return invenções.doc(invenção).set({markdown})
     .then((a) => console.log('ok', a))
     .catch(error => Promise.reject(<div>error</div>));

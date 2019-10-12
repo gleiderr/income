@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-//import { SignInChat } from './SignInScreen';
 import Card, {
   CardPrimaryContent,
   CardMedia,
@@ -7,7 +6,7 @@ import Card, {
   CardActionButtons,
   CardActionIcons, 
 } from "@material/react-card";
-import List, {ListItem, ListItemGraphic, ListItemText, ListItemMeta } from '@material/react-list';
+import TextField, {HelperText, Input} from '@material/react-text-field';
 
 /**
  * @example Modelo de Dados Mensagens
@@ -55,15 +54,19 @@ import List, {ListItem, ListItemGraphic, ListItemText, ListItemMeta } from '@mat
                                                onReaded={onMsgReaded} />);*/
   
   return (
-    <div style={{'--maxHeight': '100vh', '--inputHeight': '1rem'}}>
+    <>
       {/*<div>Comunicação ({userRole})</div>*/}
       {alertas}
       {/*<SignInChat logged={logged} setLogin={status => setLogin(status)}/>*/}
       <MessageList {...{msgList, onReaded: onMsgReaded, usuário: autor}} />
-      <input type="text" 
-        style={{height: 'var(--inputHeight, 15)'}} 
-        onKeyDown={keyDownHandle} />
-    </div>
+      <TextField label='Sua mensagem' outlined style={{height: '40px', margin: '8px'}}>
+          
+        
+        <Input type="text" style={{height: '40px'}}
+               onKeyDown={keyDownHandle} />
+      </TextField>
+      
+    </>
   );
 }
 
@@ -73,9 +76,8 @@ function MessageList({msgList, onReaded, usuário}) {
   );
 
   return (
-    <div style={{
-      height: 'calc(var(--maxHeight) - var(--inputHeight, 15))',
-      overflow: 'auto'}}>
+    //flex-grow: 1
+    <div className={'teste'} style={{flexGrow: 1, overflow: 'auto'}}>
       {divMsgs}
     </div>
   );
@@ -83,15 +85,6 @@ function MessageList({msgList, onReaded, usuário}) {
 
 function Mensagem({msg, onReaded, usuário}) {
   const [lida, ler] = useState(msg.leituras && msg.leituras[usuário]);
-
-  const p = v => v < 10 ? '0' + v : v;
-  const dataHora = timestamp => {
-    if (!timestamp) return 'aguardando';
-    const date = timestamp.toDate();
-    const [ dia, mes, ano ] = [p(date.getDate()), p(date.getMonth()), date.getFullYear()];
-    const [ hora, minuto ] = [p(date.getHours()), p(date.getMinutes())];
-    return `${dia}/${mes}/${ano} ${hora}:${minuto}`;
-  }
 
   const style = {
     //Alinhamento em função do autor
@@ -113,8 +106,8 @@ function Mensagem({msg, onReaded, usuário}) {
     }
   }, [onReaded, msg, usuário, lida]);
   
-  //<div style={style}></div>
-  //<div style={{borderStyle: 'dashed', borderWidth: '1px'}}>
+  //console.log(msg);
+
   return (
     <Card outlined={false} style={{margin: '8px', maxWidth: 'fit-content'}}     
           className={'income-theme'} data-testid="mensagem">
@@ -123,7 +116,7 @@ function Mensagem({msg, onReaded, usuário}) {
         <div data-testid="texto">{msg.texto}</div>
         <div>
           <span>Entregue: </span> 
-          <span data-testid="entrega">{dataHora(msg.timestamp)}</span>
+          <span data-testid="entrega">{msg.timestamp}</span>
         </div>
         <div data-testid="leitura">
           {msg.leituras && `${msg.destinatarios[0]} leu em ${Object.values(msg.leituras)[0]}`}
@@ -131,12 +124,4 @@ function Mensagem({msg, onReaded, usuário}) {
       </CardPrimaryContent>
     </Card>
   );
-
-  /*return (
-    <ListItem>
-      <ListItemText primaryText={msg.texto}
-                    secondaryText={msg.autor} />
-      <ListItemMeta meta={`Entregue: ${dataHora(msg.timestamp)}`}/>
-    </ListItem>
-  )*/
 }
