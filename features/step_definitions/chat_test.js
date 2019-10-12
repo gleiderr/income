@@ -49,7 +49,8 @@ Given('chat renderizado ao {string}', function (usuário) {
   document.body.appendChild(new_container);
 
   const callbacks = {sendMsg, msgsListener, onMsgReaded};
-  const chat = <Chat autor={usuário} destinatários={[this.destinatário]}                    alertas={[]} {...callbacks} />;
+  const chat = <Chat autor={usuário} destinatários={[this.destinatário]} 
+                     alertas={[]} {...callbacks} />;
 
   act(() => {
     ReactDOM.render(chat, new_container);
