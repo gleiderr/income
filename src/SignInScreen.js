@@ -70,7 +70,7 @@ export function SignInChat({ onLoginChange, userProfile, user, setUser, logged, 
     return (
       <div style={{display: 'flex'}}>
         <div style={{flex: 1}}>
-          {firebase.auth().currentUser.displayName}
+          {firebase.auth().currentUser ? firebase.auth().currentUser.displayName : ''}
         </div>
         <Button  outlined
           onClick={() => firebase.auth().signOut()}>Desconectar</Button>
