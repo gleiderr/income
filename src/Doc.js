@@ -32,11 +32,14 @@ function Markdown(props) {
   return (
     <div contentEditable suppressContentEditableWarning
       onBlur={(evt) => setMarkdown(evt.target.innerText)}
-      style={{whiteSpace:'pre-wrap', 
-              WebkitUserModify: 'read-write', 
-              overflowWrap: 'break-word', 
-              lineBreak: 'after-white-space', 
-              fontFamily: 'monospace'}}>
+      style={{
+        whiteSpace:'pre-wrap', 
+        WebkitUserModify: 'read-write', 
+        overflowWrap: 'break-word', 
+        lineBreak: 'after-white-space',
+        lineHeight: '1em',
+        fontFamily: 'monospace'
+      }}>
       {markdown}
     </div>
   );

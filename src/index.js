@@ -9,13 +9,14 @@ import '@material/react-list/dist/list.css';
 import '@material/react-typography/dist/typography.css';
 import "@material/react-switch/dist/switch.css";
 import '@material/react-button/dist/button.css';
+import '@material/react-text-field/dist/text-field.css';
 
 import './index.css';
 import './shadow.css';
 import './color.css';
 
 import {Cell, Grid, Row} from '@material/react-layout-grid';
-import {Body1} from '@material/react-typography';
+import {Body1, Body2} from '@material/react-typography';
 import { SignInChat } from './SignInScreen';
 import Doc from './Doc';
 import Chat from './Chat';
@@ -37,51 +38,31 @@ function Income(props) {
   const {sendMsg, userProfile, onLoginChange, msgsListener, onMsgReaded} = props;
   const {inventionListener, inventionSave} = props;
 
-  const [nenhumUsuário] = useState({
-    uid: undefined,
-    nome: undefined,
-    papel: 'desconectado',
-  })
-
   //Estados
-  const [user, setUser] = useState(nenhumUsuário);
+  const [user, setUser] = useState(undefined);
   const [destinatario, setDestinatario] = useState(undefined);
   const [alertas, setAlertas] = useState([]);
   const [contexto, setContexto] = useState('income');
   const [logged, setLogin] = useState(false);
-  
-  //Id do usuário
-  useEffect(() => {
-    return onLoginChange(setUser, nenhumUsuário)
-  }, [onLoginChange, nenhumUsuário]);
-  
-  //Atualiza perfil do usuário
-  useEffect(() => {
-    if (user.uid) {
-      const unsubscribe = userProfile(user, setUser);
-      setDestinatario(user.papel === 'administrador' ? 'comum' : 'administrador');
-      return unsubscribe;
-    } else {
-      setUser(nenhumUsuário);
-      setDestinatario(undefined);
-    }
-  }, [user, nenhumUsuário, userProfile]);
                               
   return (
     <Body1 tag={'div'}>
       <Grid style={{padding: 0}}>
-        <Row style={{gridGap: '8px'}}>
+        <Row style={{gridGap: '0px'}}>
           <Cell phoneColumns={12} tabletColumns={12} desktopColumns={8} style={{height: '100vh', overflow: 'auto', padding: '8px'}}>
             <Doc inventionSave={(markdown) => inventionSave(markdown, contexto, user)}
                   inventionListener={(setMarkdown) => inventionListener(contexto, setMarkdown)} /> 
           </Cell>
-          <Cell phoneColumns={12} tabletColumns={12} desktopColumns={4} style={{height: '100vh', overflow: 'auto', padding: '8px'}}>
-            <SignInChat logged={logged} setLogin={status => setLogin(status)}/>
+          <Cell phoneColumns={12} tabletColumns={12} desktopColumns={4} style={{height: '100vh', display: 'flex', flexDirection: 'column'}}>
+            <SignInChat onLoginChange={onLoginChange} userProfile={userProfile} setDestinatario={setDestinatario}
+              user={user} setUser={setUser}
+              logged={logged} setLogin={status => setLogin(status)}/>
+            
             <Chat sendMsg={(texto) => sendMsg(texto, user.uid, destinatario, contexto)
-                                        .catch((alerta) => setAlertas([alerta, ...alertas]))}
-                        msgsListener={(setMsgs) => msgsListener(contexto, user, setMsgs)}
-                        onMsgReaded={(msg) => onMsgReaded(msg, user, contexto)}
-                        alertas={alertas}/>
+                                      .catch((alerta) => setAlertas([alerta, ...alertas]))}
+                      msgsListener={(setMsgs) => msgsListener(contexto, user, setMsgs)}
+                      onMsgReaded={(msg) => onMsgReaded(msg, user, contexto)}
+                      alertas={alertas}/>
           </Cell>
         </Row>
       </Grid>
