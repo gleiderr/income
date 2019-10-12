@@ -35,12 +35,13 @@ import TextField, {HelperText, Input} from '@material/react-text-field';
   const [msgList, setMsgs] = useState([]);
   const [userRole, setRole] = useState('normal');
   const [logged, setLogin] = useState(false);
+  const [texto, escrever] = useState('');
 
   const keyDownHandle = evt => {
     if (evt.key === "Enter") {
       evt.persist();
       sendMsg(evt.target.value, autor, destinatários)
-        .then(() => evt.target.value = '') //Limpa o campo
+        .then(escrever('')) //Limpa o campo
         .catch(console.log); 
     }
   };
@@ -57,10 +58,8 @@ import TextField, {HelperText, Input} from '@material/react-text-field';
       {/*<SignInChat logged={logged} setLogin={status => setLogin(status)}/>*/}
       <MessageList {...{msgList, onReaded: onMsgReaded, usuário: autor}} />
       <TextField label='Sua mensagem' outlined style={{height: '40px', margin: '8px'}}>
-          
-        
-        <Input type="text" style={{height: '40px'}}
-               onKeyDown={keyDownHandle} />
+        <Input style={{height: '40px'}} onKeyDown={keyDownHandle}
+              value={texto} onChange={(e) => escrever(e.currentTarget.value)} />
       </TextField>
       
     </>
