@@ -112,7 +112,7 @@ function Mensagem({msg, onReaded, usuário}) {
         <div data-testid="texto">{msg.texto}</div>
         <div>
           <span>Entregue: </span> 
-          <span data-testid="entrega">{msg.timestamp}</span>
+          <span data-testid="entrega">{msg.timestamp || 'aguardando'}</span>
         </div>
         <div data-testid="leitura">
           {msg.leituras && `${msg.destinatarios[0]} leu em ${Object.values(msg.leituras)[0]}`}
