@@ -10,12 +10,16 @@ import '@material/react-typography/dist/typography.css';
 import "@material/react-switch/dist/switch.css";
 import '@material/react-button/dist/button.css';
 import '@material/react-text-field/dist/text-field.css';
+import '@material/react-fab/dist/fab.css';
+import '@material/react-material-icon/dist/material-icon.css';
 
 import './index.css';
 import './shadow.css';
 import './color.css';
 
 import {Cell, Grid, Row} from '@material/react-layout-grid';
+import MaterialIcon from '@material/react-material-icon';
+import { Fab } from '@material/react-fab';
 import {Body1} from '@material/react-typography';
 import { SignInChat } from './SignInScreen';
 import Doc from './Doc';
@@ -58,11 +62,16 @@ function Income(props) {
     <Body1 tag={'div'}>
       <Grid style={{padding: 0}}>
         <Row style={{gridGap: '0px'}}>
-          <Cell phoneColumns={12} tabletColumns={12} desktopColumns={8} style={{height: '100vh', overflow: 'auto', padding: '8px'}}>
+          <Cell id='doc' phoneColumns={12} tabletColumns={12} desktopColumns={8} 
+                style={{height: '100vh', display: 'flex', flexDirection: 'column'}}>
             <Doc inventionSave={(markdown) => inventionSave(markdown, contexto, user)}
-                  inventionListener={(setMarkdown) => inventionListener(contexto, setMarkdown)} /> 
+                  inventionListener={(setMarkdown) => inventionListener(contexto, setMarkdown)} />
+            <a href='#chat'>
+              <Fab icon={<MaterialIcon icon="question_answer"/>} />
+            </a>
           </Cell>
-          <Cell phoneColumns={12} tabletColumns={12} desktopColumns={4} style={{height: '100vh', display: 'flex', flexDirection: 'column'}}>
+          <Cell id='chat' phoneColumns={12} tabletColumns={12} desktopColumns={4} 
+                style={{height: '100vh', display: 'flex', flexDirection: 'column'}}>
             <SignInChat onLoginChange={onLoginChange} userProfile={userProfile} setDestinatario={setDestinatario}
               user={user} setUser={setUser}
               logged={logged} setLogin={status => setLogin(status)}/>

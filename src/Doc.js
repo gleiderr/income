@@ -12,17 +12,18 @@ export default function Doc(props) {
   
   return (
     <>
-      <div>
+      <div style={{display: 'flex', padding: '8px', }}>
         <label htmlFor='my-switch' style={{marginRight: '12px'}}>Visualizar</label>
         <Switch checked={view} nativeControlId='my-switch'
           onChange={(e) => setView(e.target.checked)} />
-        <Button raised 
-          style={{float: 'right'}}
+        <Button raised style={{marginLeft: 'auto'}}
           onClick={() => inventionSave(markdown)} >
           Salvar
         </Button>
       </div>
-      {view ? <View {...{markdown}} /> : <Markdown {...{markdown, setMarkdown}} />}
+      <div style={{flexGrow: 1, overflow: 'auto', padding: '8px',}}>
+        {view ? <View {...{markdown}} /> : <Markdown {...{markdown, setMarkdown}} />}
+      </div>
     </>
   );
 }
@@ -30,7 +31,7 @@ export default function Doc(props) {
 function Markdown(props) {
   const {markdown, setMarkdown} = props;
   return (
-    <div contentEditable suppressContentEditableWarning
+    <div contentEditable suppressContentEditableWarning 
       onBlur={(evt) => setMarkdown(evt.target.innerText)}
       style={{
         whiteSpace:'pre-wrap', 
@@ -38,7 +39,8 @@ function Markdown(props) {
         overflowWrap: 'break-word', 
         lineBreak: 'after-white-space',
         lineHeight: '1em',
-        fontFamily: 'monospace'
+        fontFamily: 'monospace',
+        display: 'inline-block',
       }}>
       {markdown}
     </div>
@@ -50,5 +52,5 @@ function View(props) {
   const converter = new showdown.Converter({strikethrough: true});
   converter.setFlavor('github');
   const html = converter.makeHtml(markdown);
-  return <div dangerouslySetInnerHTML={{__html: html}} />;
+  return <div class='income-doc' dangerouslySetInnerHTML={{__html: html}} />;
 }
