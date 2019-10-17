@@ -25,13 +25,15 @@ Before(function (params) {
   this.containers = {};  
   listeners = {};
   data_hora = undefined;
-})
+});
+
+const desmonta = (container) => {
+  ReactDOM.unmountComponentAtNode(container);
+  container.remove();
+}
 
 After(function() {
-  for (const container of Object.values(this.containers)) {
-      ReactDOM.unmountComponentAtNode(container);
-      container.remove();
-  }
+  Object.values(this.containers).forEach(desmonta);
 });
 
 Given('o remetente {string}', function (usuário) {
@@ -46,7 +48,9 @@ Given('nenhuma mensagem enviada', function () {
   mensagens = [];
 });
 
-Given('chat renderizado ao {string}', function (usuário) {
+When('chat renderizado pelo {string} às {string}', function (usuário, p_data_hora) {
+  data_hora = p_data_hora;
+
   const new_container = document.createElement('div');
   this.containers[usuário] = new_container;
   document.body.appendChild(new_container);
@@ -72,10 +76,9 @@ When('teclar {string}', function (string) {
   });
 });
 
-When('data-hora igual a {string}', function (p_data_hora) {
-  data_hora = p_data_hora;
-  console.log({data_hora});
-  
+When('chat desconectado pelo {string}', function (usuário) {
+  desmonta(this.containers[usuário]);
+  delete this.containers[usuário];
 });
 
 Then('o texto digitado deve ser limpo', function () {
@@ -169,7 +172,7 @@ function onMsgReaded(msg, leitor) {
   }
   mensagens[msg.id].leituras[leitor] = data_hora;
 
-  callListeners();  
+  callListeners();
   
   //console.log('onMsgReaded', mensagens[msg.id]);
 

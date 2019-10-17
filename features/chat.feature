@@ -6,7 +6,7 @@ Funcionalidade: Chat
     Dado o remetente '<remetente>'
     E o destinatário 'desenvolvedor'
     E nenhuma mensagem enviada
-    E chat renderizado ao '<remetente>'
+    E chat renderizado pelo '<remetente>' às '17/11/2019 às 14:30'
     Quando o '<remetente>' digitar a mensagem '<mensagem>'
     E teclar 'Enter'
     Então o texto digitado deve ser limpo
@@ -20,15 +20,32 @@ Funcionalidade: Chat
     | joão      | Olá, bom dia!     |
     | pedro     | Boa tarde pessoas |
 
-  Esquema do Cenário: Usuário deseja saber quando sua mensagem foi lida
+  Esquema do Cenário: Mensagem do <remetente> lida por desenvolvedor conectado simultaneamente
     Dado o remetente '<remetente>'
     E o destinatário 'desenvolvedor'
     E nenhuma mensagem enviada
-    E data-hora igual a '17/11/2019 às 14:30'
-    E chat renderizado ao '<remetente>'
-    E chat renderizado ao 'desenvolvedor'
+    E chat renderizado pelo '<remetente>' às '17/11/2019 às 14:30'
+    E chat renderizado pelo 'desenvolvedor' às '17/11/2019 às 14:30'
     Quando o '<remetente>' digitar a mensagem '<mensagem>'
     E teclar 'Enter'
+    Então uma mensagem deve ser exibida para o 'desenvolvedor'
+    E uma mensagem deve ser exibida para o '<remetente>'
+    E nessa mensagem "leitura" contém 'desenvolvedor leu em 17/11/2019 às 14:30'
+
+  Exemplos:
+    | remetente | mensagem          |
+    | joão      | Olá, bom dia!     |
+
+  Esquema do Cenário: Mensagem do <remetente> lida por desenvolvedor duas vezes
+    Dado o remetente '<remetente>'
+    E o destinatário 'desenvolvedor'
+    E nenhuma mensagem enviada
+    Quando chat renderizado pelo '<remetente>' às '16/11/2019 às 14:30'
+    E o '<remetente>' digitar a mensagem '<mensagem>'
+    E teclar 'Enter'
+    E chat renderizado pelo 'desenvolvedor' às '17/11/2019 às 14:30'
+    E chat desconectado pelo 'desenvolvedor'
+    E chat renderizado pelo 'desenvolvedor' às '18/11/2019 às 14:30'
     Então uma mensagem deve ser exibida para o 'desenvolvedor'
     E uma mensagem deve ser exibida para o '<remetente>'
     E nessa mensagem "leitura" contém 'desenvolvedor leu em 17/11/2019 às 14:30'
