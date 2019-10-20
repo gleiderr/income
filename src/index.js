@@ -3,6 +3,10 @@ import ReactDOM from "react-dom";
 import firebase from "firebase";
 import firebase_init from "./firebase-local";
 
+import './index.css';
+import './shadow.css';
+import './color.css';
+
 import '@material/react-layout-grid/dist/layout-grid.css';
 import '@material/react-card/dist/card.css';
 import '@material/react-list/dist/list.css';
@@ -12,10 +16,7 @@ import '@material/react-button/dist/button.css';
 import '@material/react-text-field/dist/text-field.css';
 import '@material/react-fab/dist/fab.css';
 import '@material/react-material-icon/dist/material-icon.css';
-
-import './index.css';
-import './shadow.css';
-import './color.css';
+import '@material/react-top-app-bar/dist/top-app-bar.css';
 
 import {Cell, Grid, Row} from '@material/react-layout-grid';
 import MaterialIcon from '@material/react-material-icon';
@@ -24,6 +25,14 @@ import {Body1} from '@material/react-typography';
 import { SignInChat } from './SignInScreen';
 import Doc from './Doc';
 import Chat from './Chat';
+import { Button } from '@material/react-button';
+import TopAppBar, {
+  TopAppBarFixedAdjust, 
+  TopAppBarIcon,
+  TopAppBarRow,
+  TopAppBarSection,
+  TopAppBarTitle,
+} from '@material/react-top-app-bar';
 //import App from "./App";
 //import * as serviceWorker from "./serviceWorker";
 
@@ -62,16 +71,24 @@ function Income(props) {
     <Body1 tag={'div'}>
       <Grid style={{padding: 0}}>
         <Row style={{gridGap: '0px'}}>
-          <Cell id='doc' phoneColumns={12} tabletColumns={12} desktopColumns={8} 
-                style={{height: '100vh', display: 'flex', flexDirection: 'column'}}>
+          <Cell id='incomedocs' phoneColumns={12} tabletColumns={12} desktopColumns={8} 
+                style={{height: '100vh', display: 'flex', flexDirection: 'column', position: 'relative'}}>
             <Doc inventionSave={(markdown) => inventionSave(markdown, contexto, user)}
                   inventionListener={(setMarkdown) => inventionListener(contexto, setMarkdown)} />
-            <a href='#chat'>
-              <Fab icon={<MaterialIcon icon="question_answer"/>} />
+            
+            <a id='fab-chat' style={{margin: '16px', position: 'absolute', bottom: '0px', right: '0px'}} href='#incomechat'>
+              <Fab icon={<MaterialIcon icon="chat"/> } style={{
+                color: 'var(--mdc-theme-on-primary, #fff)',
+                background: 'var(--mdc-theme-primary, #6200ee)'
+                }} />
             </a>
           </Cell>
-          <Cell id='chat' phoneColumns={12} tabletColumns={12} desktopColumns={4} 
-                style={{height: '100vh', display: 'flex', flexDirection: 'column'}}>
+          <Cell id='incomechat' phoneColumns={12} tabletColumns={12} desktopColumns={4} 
+                style={{height: '100vh', display: 'flex', flexDirection: 'column', position: 'relative'}}>
+           <ChatHeader logged={logged} />
+            {/* <a id='fab-docs' style={{margin: '8px', position: 'absolute', top: '0px', left: '0px'}} href='#incomedocs'>
+              <Fab icon={<MaterialIcon icon="description"/>} mini />
+            </a> */}
             <SignInChat onLoginChange={onLoginChange} userProfile={userProfile} setDestinatario={setDestinatario}
               user={user} setUser={setUser}
               logged={logged} setLogin={status => setLogin(status)}/>
@@ -82,6 +99,35 @@ function Income(props) {
       </Grid>
     </Body1>
   );
+
+  function ChatHeader({logged}) {
+    const docLink = (
+      <a id='fab-docs' style={{margin: '8px', marginLeft: 'auto', top: '0px', left: '0px'}} href='#incomedocs'>
+        <Fab href='#teste' icon={<MaterialIcon icon="description"/>} mini />
+      </a>
+    );
+
+    const style = {
+      color: 'var(--mdc-theme-on-primary, #ffffff)',
+      borderColor: 'var(--mdc-theme-on-primary, #ffffff)',
+      margin: '8px'
+    };
+    
+    const button = logged ? <Button outlined style={style} onClick={() => firebase.auth().signOut()}>Desconectar</Button> :
+                            <Button outlined style={style}>
+                              Conectar
+                            </Button>
+
+    
+    return (
+      <TopAppBar style={{position: 'static'}}>
+        <TopAppBarRow>
+          {button}
+          {docLink}
+        </TopAppBarRow>
+      </TopAppBar>
+    );
+  }
 }
 
 function onLoginChange(setUser, nenhumUsuário) {
@@ -176,6 +222,7 @@ function msgsListener(contexto, user, setMsgs) {
 
 function onMsgReaded(msg, user, contexto) {
   //console.log(msg, user, contexto);
+  /* Comentado até ser corrigido
   const msgsRef = invenções.doc(contexto).collection('msgs');
   //não lido e destinatário
   const lido = user.uid && msg.leituras && msg.leituras[user.uid];
@@ -183,7 +230,7 @@ function onMsgReaded(msg, user, contexto) {
     msgsRef.doc(msg.id).update({[`leituras.${user.uid}`]: timestamp})
       .then(() => console.log('Msg marcada como lida'))
       .catch((error => console.log("Msg não marcada como lida", error)));
-  }
+  }*/
 }
 
 function inventionListener(invenção, setMarkdown) {

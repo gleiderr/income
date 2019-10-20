@@ -27,3 +27,12 @@ body {
     margin-inline-end: 0px;
   }
 }
+
+@media (min-width: 840px) {
+  #fab-chat {
+    display: none
+  }
+  #fab-docs {
+    display: none
+  }
+}
