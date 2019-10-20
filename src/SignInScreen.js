@@ -28,6 +28,12 @@ const uiConfig = {
   }
 };
 
+export function SignIn() {
+  return (
+    <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={firebase.auth()} />
+  );
+}
+
 export function SignInChat({ onLoginChange, userProfile, user, setUser, logged, setLogin, setDestinatario }) {
   const [nenhumUsuário] = useState({
     uid: undefined,
@@ -72,8 +78,6 @@ export function SignInChat({ onLoginChange, userProfile, user, setUser, logged, 
         <div style={{flex: 1}}>
           {firebase.auth().currentUser ? firebase.auth().currentUser.displayName : ''}
         </div>
-        <Button  outlined
-          onClick={() => firebase.auth().signOut()}>Desconectar</Button>
       </div>
     );
   }
