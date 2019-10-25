@@ -52,7 +52,7 @@ setVH();
 
 function Income(props) {
   //Props
-  const {sendMsg, userProfile, onLoginChange, msgsListener, onMsgReaded} = props;
+  const {sendMsg, userProfile, onLoginChange, msgsListener} = props;
   const {inventionListener, inventionSave} = props;
 
   //Estados
@@ -66,8 +66,7 @@ function Income(props) {
   const callbacks = {
     sendMsg: (texto) => sendMsg(texto, user.uid, destinatario, contexto)
                         .catch((alerta) => setAlertas([alerta, ...alertas])), 
-    msgsListener: (setMsgs) => msgsListener(contexto, user, setMsgs), 
-    onMsgReaded: (msg) => onMsgReaded(msg, user, contexto)
+    msgsListener: (setMsgs) => msgsListener(contexto, user, setMsgs),
   };
   const chat = <Chat autor={user && user.id} destinatários={[destinatario]} 
                      alertas={[]} {...callbacks} />;
@@ -95,11 +94,7 @@ function Income(props) {
           <Cell id='incomechat' className='vh100' phoneColumns={12} tabletColumns={12} desktopColumns={4} 
                 style={{display: 'flex', flexDirection: 'column', position: 'relative'}}>
            <ChatHeader logged={logged} connecting={connecting} initLogin={initLogin} signIn={signIn} />
-            {/* <a id='fab-docs' style={{margin: '8px', position: 'absolute', top: '0px', left: '0px'}} href='#incomedocs'>
-              <Fab icon={<MaterialIcon icon="description"/>} mini />
-            </a> */}
             {connecting ? signIn : null}
-            
             {chat}
           </Cell>
         </Row>
@@ -108,13 +103,7 @@ function Income(props) {
   );
 
   function ChatHeader({logged, connecting, initLogin, signIn}) {
-    const docLink = (
-      <a id='fab-docs' style={{margin: '8px', marginLeft: 'auto', top: '0px', left: '0px'}} href='#incomedocs'>
-        <Fab icon={<MaterialIcon icon="description"/>} mini />
-      </a>
-    );
-
-    const b = <Button id='fab-docs' href='#incomedocs'
+    const docLink = <Button id='fab-docs' href='#incomedocs'
                       style={{
                         margin: 'auto 8px auto auto',
                         marginLeft: 'auto',
@@ -142,7 +131,7 @@ function Income(props) {
       <TopAppBar style={{position: 'static'}}>
         <TopAppBarRow>
           {button}
-          {b}
+          {docLink}
         </TopAppBarRow>
       </TopAppBar>
     );
@@ -197,28 +186,6 @@ function msgsListener(contexto, user, setMsgs) {
   //db.collection('conversas').doc(contexto).delete().then(() => console.log('excluído'));
   const msgsRef = invenções.doc(contexto).collection('msgs');
   const msgsQuery = msgsRef.orderBy('timestamp');
-  
-  const destinatario = (msg) => {
-    return user.papel === msg.destinatarios[0] || user.uid === msg.destinatarios[0];
-  }
-
-  const dataHora = timestamp => {
-    if (!timestamp) return 'aguardando';
-    
-    const p = v => v < 10 ? '0' + v : v;
-    
-    const date = timestamp.toDate();
-    const [ dia, mes, ano ] = [p(date.getDate()), p(date.getMonth()), date.getFullYear()];
-    const [ hora, minuto ] = [p(date.getHours()), p(date.getMinutes())];
-    return `${dia}/${mes}/${ano} ${hora}:${minuto}`;
-  }
-
-  const leituras = data => {
-    return data.destinatarios.reduce((prev, destinatario) => {
-      prev[destinatario] = data.leituras && dataHora(Object.values(data.leituras)[0]);
-      return prev;
-    }, {});
-  }
 
   return msgsQuery.onSnapshot( docs => {
     //console.log('msgsListener');
@@ -227,29 +194,11 @@ function msgsListener(contexto, user, setMsgs) {
       data.push({
         ...doc.data(), 
         id: doc.id,
-        minha: doc.data().autor === user.uid,
-        para_mim: destinatario(doc.data()),
-        timestamp: dataHora(doc.data().timestamp),
-        leituras: leituras(doc.data()),
       });
     });
-    //console.log(data);
     setMsgs(data);
   },
   error => console.log(error));
-}
-
-function onMsgReaded(msg, user, contexto) {
-  //console.log(msg, user, contexto);
-  /* Comentado até ser corrigido
-  const msgsRef = invenções.doc(contexto).collection('msgs');
-  //não lido e destinatário
-  const lido = user.uid && msg.leituras && msg.leituras[user.uid];
-  if (!lido && msg.para_mim) {
-    msgsRef.doc(msg.id).update({[`leituras.${user.uid}`]: timestamp})
-      .then(() => console.log('Msg marcada como lida'))
-      .catch((error => console.log("Msg não marcada como lida", error)));
-  }*/
 }
 
 function inventionListener(invenção, setMarkdown) {
@@ -269,7 +218,7 @@ function inventionSave(markdown, invenção, autor) {
 }
 
 ReactDOM.render(<Income sendMsg={sendMsg} msgsListener={msgsListener}
-                        onMsgReaded={onMsgReaded} onLoginChange={onLoginChange}
+                        onLoginChange={onLoginChange}
                         userProfile={userProfile}
                         inventionListener={inventionListener}
                         inventionSave={inventionSave}
