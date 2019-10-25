@@ -1,6 +1,6 @@
 
 /*https://material.io/resources/color/#!/?view.left=0&view.right=0&primary.color=00695C&secondary.color=B2DFDB*/
-body {
+:root {
   --mdc-theme-primary: #00695c;
   --mdc-theme-secondary: #b2dfdb;
   --mdc-theme-background: red;

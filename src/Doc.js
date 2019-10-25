@@ -52,5 +52,5 @@ function View(props) {
   const converter = new showdown.Converter({strikethrough: true});
   converter.setFlavor('github');
   const html = converter.makeHtml(markdown);
-  return <div class='income-doc' dangerouslySetInnerHTML={{__html: html}} />;
+  return <div className='income-doc' dangerouslySetInnerHTML={{__html: html}} />;
 }

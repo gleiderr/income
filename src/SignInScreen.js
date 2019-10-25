@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import firebase from "firebase";
 import firebase_init from "./firebase-local";
 import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
-import { Button } from '@material/react-button';
 
 try {
   firebase.app();
@@ -64,8 +63,7 @@ export function SignInChat({ onLoginChange, userProfile, user, setUser, logged, 
 
   if (!logged) {
     return (
-      <div>
-        <div>Conecte-se para enviar mensagens</div>
+      <div style={{background: 'var(--mdc-theme-primary)'}}>
         <StyledFirebaseAuth
           uiConfig={uiConfig}
           firebaseAuth={firebase.auth()}
@@ -73,12 +71,13 @@ export function SignInChat({ onLoginChange, userProfile, user, setUser, logged, 
       </div>
     );
   } else {
-    return (
-      <div style={{display: 'flex'}}>
-        <div style={{flex: 1}}>
-          {firebase.auth().currentUser ? firebase.auth().currentUser.displayName : ''}
-        </div>
-      </div>
-    );
+    return <></>; //Somente mantendo presença para desconexão
+    // return (
+    //   <div style={{display: 'flex'}}>
+    //     <div style={{flex: 1}}>
+    //       {firebase.auth().currentUser ? firebase.auth().currentUser.displayName : ''}
+    //     </div>
+    //   </div>
+    // );
   }
 }

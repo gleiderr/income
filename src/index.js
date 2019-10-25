@@ -2,10 +2,12 @@ import React, { useState, useEffect, useRef } from "react";
 import ReactDOM from "react-dom";
 import firebase from "firebase";
 import firebase_init from "./firebase-local";
+import {setVH} from './height';
 
 import './index.css';
 import './shadow.css';
 import './color.css';
+import './height.css';
 
 import '@material/react-layout-grid/dist/layout-grid.css';
 import '@material/react-card/dist/card.css';
@@ -46,6 +48,8 @@ const db = firebase.firestore();
 const invenções = db.collection('invenções');
 const timestamp = firebase.firestore.FieldValue.serverTimestamp();
 
+setVH();
+
 function Income(props) {
   //Props
   const {sendMsg, userProfile, onLoginChange, msgsListener, onMsgReaded} = props;
@@ -57,6 +61,7 @@ function Income(props) {
   const [alertas, setAlertas] = useState([]);
   const [contexto, setContexto] = useState('income');
   const [logged, setLogin] = useState(false);
+  const [connecting, initLogin] = useState(false);
 
   const callbacks = {
     sendMsg: (texto) => sendMsg(texto, user.uid, destinatario, contexto)
@@ -66,13 +71,17 @@ function Income(props) {
   };
   const chat = <Chat autor={user && user.id} destinatários={[destinatario]} 
                      alertas={[]} {...callbacks} />;
+  
+  const signIn = <SignInChat onLoginChange={onLoginChange} userProfile={userProfile} setDestinatario={setDestinatario}
+                    user={user} setUser={setUser}
+                    logged={logged} setLogin={status => setLogin(status)}/>
 
   return (
     <Body1 tag={'div'}>
       <Grid style={{padding: 0}}>
         <Row style={{gridGap: '0px'}}>
-          <Cell id='incomedocs' phoneColumns={12} tabletColumns={12} desktopColumns={8} 
-                style={{height: '100vh', display: 'flex', flexDirection: 'column', position: 'relative'}}>
+          <Cell id='incomedocs' className='vh100' phoneColumns={12} tabletColumns={12} desktopColumns={8} 
+                style={{display: 'flex', flexDirection: 'column', position: 'relative'}}>
             <Doc inventionSave={(markdown) => inventionSave(markdown, contexto, user)}
                   inventionListener={(setMarkdown) => inventionListener(contexto, setMarkdown)} />
             
@@ -83,15 +92,13 @@ function Income(props) {
                 }} />
             </a>
           </Cell>
-          <Cell id='incomechat' phoneColumns={12} tabletColumns={12} desktopColumns={4} 
-                style={{height: '100vh', display: 'flex', flexDirection: 'column', position: 'relative'}}>
-           <ChatHeader logged={logged} />
+          <Cell id='incomechat' className='vh100' phoneColumns={12} tabletColumns={12} desktopColumns={4} 
+                style={{display: 'flex', flexDirection: 'column', position: 'relative'}}>
+           <ChatHeader logged={logged} connecting={connecting} initLogin={initLogin} signIn={signIn} />
             {/* <a id='fab-docs' style={{margin: '8px', position: 'absolute', top: '0px', left: '0px'}} href='#incomedocs'>
               <Fab icon={<MaterialIcon icon="description"/>} mini />
             </a> */}
-            <SignInChat onLoginChange={onLoginChange} userProfile={userProfile} setDestinatario={setDestinatario}
-              user={user} setUser={setUser}
-              logged={logged} setLogin={status => setLogin(status)}/>
+            {connecting ? signIn : null}
             
             {chat}
           </Cell>
@@ -100,21 +107,33 @@ function Income(props) {
     </Body1>
   );
 
-  function ChatHeader({logged}) {
+  function ChatHeader({logged, connecting, initLogin, signIn}) {
     const docLink = (
       <a id='fab-docs' style={{margin: '8px', marginLeft: 'auto', top: '0px', left: '0px'}} href='#incomedocs'>
-        <Fab href='#teste' icon={<MaterialIcon icon="description"/>} mini />
+        <Fab icon={<MaterialIcon icon="description"/>} mini />
       </a>
     );
+
+    const b = <Button id='fab-docs' href='#incomedocs'
+                      style={{
+                        margin: 'auto 8px auto auto',
+                        marginLeft: 'auto',
+                        background: 'var(--mdc-theme-secondary)',
+                        color: 'var(--mdc-theme-on-secondary)',
+                        borderColor: 'var(--mdc-theme-on-primary, #ffffff)',
+                      }}
+                      icon={<MaterialIcon icon="description"/>}>
+      Documentação
+    </Button>
 
     const style = {
       color: 'var(--mdc-theme-on-primary, #ffffff)',
       borderColor: 'var(--mdc-theme-on-primary, #ffffff)',
-      margin: '8px'
+      margin: 'auto 8px'
     };
-    
     const button = logged ? <Button outlined style={style} onClick={() => firebase.auth().signOut()}>Desconectar</Button> :
-                            <Button outlined style={style}>
+                            <Button outlined style={style} onClick={() => initLogin(!connecting)}
+                              trailingIcon={<MaterialIcon icon={connecting ? "arrow_drop_up" : "arrow_drop_down"}/>}>
                               Conectar
                             </Button>
 
@@ -123,7 +142,7 @@ function Income(props) {
       <TopAppBar style={{position: 'static'}}>
         <TopAppBarRow>
           {button}
-          {docLink}
+          {b}
         </TopAppBarRow>
       </TopAppBar>
     );
@@ -243,8 +262,9 @@ function inventionSave(markdown, invenção, autor) {
   invenções.doc(invenção).collection('historico').add({
     markdown, timestamp
   });
+  console.log('salvando...');
   return invenções.doc(invenção).set({markdown})
-    .then((a) => console.log('ok', a))
+    .then((a) => console.log('salvo', a))
     .catch(error => Promise.reject(<div>error</div>));
 }
 
