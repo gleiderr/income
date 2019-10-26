@@ -2,10 +2,13 @@ import React, { useState, useEffect, useRef } from "react";
 import ReactDOM from "react-dom";
 import firebase from "firebase";
 import firebase_init from "./firebase-local";
+import {setVH} from './height';
 
 import './index.css';
 import './shadow.css';
 import './color.css';
+import './height.css';
+import './docs.css';
 
 import '@material/react-layout-grid/dist/layout-grid.css';
 import '@material/react-card/dist/card.css';
@@ -46,9 +49,11 @@ const db = firebase.firestore();
 const invenções = db.collection('invenções');
 const timestamp = firebase.firestore.FieldValue.serverTimestamp();
 
+setVH();
+
 function Income(props) {
   //Props
-  const {sendMsg, userProfile, onLoginChange, msgsListener, onMsgReaded} = props;
+  const {sendMsg, userProfile, onLoginChange, msgsListener} = props;
   const {inventionListener, inventionSave} = props;
 
   //Estados
@@ -57,22 +62,26 @@ function Income(props) {
   const [alertas, setAlertas] = useState([]);
   const [contexto, setContexto] = useState('income');
   const [logged, setLogin] = useState(false);
+  const [connecting, initLogin] = useState(false);
 
   const callbacks = {
     sendMsg: (texto) => sendMsg(texto, user.uid, destinatario, contexto)
                         .catch((alerta) => setAlertas([alerta, ...alertas])), 
-    msgsListener: (setMsgs) => msgsListener(contexto, user, setMsgs), 
-    onMsgReaded: (msg) => onMsgReaded(msg, user, contexto)
+    msgsListener: (setMsgs) => msgsListener(contexto, setMsgs),
   };
   const chat = <Chat autor={user && user.id} destinatários={[destinatario]} 
                      alertas={[]} {...callbacks} />;
+  
+  const signIn = <SignInChat onLoginChange={onLoginChange} userProfile={userProfile} setDestinatario={setDestinatario}
+                    user={user} setUser={setUser}
+                    logged={logged} setLogin={status => setLogin(status)}/>
 
   return (
     <Body1 tag={'div'}>
       <Grid style={{padding: 0}}>
         <Row style={{gridGap: '0px'}}>
-          <Cell id='incomedocs' phoneColumns={12} tabletColumns={12} desktopColumns={8} 
-                style={{height: '100vh', display: 'flex', flexDirection: 'column', position: 'relative'}}>
+          <Cell id='incomedocs' className='vh100' phoneColumns={12} tabletColumns={12} desktopColumns={8} 
+                style={{display: 'flex', flexDirection: 'column', position: 'relative'}}>
             <Doc inventionSave={(markdown) => inventionSave(markdown, contexto, user)}
                   inventionListener={(setMarkdown) => inventionListener(contexto, setMarkdown)} />
             
@@ -83,16 +92,10 @@ function Income(props) {
                 }} />
             </a>
           </Cell>
-          <Cell id='incomechat' phoneColumns={12} tabletColumns={12} desktopColumns={4} 
-                style={{height: '100vh', display: 'flex', flexDirection: 'column', position: 'relative'}}>
-           <ChatHeader logged={logged} />
-            {/* <a id='fab-docs' style={{margin: '8px', position: 'absolute', top: '0px', left: '0px'}} href='#incomedocs'>
-              <Fab icon={<MaterialIcon icon="description"/>} mini />
-            </a> */}
-            <SignInChat onLoginChange={onLoginChange} userProfile={userProfile} setDestinatario={setDestinatario}
-              user={user} setUser={setUser}
-              logged={logged} setLogin={status => setLogin(status)}/>
-            
+          <Cell id='incomechat' className='vh100' phoneColumns={12} tabletColumns={12} desktopColumns={4} 
+                style={{display: 'flex', flexDirection: 'column', position: 'relative'}}>
+           <ChatHeader logged={logged} connecting={connecting} initLogin={initLogin} signIn={signIn} />
+            {connecting ? signIn : null}
             {chat}
           </Cell>
         </Row>
@@ -100,21 +103,27 @@ function Income(props) {
     </Body1>
   );
 
-  function ChatHeader({logged}) {
-    const docLink = (
-      <a id='fab-docs' style={{margin: '8px', marginLeft: 'auto', top: '0px', left: '0px'}} href='#incomedocs'>
-        <Fab href='#teste' icon={<MaterialIcon icon="description"/>} mini />
-      </a>
-    );
+  function ChatHeader({logged, connecting, initLogin, signIn}) {
+    const docLink = <Button id='fab-docs' href='#incomedocs'
+                      style={{
+                        margin: 'auto 8px auto auto',
+                        marginLeft: 'auto',
+                        background: 'var(--mdc-theme-secondary)',
+                        color: 'var(--mdc-theme-on-secondary)',
+                        borderColor: 'var(--mdc-theme-on-primary, #ffffff)',
+                      }}
+                      icon={<MaterialIcon icon="description"/>}>
+      Documentação
+    </Button>
 
     const style = {
       color: 'var(--mdc-theme-on-primary, #ffffff)',
       borderColor: 'var(--mdc-theme-on-primary, #ffffff)',
-      margin: '8px'
+      margin: 'auto 8px'
     };
-    
     const button = logged ? <Button outlined style={style} onClick={() => firebase.auth().signOut()}>Desconectar</Button> :
-                            <Button outlined style={style}>
+                            <Button outlined style={style} onClick={() => initLogin(!connecting)}
+                              trailingIcon={<MaterialIcon icon={connecting ? "arrow_drop_up" : "arrow_drop_down"}/>}>
                               Conectar
                             </Button>
 
@@ -174,32 +183,10 @@ async function sendMsg(texto, autor, destinatario, contexto) {
   }
 }
 
-function msgsListener(contexto, user, setMsgs) {
+function msgsListener(contexto, setMsgs) {
   //db.collection('conversas').doc(contexto).delete().then(() => console.log('excluído'));
   const msgsRef = invenções.doc(contexto).collection('msgs');
   const msgsQuery = msgsRef.orderBy('timestamp');
-  
-  const destinatario = (msg) => {
-    return user.papel === msg.destinatarios[0] || user.uid === msg.destinatarios[0];
-  }
-
-  const dataHora = timestamp => {
-    if (!timestamp) return 'aguardando';
-    
-    const p = v => v < 10 ? '0' + v : v;
-    
-    const date = timestamp.toDate();
-    const [ dia, mes, ano ] = [p(date.getDate()), p(date.getMonth()), date.getFullYear()];
-    const [ hora, minuto ] = [p(date.getHours()), p(date.getMinutes())];
-    return `${dia}/${mes}/${ano} ${hora}:${minuto}`;
-  }
-
-  const leituras = data => {
-    return data.destinatarios.reduce((prev, destinatario) => {
-      prev[destinatario] = data.leituras && dataHora(Object.values(data.leituras)[0]);
-      return prev;
-    }, {});
-  }
 
   return msgsQuery.onSnapshot( docs => {
     //console.log('msgsListener');
@@ -208,29 +195,11 @@ function msgsListener(contexto, user, setMsgs) {
       data.push({
         ...doc.data(), 
         id: doc.id,
-        minha: doc.data().autor === user.uid,
-        para_mim: destinatario(doc.data()),
-        timestamp: dataHora(doc.data().timestamp),
-        leituras: leituras(doc.data()),
       });
     });
-    //console.log(data);
     setMsgs(data);
   },
   error => console.log(error));
-}
-
-function onMsgReaded(msg, user, contexto) {
-  //console.log(msg, user, contexto);
-  /* Comentado até ser corrigido
-  const msgsRef = invenções.doc(contexto).collection('msgs');
-  //não lido e destinatário
-  const lido = user.uid && msg.leituras && msg.leituras[user.uid];
-  if (!lido && msg.para_mim) {
-    msgsRef.doc(msg.id).update({[`leituras.${user.uid}`]: timestamp})
-      .then(() => console.log('Msg marcada como lida'))
-      .catch((error => console.log("Msg não marcada como lida", error)));
-  }*/
 }
 
 function inventionListener(invenção, setMarkdown) {
@@ -243,13 +212,14 @@ function inventionSave(markdown, invenção, autor) {
   invenções.doc(invenção).collection('historico').add({
     markdown, timestamp
   });
+  console.log('salvando...');
   return invenções.doc(invenção).set({markdown})
-    .then((a) => console.log('ok', a))
+    .then((a) => console.log('salvo', a))
     .catch(error => Promise.reject(<div>error</div>));
 }
 
 ReactDOM.render(<Income sendMsg={sendMsg} msgsListener={msgsListener}
-                        onMsgReaded={onMsgReaded} onLoginChange={onLoginChange}
+                        onLoginChange={onLoginChange}
                         userProfile={userProfile}
                         inventionListener={inventionListener}
                         inventionSave={inventionSave}
