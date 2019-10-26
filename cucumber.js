@@ -1,3 +1,4 @@
 module.exports = {
-  default: `--format-options '{"snippetInterface": "synchronous"}' --fail-fast`,
+  default: `--format-options '{"snippetInterface": "synchronous"}' 
+            --fail-fast`,
 }

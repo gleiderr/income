@@ -1,24 +1,20 @@
 //https://github.com/NguyenAndrew/Enzyme-Cucumber-React
 //https://github.com/testing-library/react-testing-library
 //import { render, fireEvent } from '@testing-library/react';
-import { JSDOM } from 'jsdom';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Chat from '../../src/Chat';
-import {Given, When, Then, Before, After} from 'cucumber';
+import {Given, When, Then, Before, After, BeforeAll} from 'cucumber';
 import assert from 'assert';
 import { Simulate, act } from 'react-dom/test-utils';
-
-//https://github.com/NguyenAndrew/Enzyme-Cucumber-React
-const {window} = new JSDOM(`<!DOCTYPE html><body></body></html>`);
-global.window = window;
-global.document = window.document;
-//Polyfill de requestAnimationFrame
-global.requestAnimationFrame =  window.requestAnimationFrame = 
-  callback => setTimeout(callback, 0);
+import { initDOM } from "./utils_test";
+import Chat from '../../src/Chat';
 
 let mensagens;
 let listeners = [];
+
+BeforeAll(function () {
+  initDOM();
+})
 
 Before(function (params) {
   this.containers = {};  
@@ -42,17 +38,18 @@ Given('nenhuma mensagem enviada', function () {
   mensagens = [];
 });
 
-When('chat renderizado pelo {string}', function (usuário) {
+Given('Callbacks padrão', function () {
+  
+})
+
+Given('chat renderizado pelo {string}', function (usuário) {
+  const callbacks = { sendMsg, msgsListener };
+  const chat = <Chat autor={usuário} destinatários={[this.destinatário]} 
+                     alertas={[]} {...callbacks} />;
+
   const new_container = document.createElement('div');
   this.containers[usuário] = new_container;
   document.body.appendChild(new_container);
-
-  const callbacks = {
-    sendMsg, 
-    msgsListener: setMsgs => msgsListener(setMsgs)
-  };
-  const chat = <Chat autor={usuário} destinatários={[this.destinatário]} 
-                     alertas={[]} {...callbacks} />;
 
   act(() => {
     ReactDOM.render(chat, new_container);
@@ -88,31 +85,31 @@ Then('nessa mensagem {string} contém {string}', function (campo, conteúdo) {
   assert.strictEqual(innerHTML, conteúdo, `${campo} diferente de ${conteúdo}`);
 });
 
+Then('deve ser emitido alerta {string}', function (alerta) {
+  const [container] = Object.values(this.containers);
+  const { innerHTML } = container.querySelector('.alerta');
+  assert.strictEqual(innerHTML, alerta, `${alerta} diferente de ${innerHTML}`);
+});
+
 /**
- * O chat espera que cada mensagem tenha a estrura mínima abaixo.
- * @example
- * 'auto_id': {
- *    texto: "minha mensagem",
- *    timestamp: timestamp,
- *    autor: 'GleiderID',
- *  }
  * @param {String} texto
  * @param {String} autor
- * @param {String} destinatario
- * @param {Boolean} error utilizado na simulação de testes
- * @returns {Promise<React.Component>} Componente react para ser exibido como alerta em caso de erro.
+ * @returns {Promise<React.Component>}
  */
-async function sendMsg(texto, autor) {
-    texto = texto.trim();
-    
-    mensagens.push({
-      texto, autor,
-      timestamp: null, 
-    });
+async function sendMsg(texto, autor) {  
+  if (!autor) {
+    return Promise.reject(<div className='alerta'>Conecte-se para enviar mensagens</div>);
+  }
 
-    callListeners();
+  mensagens.push({
+    texto: texto.trim(), 
+    autor,
+    timestamp: null, 
+  });
 
-    return Promise.resolve();
+  callListeners();
+
+  return Promise.resolve();
 }
 
 function callListeners() {
@@ -120,9 +117,7 @@ function callListeners() {
 }
 
 /**
- * Deve retornar função para cancelar a inscrição do "listener" no servidor.
- * @param {String} leitor - nome do usuário que está logado no chat
- * @callback [setMsgs] recebe nova lista de mensagens.
+ * @callback [setMsgs] ação ao receber novas mensagens
  */
 function msgsListener(setMsgs) {
   const newListener = () => {

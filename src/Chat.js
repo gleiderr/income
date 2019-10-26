@@ -25,18 +25,21 @@ import TextField, {HelperText, Input} from '@material/react-text-field';
  */
  
  export default function Chat(props) {
-  const {sendMsg, msgsListener, alertas} = props || {};
+  const {sendMsg, msgsListener} = props || {};
   const {autor} = props || {};
 
   const [msgList, setMsgs] = useState([]);
   const [texto, escrever] = useState('');
+  const [alertas, setAlertas] = useState([]);
 
   const keyDownHandle = evt => {
     if (evt.key === "Enter") {
       evt.persist();
       sendMsg(evt.target.value, autor)
         .then(escrever('')) //Limpa o campo
-        .catch(console.log); 
+        .catch(alerta => {
+          console.log('alertou');
+          setAlertas(a => a.push(alerta))}); 
     }
   };
 

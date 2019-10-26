@@ -32,6 +32,14 @@ Funcionalidade: Chat
     | remetente | mensagem          |
     | joão      | Olá, bom dia!     |
 
+  Cenário: Usuário não conectado deseja enviar mensagens
+    Dado o remetente ''
+    E nenhuma mensagem enviada
+    E chat renderizado pelo ''
+    Quando o '' digitar a mensagem 'Olá bom dia'
+    E teclar 'Enter'
+    Então deve ser emitido alerta 'Conecte-se para enviar mensagens'
+
   #Cenário: Usuário não conectado deseja enviar mensagens
   #Cenário: Usuário deseja ler mensagens
   #Cenário: Todo usuário deseja saber quando uma mensagem foi lida pelo destinatário
