@@ -8,6 +8,7 @@ import './index.css';
 import './shadow.css';
 import './color.css';
 import './height.css';
+import './docs.css';
 
 import '@material/react-layout-grid/dist/layout-grid.css';
 import '@material/react-card/dist/card.css';
@@ -66,7 +67,7 @@ function Income(props) {
   const callbacks = {
     sendMsg: (texto) => sendMsg(texto, user.uid, destinatario, contexto)
                         .catch((alerta) => setAlertas([alerta, ...alertas])), 
-    msgsListener: (setMsgs) => msgsListener(contexto, user, setMsgs),
+    msgsListener: (setMsgs) => msgsListener(contexto, setMsgs),
   };
   const chat = <Chat autor={user && user.id} destinatários={[destinatario]} 
                      alertas={[]} {...callbacks} />;
@@ -182,7 +183,7 @@ async function sendMsg(texto, autor, destinatario, contexto) {
   }
 }
 
-function msgsListener(contexto, user, setMsgs) {
+function msgsListener(contexto, setMsgs) {
   //db.collection('conversas').doc(contexto).delete().then(() => console.log('excluído'));
   const msgsRef = invenções.doc(contexto).collection('msgs');
   const msgsQuery = msgsRef.orderBy('timestamp');

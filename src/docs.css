@@ -1,0 +1,8 @@
+#incomedocs table {
+  display: block;
+  overflow-x: auto;
+}
+
+#incomedocs a {
+  word-break: break-all;
+}
