@@ -18,13 +18,11 @@ global.requestAnimationFrame =  window.requestAnimationFrame =
   callback => setTimeout(callback, 0);
 
 let mensagens;
-let listeners = {};
-let data_hora;
+let listeners = [];
 
 Before(function (params) {
   this.containers = {};  
-  listeners = {};
-  data_hora = undefined;
+  listeners = [];
 });
 
 const desmonta = (container) => {
@@ -40,22 +38,19 @@ Given('o remetente {string}', function (usuário) {
   this.usuário = usuário;
 });
 
-Given('o destinatário {string}', function (destinatário) {
-  this.destinatário = destinatário;
-});
-
 Given('nenhuma mensagem enviada', function () {
   mensagens = [];
 });
 
-When('chat renderizado pelo {string} às {string}', function (usuário, p_data_hora) {
-  data_hora = p_data_hora;
-
+When('chat renderizado pelo {string}', function (usuário) {
   const new_container = document.createElement('div');
   this.containers[usuário] = new_container;
   document.body.appendChild(new_container);
 
-  const callbacks = {sendMsg, msgsListener, onMsgReaded};
+  const callbacks = {
+    sendMsg, 
+    msgsListener: setMsgs => msgsListener(setMsgs)
+  };
   const chat = <Chat autor={usuário} destinatários={[this.destinatário]} 
                      alertas={[]} {...callbacks} />;
 
@@ -74,11 +69,6 @@ When('teclar {string}', function (string) {
   act(() => {
     Simulate.keyDown(this.input, {'key': 'Enter'});
   });
-});
-
-When('chat desconectado pelo {string}', function (usuário) {
-  desmonta(this.containers[usuário]);
-  delete this.containers[usuário];
 });
 
 Then('o texto digitado deve ser limpo', function () {
@@ -105,10 +95,6 @@ Then('nessa mensagem {string} contém {string}', function (campo, conteúdo) {
  *    texto: "minha mensagem",
  *    timestamp: timestamp,
  *    autor: 'GleiderID',
- *    destinatarios: ['DestinatárioID'],
- *    leituras: { 'DestinatárioID': timestamp }, //objeto para manter flexibilidade
- *    //projetos: ['ProjetoID'],
- *    //msgRespondida: 'msgResp'
  *  }
  * @param {String} texto
  * @param {String} autor
@@ -116,13 +102,11 @@ Then('nessa mensagem {string} contém {string}', function (campo, conteúdo) {
  * @param {Boolean} error utilizado na simulação de testes
  * @returns {Promise<React.Component>} Componente react para ser exibido como alerta em caso de erro.
  */
-async function sendMsg(texto, autor, destinatario) {
-    //console.log(texto, autor, destinatario);
+async function sendMsg(texto, autor) {
     texto = texto.trim();
     
     mensagens.push({
-      texto, autor, 
-      destinatarios: [destinatario],
+      texto, autor,
       timestamp: null, 
     });
 
@@ -132,10 +116,7 @@ async function sendMsg(texto, autor, destinatario) {
 }
 
 function callListeners() {
-  const lis = Object.values(listeners);
-  for (const listener of lis) {
-    listener();
-  }
+  listeners.forEach(listener => listener());
 }
 
 /**
@@ -143,45 +124,14 @@ function callListeners() {
  * @param {String} leitor - nome do usuário que está logado no chat
  * @callback [setMsgs] recebe nova lista de mensagens.
  */
-function msgsListener(setMsgs, leitor) {
-  //console.log('msgsListener', {leitor}, );
-  listeners[leitor] = () => {
-    //console.log('updateMsgs');
-    //console.table(mensagens);
-
+function msgsListener(setMsgs) {
+  const newListener = () => {
     setMsgs(mensagens.map((m, index) => ({
-      id: index, 
-      autor: m.autor === leitor ? '' : m.autor,
-      texto: m.texto, 
-      timestamp: m.timestamp, 
-      leituras: m.leituras,
-      destinatarios: m.destinatarios,
+      ...m,
+      id: index,
     })));
   };
 
-  listeners[leitor]();
-}
-
-/**
- * Função a ser executada quando uma mensagem é lida.
- * Recebe objeto da mensagem lida
- */
-function onMsgReaded(msg, leitor) {
-  if (!mensagens[msg.id].leituras) {
-    mensagens[msg.id].leituras = {};
-  }
-  mensagens[msg.id].leituras[leitor] = data_hora;
-
-  callListeners();
-  
-  //console.log('onMsgReaded', mensagens[msg.id]);
-
-  /*const msgsRef = invenções.doc(contexto).collection('msgs');
-  //não lido e destinatário
-  const lido = user.uid && msg.leituras && msg.leituras[user.uid];
-  if (!lido && msg.para_mim) {
-    msgsRef.doc(msg.id).update({[`leituras.${user.uid}`]: timestamp})
-      .then(() => console.log('Msg marcada como lida'))
-      .catch((error => console.log("Msg não marcada como lida", error)));
-  }*/
+  newListener();
+  listeners.push(newListener);
 }

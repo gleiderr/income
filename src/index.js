@@ -53,28 +53,17 @@ setVH();
 
 function Income(props) {
   //Props
-  const {sendMsg, userProfile, onLoginChange, msgsListener} = props;
+  const {sendMsg, msgsListener} = props;
   const {inventionListener, inventionSave} = props;
 
   //Estados
   const [user, setUser] = useState(undefined);
-  const [destinatario, setDestinatario] = useState(undefined);
-  const [alertas, setAlertas] = useState([]);
   const [contexto, setContexto] = useState('income');
-  const [logged, setLogin] = useState(false);
   const [connecting, initLogin] = useState(false);
 
-  const callbacks = {
-    sendMsg: (texto) => sendMsg(texto, user.uid, destinatario, contexto)
-                        .catch((alerta) => setAlertas([alerta, ...alertas])), 
-    msgsListener: (setMsgs) => msgsListener(contexto, setMsgs),
-  };
-  const chat = <Chat autor={user && user.id} destinatários={[destinatario]} 
-                     alertas={[]} {...callbacks} />;
+  const callbacks = { sendMsg, msgsListener, };
   
-  const signIn = <SignInChat onLoginChange={onLoginChange} userProfile={userProfile} setDestinatario={setDestinatario}
-                    user={user} setUser={setUser}
-                    logged={logged} setLogin={status => setLogin(status)}/>
+  const signIn = <SignInChat user={user} setUser={setUser}/>
 
   return (
     <Body1 tag={'div'}>
@@ -94,9 +83,9 @@ function Income(props) {
           </Cell>
           <Cell id='incomechat' className='vh100' phoneColumns={12} tabletColumns={12} desktopColumns={4} 
                 style={{display: 'flex', flexDirection: 'column', position: 'relative'}}>
-           <ChatHeader logged={logged} connecting={connecting} initLogin={initLogin} signIn={signIn} />
+           <ChatHeader logged={!!user} connecting={connecting} initLogin={initLogin} signIn={signIn} />
             {connecting ? signIn : null}
-            {chat}
+            <Chat autor={user && user.uid} alertas={[]} {...callbacks} />;
           </Cell>
         </Row>
       </Grid>
@@ -139,53 +128,26 @@ function Income(props) {
   }
 }
 
-function onLoginChange(setUser, nenhumUsuário) {
-  return firebase.auth().onAuthStateChanged(user => {
-    console.log('onLoginChange');
-    if (user) {
-      setUser({uid: user.uid, nome: user.displayName});
-    } else {
-      setUser(nenhumUsuário);
-    }
-  });
-}
-
-function userProfile({uid, nome}, setUser) {
-  return db.collection('usuários').doc(uid).onSnapshot(doc => {
-    if (!doc.metadata.fromCache) {
-      let newProfile;
-      if (doc.data() === undefined) { //Se usuário não cadastrado
-        doc.ref.set({papel: 'comum', nome}); //atribui-o como comum no banco
-        newProfile = {papel: 'comum'}; 
-      } else {
-        newProfile = {papel: doc.data().papel};
-      }
-      //console.log('userProfile', newProfile);
-      setUser(user => {return {...user, ...newProfile}});
-    }
-  }, error => console.error(error));
-}
-
 async function sendMsg(texto, autor, destinatario, contexto) {
-  if (!autor || !destinatario) {
-    console.log({texto, autor, destinatario, contexto})
-    return Promise.reject(<div>Necessário conectar para enviar mensagens</div>);
-  }
+  // if (!autor || !destinatario) {
+  //   console.log({texto, autor, destinatario, contexto})
+  //   return Promise.reject(<div>Necessário conectar para enviar mensagens</div>);
+  // }
 
   texto = texto.trim();
   if (texto.length > 0) {
-    return invenções.doc(contexto)
+    return invenções.doc('income')
           .collection('msgs')
-          .add({texto, timestamp, autor, destinatarios: [destinatario]})
+          .add({texto, timestamp, autor})
           .catch(error => Promise.reject(<div>error</div>));
   } else {
     return Promise.resolve();
   }
 }
 
-function msgsListener(contexto, setMsgs) {
+function msgsListener(setMsgs) {
   //db.collection('conversas').doc(contexto).delete().then(() => console.log('excluído'));
-  const msgsRef = invenções.doc(contexto).collection('msgs');
+  const msgsRef = invenções.doc('income').collection('msgs');
   const msgsQuery = msgsRef.orderBy('timestamp');
 
   return msgsQuery.onSnapshot( docs => {
@@ -219,8 +181,6 @@ function inventionSave(markdown, invenção, autor) {
 }
 
 ReactDOM.render(<Income sendMsg={sendMsg} msgsListener={msgsListener}
-                        onLoginChange={onLoginChange}
-                        userProfile={userProfile}
                         inventionListener={inventionListener}
                         inventionSave={inventionSave}
                />, document.querySelector("#root"));

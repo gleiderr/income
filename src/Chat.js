@@ -16,10 +16,6 @@ import TextField, {HelperText, Input} from '@material/react-text-field';
  *    texto: "minha mensagem",
  *    timestamp: timestamp,
  *    autor: 'GleiderID',
- *    destinatarios: ['DestinatárioID'],
- *    projetos: ['ProjetoID'],
- *    leituras: { 'DestinatárioID': timestamp }, //objeto para manter flexibilidade
- *    msgRespondida: 'msgResp'
  *  }
  * 
  * @example Modelo de Dados de Usuários 
@@ -30,7 +26,7 @@ import TextField, {HelperText, Input} from '@material/react-text-field';
  
  export default function Chat(props) {
   const {sendMsg, msgsListener, alertas} = props || {};
-  const {autor, destinatários} = props || {};
+  const {autor} = props || {};
 
   const [msgList, setMsgs] = useState([]);
   const [texto, escrever] = useState('');
@@ -38,7 +34,7 @@ import TextField, {HelperText, Input} from '@material/react-text-field';
   const keyDownHandle = evt => {
     if (evt.key === "Enter") {
       evt.persist();
-      sendMsg(evt.target.value, autor, destinatários)
+      sendMsg(evt.target.value, autor)
         .then(escrever('')) //Limpa o campo
         .catch(console.log); 
     }
@@ -46,7 +42,6 @@ import TextField, {HelperText, Input} from '@material/react-text-field';
 
   //Atualiza lista de mensagens
   useEffect(() => {
-    console.log('trocou msgsListener, setMsgs');
     return msgsListener(setMsgs);
   }, [msgsListener, setMsgs]);
   

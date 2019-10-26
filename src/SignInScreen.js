@@ -33,35 +33,15 @@ export function SignIn() {
   );
 }
 
-export function SignInChat({ onLoginChange, userProfile, user, setUser, logged, setLogin, setDestinatario }) {
-  const [nenhumUsuário] = useState({
-    uid: undefined,
-    nome: undefined,
-    papel: 'desconectado',
+export function SignInChat({ user, setUser }) {  
+  useEffect(() => {
+    return firebase.auth().onAuthStateChanged(user => {
+      console.log({user});
+      setUser(user)
+    });
   });
-  
-  useEffect(() => {
-    return firebase.auth().onAuthStateChanged(user => setLogin(!!user));
-  }, [setLogin]);
 
-  useEffect(() => {
-    setUser(nenhumUsuário);
-    return onLoginChange(setUser, nenhumUsuário)
-  }, [onLoginChange, setUser, nenhumUsuário]);
-
-  //Atualiza perfil do usuário
-  useEffect(() => {
-    if (user && user.uid) {
-      const unsubscribe = userProfile(user, setUser);
-      setDestinatario(user.papel === 'administrador' ? 'comum' : 'administrador');
-      return unsubscribe;
-    } else {
-      setUser(nenhumUsuário);
-      setDestinatario(undefined);
-    }
-  }, [user, setDestinatario, setUser, nenhumUsuário, userProfile]);
-
-  if (!logged) {
+  if (!user) {
     return (
       <div style={{background: 'var(--mdc-theme-primary)'}}>
         <StyledFirebaseAuth
@@ -71,13 +51,6 @@ export function SignInChat({ onLoginChange, userProfile, user, setUser, logged, 
       </div>
     );
   } else {
-    return <></>; //Somente mantendo presença para desconexão
-    // return (
-    //   <div style={{display: 'flex'}}>
-    //     <div style={{flex: 1}}>
-    //       {firebase.auth().currentUser ? firebase.auth().currentUser.displayName : ''}
-    //     </div>
-    //   </div>
-    // );
+    return <></>;
   }
 }
