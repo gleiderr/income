@@ -30,11 +30,11 @@ import Doc from './Doc';
 import Chat from './Chat';
 import { Button } from '@material/react-button';
 import TopAppBar, {
-  TopAppBarFixedAdjust, 
-  TopAppBarIcon,
   TopAppBarRow,
+  /*TopAppBarFixedAdjust, 
+  TopAppBarIcon,
   TopAppBarSection,
-  TopAppBarTitle,
+  TopAppBarTitle,*/
 } from '@material/react-top-app-bar';
 //import App from "./App";
 //import * as serviceWorker from "./serviceWorker";
@@ -56,6 +56,31 @@ function Income(props) {
   const {sendMsg, msgsListener} = props;
   const {inventionListener, inventionSave} = props;
 
+  const user_profile = {
+    get_set: user => {
+      const doc = db.collection('usuários').doc(user.uid);
+      const unsub = doc.onSnapshot({ includeMetadataChanges: true }, get);
+
+      async function get(snapshot) {
+        if (!snapshot.metadata.fromCache) {
+          if (!snapshot.data()) await set();
+          console.log('profile setted');
+          unsub();
+        }
+      }
+
+      async function set() {
+        return doc.set({
+            nome: user.displayName,
+            papel: 'comum',
+        })
+        .catch(e => {
+          console.error(e);
+        });
+      }
+    }
+  }
+
   //Estados
   const [user, setUser] = useState(undefined);
   const [contexto, setContexto] = useState('income');
@@ -63,7 +88,7 @@ function Income(props) {
 
   const callbacks = { sendMsg, msgsListener, };
   
-  const signIn = <SignInChat user={user} setUser={setUser}/>
+  const signIn = <SignInChat user={user} setUser={setUser} user_profile={user_profile} />
 
   return (
     <Body1 tag={'div'}>
@@ -85,7 +110,7 @@ function Income(props) {
                 style={{display: 'flex', flexDirection: 'column', position: 'relative'}}>
            <ChatHeader logged={!!user} connecting={connecting} initLogin={initLogin} signIn={signIn} />
             {connecting ? signIn : null}
-            <Chat autor={user && user.uid} alertas={[]} {...callbacks} />;
+            <Chat autor={user && user.uid} alertas={[]} {...callbacks} />
           </Cell>
         </Row>
       </Grid>
@@ -128,7 +153,7 @@ function Income(props) {
   }
 }
 
-async function sendMsg(texto, autor, destinatario, contexto) {
+async function sendMsg(texto, autor) {
   // if (!autor || !destinatario) {
   //   console.log({texto, autor, destinatario, contexto})
   //   return Promise.reject(<div>Necessário conectar para enviar mensagens</div>);

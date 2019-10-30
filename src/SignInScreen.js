@@ -33,24 +33,35 @@ export function SignIn() {
   );
 }
 
-export function SignInChat({ user, setUser }) {  
+export function SignInChat({ user, setUser, user_profile }) {  
   useEffect(() => {
     return firebase.auth().onAuthStateChanged(user => {
-      console.log({user});
+      if(!!user) { //ao fazer login
+        user_profile.get_set(user);
+        
+        /*user_profile.get(user)
+          .then(profile => {
+            console.log('profile getted!');
+           //Se não existir no banco de dados, cadastra-o de forma assícrona
+            if (!profile) user_profile.set(user);
+          })
+          .catch(console.error);*/
+      }
+      
       setUser(user)
     });
   });
 
-  if (!user) {
-    return (
-      <div style={{background: 'var(--mdc-theme-primary)'}}>
-        <StyledFirebaseAuth
-          uiConfig={uiConfig}
-          firebaseAuth={firebase.auth()}
-        />
-      </div>
-    );
-  } else {
-    return <></>;
-  }
+  // Se usuário conectado, elemento é processado para que conexão seja 
+  // verificada, mas não é renderizado
+  if (!!user) return null; 
+  
+  return (
+    <div style={{background: 'var(--mdc-theme-primary)'}}>
+      <StyledFirebaseAuth
+        uiConfig={uiConfig}
+        firebaseAuth={firebase.auth()}
+      />
+    </div>
+  );
 }
