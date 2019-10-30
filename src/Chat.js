@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 import Card, {
   CardPrimaryContent,
-  CardMedia,
+  /*CardMedia,
   CardActions,
   CardActionButtons,
-  CardActionIcons, 
+  CardActionIcons, */
 } from "@material/react-card";
-import TextField, {HelperText, Input} from '@material/react-text-field';
+import TextField, {/*HelperText, */Input} from '@material/react-text-field';
 
 /**
  * @example Modelo de Dados Mensagens
@@ -75,10 +75,9 @@ function MessageList({msgList}) {
 
 function Mensagem({msg}) {
   return (
-    <Card outlined={false} style={{margin: '8px', maxWidth: 'fit-content'}}     
-          className={'income-theme'} data-testid="mensagem">
-      <CardPrimaryContent>
-        <div data-testid="autor">{msg.autor}</div>
+    <Card outlined={false} style={{margin: '8px'}} data-testid="mensagem">
+      <CardPrimaryContent style={{padding: '0px 4px'}}>
+        <div data-testid="autor" style={{fontWeight: 'bold'}} >{msg.autor}</div>
         <div data-testid="texto">{msg.texto}</div>
       </CardPrimaryContent>
     </Card>

@@ -86,6 +86,44 @@ function Income(props) {
   const [contexto, setContexto] = useState('income');
   const [connecting, initLogin] = useState(false);
 
+  useEffect(() => {
+    return firebase.auth().onAuthStateChanged(user => {
+      if (!user) {
+        setUser(undefined);
+      } else { //ao fazer login
+        console.time('logging');
+        
+        //Atribui usuário sem definição do papel
+        setUser({
+          uid: user.uid,
+          nome: user.displayName,
+        });
+        
+        const doc = db.collection('usuários').doc(user.uid);
+        const unsub = doc.onSnapshot({ includeMetadataChanges: true }, get);
+
+        async function get(snapshot) {
+          if (!snapshot.metadata.fromCache) {
+            //Atribui usuário com definições gravadas no banco
+            setUser(snapshot.data() ||  await set());
+            unsub(); //desescreve snapshot listener quando acabar
+            console.timeEnd('logging');
+          }
+        }
+
+        async function set() {
+          const newUser = {
+            uid: user.uid,
+            nome: user.displayName,
+            papel: 'comum',
+          };
+          await doc.set(newUser);
+          return newUser;
+        }
+      }      
+    });
+  }, []);
+
   const callbacks = { sendMsg, msgsListener, };
   
   const signIn = <SignInChat user={user} setUser={setUser} user_profile={user_profile} />
@@ -110,7 +148,7 @@ function Income(props) {
                 style={{display: 'flex', flexDirection: 'column', position: 'relative'}}>
            <ChatHeader logged={!!user} connecting={connecting} initLogin={initLogin} signIn={signIn} />
             {connecting ? signIn : null}
-            <Chat autor={user && user.uid} alertas={[]} {...callbacks} />
+            <Chat autor={user} alertas={[]} {...callbacks} />
           </Cell>
         </Row>
       </Grid>
@@ -160,6 +198,8 @@ async function sendMsg(texto, autor) {
   // }
 
   texto = texto.trim();
+
+  console.log({texto, timestamp, autor});
   if (texto.length > 0) {
     return invenções.doc('income')
           .collection('msgs')
@@ -182,8 +222,10 @@ function msgsListener(setMsgs) {
       data.push({
         ...doc.data(), 
         id: doc.id,
+        autor: doc.data().autor.nome,
       });
     });
+    console.table(data);
     setMsgs(data);
   },
   error => console.log(error));
