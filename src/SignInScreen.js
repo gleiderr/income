@@ -39,7 +39,7 @@ export function SignIn() {
   );
 }
 
-export function SignInChat({ user, setUser, user_profile }) {
+export function SignInChat({ user, setUser }) {
   // Se usuário conectado, elemento é processado para que conexão seja 
   // verificada, mas não é renderizado
   if (!!user) return null; 

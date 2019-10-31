@@ -56,31 +56,6 @@ function Income(props) {
   const {sendMsg, msgsListener} = props;
   const {inventionListener, inventionSave} = props;
 
-  const user_profile = {
-    get_set: user => {
-      const doc = db.collection('usuários').doc(user.uid);
-      const unsub = doc.onSnapshot({ includeMetadataChanges: true }, get);
-
-      async function get(snapshot) {
-        if (!snapshot.metadata.fromCache) {
-          if (!snapshot.data()) await set();
-          console.log('profile setted');
-          unsub();
-        }
-      }
-
-      async function set() {
-        return doc.set({
-            nome: user.displayName,
-            papel: 'comum',
-        })
-        .catch(e => {
-          console.error(e);
-        });
-      }
-    }
-  }
-
   //Estados
   const [user, setUser] = useState(undefined);
   const [contexto, setContexto] = useState('income');
@@ -126,7 +101,7 @@ function Income(props) {
 
   const callbacks = { sendMsg, msgsListener, };
   
-  const signIn = <SignInChat user={user} setUser={setUser} user_profile={user_profile} />
+  const signIn = <SignInChat user={user} setUser={setUser} />
 
   return (
     <Body1 tag={'div'}>
@@ -134,7 +109,8 @@ function Income(props) {
         <Row style={{gridGap: '0px'}}>
           <Cell id='incomedocs' className='vh100' phoneColumns={12} tabletColumns={12} desktopColumns={8} 
                 style={{display: 'flex', flexDirection: 'column', position: 'relative'}}>
-            <Doc inventionSave={(markdown) => inventionSave(markdown, contexto, user)}
+            <Doc showHeader={!!user && user.papel === 'administrador'}
+                  inventionSave={(markdown) => inventionSave(markdown, contexto, user)}
                   inventionListener={(setMarkdown) => inventionListener(contexto, setMarkdown)} />
             
             <a id='fab-chat' style={{margin: '16px', position: 'absolute', bottom: '0px', right: '0px'}} href='#incomechat'>
