@@ -168,10 +168,10 @@ function Income(props) {
 }
 
 async function sendMsg(texto, autor) {
-  // if (!autor || !destinatario) {
-  //   console.log({texto, autor, destinatario, contexto})
-  //   return Promise.reject(<div>Necessário conectar para enviar mensagens</div>);
-  // }
+  if (!autor) {
+     console.log({texto, autor})
+     return Promise.reject('Conecte-se para enviar mensagens');
+  }
 
   texto = texto.trim();
 

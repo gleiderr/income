@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import { Button } from '@material/react-button';
+import MaterialIcon from '@material/react-material-icon';
 import Card, {
   CardPrimaryContent,
   /*CardMedia,
@@ -30,7 +32,7 @@ import TextField, {/*HelperText, */Input} from '@material/react-text-field';
 
   const [msgList, setMsgs] = useState([]);
   const [texto, escrever] = useState('');
-  const [alertas, setAlertas] = useState([]);
+  const [alerta, setAlerta] = useState(undefined);
 
   const keyDownHandle = evt => {
     if (evt.key === "Enter") {
@@ -38,8 +40,9 @@ import TextField, {/*HelperText, */Input} from '@material/react-text-field';
       sendMsg(evt.target.value, autor)
         .then(escrever('')) //Limpa o campo
         .catch(alerta => {
-          console.log('alertou');
-          setAlertas(a => a.push(alerta))}); 
+          console.log('alertou', alerta);
+          setAlerta(alerta);
+        }); 
     }
   };
 
@@ -47,10 +50,18 @@ import TextField, {/*HelperText, */Input} from '@material/react-text-field';
   useEffect(() => {
     return msgsListener(setMsgs);
   }, [msgsListener, setMsgs]);
+
+  const alert = alerta && (
+    <Button outlined dense style={{padding: '0px', margin: '3px 4px 0px 4px', '--mdc-theme-primary': 'darkorange'}}
+      onClick={() => setAlerta(undefined)}
+      trailingIcon={<MaterialIcon style={{marginLeft: '0px'}} icon="close"/>}>
+      {alerta}
+    </Button>
+  );
   
   return (
     <>
-      {alertas}
+      {alert}
       <MessageList {...{msgList}} />
       <TextField label='Sua mensagem' outlined style={{height: '40px', margin: '8px'}}>
         <Input style={{height: '40px'}} onKeyDown={keyDownHandle}

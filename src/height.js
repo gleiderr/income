@@ -19,28 +19,38 @@ export const setVH = () => {
     }
   }
 
-  const resize = throttle(() => {
+  const scroll = () => {
+    let element;
+    const {hash = '#incomedocs'} = window.location;
+    // alert(`.${hash}.`);
+    // console.log(hash);
+    switch(hash) {
+      case '#incomedocs':
+      case '#incomechat':
+        element = document.querySelector(hash);
+        element && element.scrollIntoView();
+        break;
+      default:
+        element = document.querySelector('#incomedocs');
+        element && element.scrollIntoView();
+    }
+  };
+
+  const resize = () => {
     //Recupera e atribui unidade de altura da tela corrente
     const vh = window.innerHeight * 0.01;
     document.documentElement.style.setProperty('--vh', `${vh}px`);
 
     //Rola para sessão corrente
-    const {hash = '#incomedocs'} = window.location;
-    switch(hash) {
-      case '#incomedocs':
-      case '#incomechat':
-        const element = document.querySelector(hash);
-        element && element.scrollIntoView();
-        break;
-      default:
-    }
-  });
+    scroll();
+  };
 
   resize();
-  window.addEventListener('resize', resize);
+  window.addEventListener('resize', throttle(resize));
+  window.addEventListener('scroll', throttle(scroll));
 }
 
-function throttle(func, wait, options) {
+/*function throttle(func, wait, options) {
   var context, args, result;
   var timeout = null;
   var previous = 0;
@@ -70,5 +80,5 @@ function throttle(func, wait, options) {
     }
     return result;
   };
-};
+};*/
 
