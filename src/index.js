@@ -3,6 +3,7 @@ import ReactDOM from "react-dom";
 import firebase from "firebase";
 import firebase_init from "./firebase-local";
 import {setVH} from './height';
+import {ChatHeader} from './header';
 
 import './index.css';
 import './shadow.css';
@@ -59,12 +60,19 @@ function Income(props) {
   //Estados
   const [user, setUser] = useState(undefined);
   const [contexto, setContexto] = useState('income');
-  const [connecting, initLogin] = useState(false);
+  //const [connecting, initLogin] = useState(false);
 
   useEffect(() => {
+    let unsubProfileGetter = undefined;
     return firebase.auth().onAuthStateChanged(user => {
       if (!user) {
         setUser(undefined);
+        if(unsubProfileGetter) {
+          unsubProfileGetter();
+          unsubProfileGetter = undefined;
+        }
+        console.log('desconectado');
+        console.timeEnd('logging');
       } else { //ao fazer login
         console.time('logging');
         
@@ -75,13 +83,14 @@ function Income(props) {
         });
         
         const doc = db.collection('usuários').doc(user.uid);
-        const unsub = doc.onSnapshot({ includeMetadataChanges: true }, get);
+        unsubProfileGetter = doc.onSnapshot({ includeMetadataChanges: true }, get);
 
         async function get(snapshot) {
           if (!snapshot.metadata.fromCache) {
-            //Atribui usuário com definições gravadas no banco
+           //Atribui usuário com definições gravadas no banco, se usuário permanecer conectado
             setUser(snapshot.data() ||  await set());
-            unsub(); //desescreve snapshot listener quando acabar
+            unsubProfileGetter(); //desescreve snapshot listener quando acabar
+            unsubProfileGetter = undefined;
             console.timeEnd('logging');
           }
         }
@@ -100,8 +109,6 @@ function Income(props) {
   }, []);
 
   const callbacks = { sendMsg, msgsListener, };
-  
-  const signIn = <SignInChat user={user} setUser={setUser} />
 
   return (
     <Body1 tag={'div'}>
@@ -122,49 +129,14 @@ function Income(props) {
           </Cell>
           <Cell id='incomechat' className='vh100' phoneColumns={12} tabletColumns={12} desktopColumns={4} 
                 style={{display: 'flex', flexDirection: 'column', position: 'relative'}}>
-           <ChatHeader logged={!!user} connecting={connecting} initLogin={initLogin} signIn={signIn} />
-            {connecting ? signIn : null}
+           <ChatHeader user={user} setUser={setUser} />
+            {/*connecting ? signIn : null*/}
             <Chat autor={user} alertas={[]} {...callbacks} />
           </Cell>
         </Row>
       </Grid>
     </Body1>
   );
-
-  function ChatHeader({logged, connecting, initLogin, signIn}) {
-    const docLink = <Button id='fab-docs' href='#incomedocs'
-                      style={{
-                        margin: 'auto 8px auto auto',
-                        marginLeft: 'auto',
-                        background: 'var(--mdc-theme-secondary)',
-                        color: 'var(--mdc-theme-on-secondary)',
-                        borderColor: 'var(--mdc-theme-on-primary, #ffffff)',
-                      }}
-                      icon={<MaterialIcon icon="description"/>}>
-      Documentação
-    </Button>
-
-    const style = {
-      color: 'var(--mdc-theme-on-primary, #ffffff)',
-      borderColor: 'var(--mdc-theme-on-primary, #ffffff)',
-      margin: 'auto 8px'
-    };
-    const button = logged ? <Button outlined style={style} onClick={() => firebase.auth().signOut()}>Desconectar</Button> :
-                            <Button outlined style={style} onClick={() => initLogin(!connecting)}
-                              trailingIcon={<MaterialIcon icon={connecting ? "arrow_drop_up" : "arrow_drop_down"}/>}>
-                              Conectar
-                            </Button>
-
-    
-    return (
-      <TopAppBar style={{position: 'static'}}>
-        <TopAppBarRow>
-          {button}
-          {docLink}
-        </TopAppBarRow>
-      </TopAppBar>
-    );
-  }
 }
 
 async function sendMsg(texto, autor) {
