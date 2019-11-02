@@ -3,7 +3,7 @@ import ReactDOM from "react-dom";
 import firebase from "firebase";
 import firebase_init from "./firebase-local";
 import {setVH} from './height';
-import {ChatHeader} from './header';
+import {ChatHeader} from './Header';
 
 import './index.css';
 import './shadow.css';
@@ -60,6 +60,7 @@ function Income(props) {
   //Estados
   const [user, setUser] = useState(undefined);
   const [contexto, setContexto] = useState('income');
+  const [sign_in, open_sign_in] = useState(false);
   //const [connecting, initLogin] = useState(false);
 
   useEffect(() => {
@@ -108,7 +109,12 @@ function Income(props) {
     });
   }, []);
 
-  const callbacks = { sendMsg, msgsListener, };
+  const callbacks = { 
+    sendMsg: (...params) => {
+      return sendMsg(...params);
+    }, 
+    msgsListener, 
+  };
 
   return (
     <Body1 tag={'div'}>
@@ -129,8 +135,7 @@ function Income(props) {
           </Cell>
           <Cell id='incomechat' className='vh100' phoneColumns={12} tabletColumns={12} desktopColumns={4} 
                 style={{display: 'flex', flexDirection: 'column', position: 'relative'}}>
-           <ChatHeader user={user} setUser={setUser} />
-            {/*connecting ? signIn : null*/}
+            <ChatHeader user={user} sign_in={sign_in} open_sign_in={open_sign_in} />
             <Chat autor={user} alertas={[]} {...callbacks} />
           </Cell>
         </Row>

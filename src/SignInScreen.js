@@ -39,13 +39,14 @@ export function SignIn() {
   );
 }
 
-export function SignInChat({ user, setUser }) {
+export function SignInChat({ user }) {
   // Se usuário conectado, elemento é processado para que conexão seja 
   // verificada, mas não é renderizado
   if (!!user) return null; 
   
   return (
-    <div style={{background: 'var(--mdc-theme-primary)'}}>
+    <div style={{background: 'var(--mdc-theme-primary)', alignSelf: 'center'}}>
+      Conecte-se para enviar mensagens
       <StyledFirebaseAuth
         uiConfig={uiConfig}
         firebaseAuth={firebase.auth()}

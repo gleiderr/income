@@ -12,8 +12,7 @@ import TopAppBar, {
 } from '@material/react-top-app-bar';
 import { SignInChat } from './SignInScreen';
 
-export function ChatHeader({user, setUser}) {
-  const [sign_in, open_sign_in] = useState(false);
+export function ChatHeader({user, sign_in, open_sign_in}) {
 
   const docLink = <Button id='fab-docs' href='#incomedocs'
                     style={{
@@ -46,7 +45,7 @@ export function ChatHeader({user, setUser}) {
         {button}
         {docLink}
       </TopAppBarRow>
-      {sign_in ? <SignInChat user={user} setUser={setUser} /> : null}
+      {sign_in ? <SignInChat user={user} /> : null}
     </TopAppBar>
   );
 }
