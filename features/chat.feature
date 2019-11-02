@@ -8,7 +8,7 @@ Funcionalidade: Chat
     E chat renderizado pelo '<remetente>'
     Quando o '<remetente>' digitar a mensagem '<mensagem>'
     E teclar 'Enter'
-    Então o texto digitado deve ser limpo
+    Então o texto digitado deve ser igual a '' 
     E uma mensagem deve ser exibida para o '<remetente>'
     E nessa mensagem "autor" contém '<remetente>'
     E nessa mensagem "texto" contém '<mensagem>'
@@ -38,7 +38,7 @@ Funcionalidade: Chat
     E chat renderizado pelo ''
     Quando o '' digitar a mensagem 'Olá bom dia'
     E teclar 'Enter'
-    Então deve ser emitido alerta 'Conecte-se para enviar mensagens'
+    Então o texto digitado deve ser igual a 'Olá bom dia'
 
   #Cenário: Usuário não conectado deseja enviar mensagens
   #Cenário: Usuário deseja ler mensagens

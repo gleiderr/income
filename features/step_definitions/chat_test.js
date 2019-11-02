@@ -68,8 +68,9 @@ When('teclar {string}', function (string) {
   });
 });
 
-Then('o texto digitado deve ser limpo', function () {
-  assert.strictEqual(this.input.value, '', 'Texto não limpo');
+Then('o texto digitado deve ser igual a {string}', function (expected) {
+  assert.strictEqual(this.input.value, expected, 
+    `Input "${this.input.value}" diferente de "${expected}"`);
 });
 
 Then('uma mensagem deve ser exibida para o {string}', function (usuário) {
@@ -85,12 +86,6 @@ Then('nessa mensagem {string} contém {string}', function (campo, conteúdo) {
   assert.strictEqual(innerHTML, conteúdo, `${campo} diferente de ${conteúdo}`);
 });
 
-Then('deve ser emitido alerta {string}', function (alerta) {
-  const [container] = Object.values(this.containers);
-  const { innerHTML } = container.querySelector('.alerta');
-  assert.strictEqual(innerHTML, alerta, `${alerta} diferente de ${innerHTML}`);
-});
-
 /**
  * @param {String} texto
  * @param {String} autor
@@ -98,7 +93,7 @@ Then('deve ser emitido alerta {string}', function (alerta) {
  */
 async function sendMsg(texto, autor) {  
   if (!autor) {
-    return Promise.reject(<div className='alerta'>Conecte-se para enviar mensagens</div>);
+    return Promise.reject('Conecte-se para enviar mensagens');
   }
 
   mensagens.push({

@@ -30,44 +30,30 @@ import TextField, {/*HelperText, */Input} from '@material/react-text-field';
   const {sendMsg, msgsListener} = props || {};
   const {autor} = props || {};
 
-  const [msgList, setMsgs] = useState([]);
   const [texto, escrever] = useState('');
-  const [alerta, setAlerta] = useState(undefined);
-
+  
   const keyDownHandle = evt => {
     if (evt.key === "Enter") {
       evt.persist();
       sendMsg(evt.target.value, autor)
-        .then(escrever('')) //Limpa o campo
-        .catch(alerta => {
-          console.log('alertou', alerta);
-          setAlerta(alerta);
-        }); 
+        .then(() => escrever('')) //Limpa o campo
+        .catch(console.error); 
     }
   };
-
+  
   //Atualiza lista de mensagens
+  const [msgList, setMsgs] = useState([]);
   useEffect(() => {
     return msgsListener(setMsgs);
   }, [msgsListener, setMsgs]);
-
-  const alert = alerta && (
-    <Button outlined dense style={{padding: '0px', margin: '3px 4px 0px 4px', '--mdc-theme-primary': 'darkorange'}}
-      onClick={() => setAlerta(undefined)}
-      trailingIcon={<MaterialIcon style={{marginLeft: '0px'}} icon="close"/>}>
-      {alerta}
-    </Button>
-  );
   
   return (
     <>
-      {alert}
       <MessageList {...{msgList}} />
       <TextField label='Sua mensagem' outlined style={{height: '40px', margin: '8px'}}>
         <Input style={{height: '40px'}} onKeyDown={keyDownHandle}
               value={texto} onChange={(e) => escrever(e.currentTarget.value)} />
       </TextField>
-      
     </>
   );
 }
