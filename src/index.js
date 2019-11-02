@@ -111,7 +111,10 @@ function Income(props) {
 
   const callbacks = { 
     sendMsg: (...params) => {
-      return sendMsg(...params);
+      if (user) return sendMsg(...params);
+      
+      open_sign_in(true);
+      return Promise.reject('Usuário não conectado');
     }, 
     msgsListener, 
   };
@@ -146,18 +149,15 @@ function Income(props) {
 
 async function sendMsg(texto, autor) {
   if (!autor) {
-     console.log({texto, autor})
      return Promise.reject('Conecte-se para enviar mensagens');
   }
 
   texto = texto.trim();
 
-  console.log({texto, timestamp, autor});
   if (texto.length > 0) {
     return invenções.doc('income')
           .collection('msgs')
-          .add({texto, timestamp, autor})
-          .catch(error => Promise.reject(<div>error</div>));
+          .add({texto, timestamp, autor});
   } else {
     return Promise.resolve();
   }

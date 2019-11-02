@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useMemo } from "react";
 import firebase from "firebase";
 
 import { Button } from '@material/react-button';
@@ -36,8 +36,10 @@ export function ChatHeader({user, sign_in, open_sign_in}) {
                           <Button outlined style={style} 
                                   onClick={() => open_sign_in(!sign_in)}
                                   trailingIcon={<MaterialIcon icon={sign_in ? "arrow_drop_up" : "arrow_drop_down"}/>}>
-                            Conectar
+                            {sign_in ? 'Cancelar' : 'Conectar'}
                           </Button>
+
+  const sigInChat = useMemo(() => <SignInChat user={user} />, [user]) ;
 
   return (
     <TopAppBar style={{position: 'static'}}>
@@ -45,7 +47,7 @@ export function ChatHeader({user, sign_in, open_sign_in}) {
         {button}
         {docLink}
       </TopAppBarRow>
-      {sign_in ? <SignInChat user={user} /> : null}
+      {sign_in ? sigInChat : null}
     </TopAppBar>
   );
 }
