@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import firebase from "firebase";
 import firebase_init from "./firebase-local";
 import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
-import firebaseui from 'firebaseui';
+//import firebaseui from 'firebaseui';
+const firebaseui = require('firebaseui');
 
 try {
   firebase.app();
