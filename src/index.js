@@ -47,7 +47,7 @@ try {
 }
 
 const db = firebase.firestore();
-const invenções = db.collection('invenções');
+const invencoes = db.collection('invencoes');
 const timestamp = firebase.firestore.FieldValue.serverTimestamp();
 
 setVH();
@@ -83,7 +83,7 @@ function Income(props) {
           nome: user.displayName,
         });
         
-        const doc = db.collection('usuários').doc(user.uid);
+        const doc = db.collection('usuarios').doc(user.uid);
         unsubProfileGetter = doc.onSnapshot({ includeMetadataChanges: true }, get);
 
         async function get(snapshot) {
@@ -155,7 +155,7 @@ async function sendMsg(texto, autor) {
   texto = texto.trim();
 
   if (texto.length > 0) {
-    return invenções.doc('income')
+    return invencoes.doc('income')
           .collection('msgs')
           .add({texto, timestamp, autor});
   } else {
@@ -165,7 +165,7 @@ async function sendMsg(texto, autor) {
 
 function msgsListener(setMsgs) {
   //db.collection('conversas').doc(contexto).delete().then(() => console.log('excluído'));
-  const msgsRef = invenções.doc('income').collection('msgs');
+  const msgsRef = invencoes.doc('income').collection('msgs');
   const msgsQuery = msgsRef.orderBy('timestamp');
 
   return msgsQuery.onSnapshot( docs => {
@@ -185,17 +185,17 @@ function msgsListener(setMsgs) {
 }
 
 function inventionListener(invenção, setMarkdown) {
-  return invenções.doc(invenção).onSnapshot( doc => {
+  return invencoes.doc(invenção).onSnapshot( doc => {
     if(doc.data()) setMarkdown(doc.data().markdown);
   }, error => console.log(error));
 }
 
 function inventionSave(markdown, invenção, autor) {
-  invenções.doc(invenção).collection('historico').add({
+  invencoes.doc(invenção).collection('historico').add({
     markdown, timestamp
   });
   console.log('salvando...');
-  return invenções.doc(invenção).set({markdown})
+  return invencoes.doc(invenção).set({markdown})
     .then((a) => console.log('salvo', a))
     .catch(error => Promise.reject(<div>error</div>));
 }

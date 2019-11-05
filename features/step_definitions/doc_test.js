@@ -16,28 +16,43 @@ Before(function () {
   const listeners = [];
   const callListeners = () => listeners.foreach(listener => listener());
 
-  const inventionSave = (markdown) => {
+  this.inventionSave = (markdown) => {
     this.markdown = markdown;
     callListeners();
   }
 
-  const inventionListener = (setMarkdown) => {
+  this.inventionListener = (setMarkdown) => {
     const newListener = () => setMarkdown(this.markdown);
     newListener();
     listeners.push(newListener);
   }
+});
 
-  const doc = <Doc inventionSave={inventionSave} inventionListener={inventionListener} />
-  
-  const new_container = document.createElement('div');
-  document.body.appendChild(new_container);
+Given('o texto markdown:', function (docString) {
+  this.markdown = docString;
+});
+
+Given('a documentação renderizada {string} o cabeçalho', function (cabeçalho) {
+  const doc = <Doc showHeader={cabeçalho === 'exibindo'}
+                    inventionSave={this.inventionSave} 
+                    inventionListener={this.inventionListener} />
+
+  this.container = document.createElement('div');
+  document.body.appendChild(this.container);
   
   act(() => {
-    ReactDOM.render(doc, new_container);
+    ReactDOM.render(doc, this.container);
   });
 });
 
-Given('o markdown:', function (docString) {
-  // Write code here that turns the phrase above into concrete actions
+When('habilitar a edição', function () {
+  const chave = this.container.querySelector('[data-testid="switch"]');
+  act(() => {
+    Simulate.click(chave);
+  })
+});
+
+When('digitar o texto', function () {
+  console.log({texto: this.container.innerHTML});
   return 'pending';
 });

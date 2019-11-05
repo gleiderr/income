@@ -13,7 +13,7 @@ export default function Doc(props) {
   const header = !showHeader ? null : (
     <div style={{display: 'flex', padding: '8px', }}>
       <label htmlFor='my-switch' style={{marginRight: '12px'}}>Visualizar</label>
-      <Switch checked={view} nativeControlId='my-switch'
+      <Switch checked={view} nativeControlId='my-switch' data-testid='switch'
         onChange={(e) => setView(e.target.checked)} />
       <Button raised style={{marginLeft: 'auto'}}
         onClick={() => inventionSave(markdown)} >
