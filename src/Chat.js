@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Button } from '@material/react-button';
 import MaterialIcon from '@material/react-material-icon';
+import { Fab } from '@material/react-fab';
 import Card, {
   CardPrimaryContent,
   /*CardMedia,
@@ -31,13 +32,17 @@ import TextField, {/*HelperText, */Input} from '@material/react-text-field';
   const {autor} = props || {};
 
   const [texto, escrever] = useState('');
+
+  const send = () => {
+    sendMsg(texto, autor)
+      .then(() => escrever('')) //Limpa o campo
+      .catch(console.error); 
+  }
   
   const keyDownHandle = evt => {
     if (evt.key === "Enter") {
       evt.persist();
-      sendMsg(evt.target.value, autor)
-        .then(() => escrever('')) //Limpa o campo
-        .catch(console.error); 
+      send();
     }
   };
   
@@ -50,10 +55,22 @@ import TextField, {/*HelperText, */Input} from '@material/react-text-field';
   return (
     <>
       <MessageList {...{msgList}} />
-      <TextField label='Sua mensagem' outlined style={{height: '40px', margin: '8px'}}>
-        <Input style={{height: '40px'}} onKeyDown={keyDownHandle}
-              value={texto} onChange={(e) => escrever(e.currentTarget.value)} />
-      </TextField>
+      <div style={{display: 'flex'}}>
+        <TextField label='Sua mensagem' outlined style={{ flex: 1, height: '40px', margin: '8px'}} >
+          <Input style={{height: '40px'}}
+                
+                onKeyDown={keyDownHandle}
+                value={texto} onChange={(e) => escrever(e.currentTarget.value)} />
+        </TextField>
+        <Fab mini icon={<MaterialIcon icon="send"/> }
+             onClick={send}
+             style={{
+               margin: 'auto',
+               marginRight: '8px',
+               color: 'var(--mdc-theme-on-primary, #fff)',
+               background: 'var(--mdc-theme-primary, #6200ee)'
+             }} />
+      </div>
     </>
   );
 }
