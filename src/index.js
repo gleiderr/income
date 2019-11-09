@@ -178,7 +178,7 @@ function msgsListener(setMsgs) {
         autor: doc.data().autor.nome,
       });
     });
-    console.table(data);
+    //console.table(data);
     setMsgs(data);
   },
   error => console.log(error));

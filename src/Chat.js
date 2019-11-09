@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Button } from '@material/react-button';
 import MaterialIcon from '@material/react-material-icon';
 import { Fab } from '@material/react-fab';
@@ -76,13 +76,37 @@ import TextField, {/*HelperText, */Input} from '@material/react-text-field';
 }
 
 function MessageList({msgList}) {
+  const fim = useRef(null);
+  const lista = useRef(null);
+  const [a, as] = useState(true);
+
   const divMsgs = msgList.map(msg => 
     <Mensagem key={msg.id} msg={msg} />
   );
 
+  useEffect(() => {
+    if (fim.current.previousSibling) {
+      const { bottom: bottomList } = lista.current.getBoundingClientRect();
+      const { top: topFim } = fim.current.previousSibling.getBoundingClientRect();
+      
+      console.log(fim.current);
+      console.log({bottomList, topFim, a});
+      if(a) {
+        as(false);
+        fim.current.scrollIntoView();
+      } else if (topFim - bottomList < 100) {
+        fim.current.scrollIntoView({behavior: "smooth"});
+      }
+    }
+  }, [msgList, a]);
+
+  //https://stackoverflow.com/questions/19669786/check-if-element-is-visible-in-dom
   return (
-    <div className={'teste'} style={{flexGrow: 1, overflow: 'auto'}}>
+    <div className={'teste'}
+         style={{flexGrow: 1, overflow: 'auto'}}
+         ref={lista} >
       {divMsgs}
+      <div ref={fim}></div>
     </div>
   );
 }
