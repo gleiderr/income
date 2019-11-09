@@ -84,6 +84,7 @@ function MessageList({msgList}) {
     <Mensagem key={msg.id} msg={msg} />
   );
 
+  //Rolagem das mensagens do chat em função da posição do scroll
   useEffect(() => {
     if (fim.current.previousSibling) {
       const { bottom: bottomList } = lista.current.getBoundingClientRect();
@@ -100,7 +101,6 @@ function MessageList({msgList}) {
     }
   }, [msgList, a]);
 
-  //https://stackoverflow.com/questions/19669786/check-if-element-is-visible-in-dom
   return (
     <div className={'teste'}
          style={{flexGrow: 1, overflow: 'auto'}}
