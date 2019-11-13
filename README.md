@@ -1,87 +1,46 @@
-# INCOME (18%)
-INvention & COmunication gaME
+# INCOME
 
-**Características:**
-- Login de usuários (80%)
-- Chat de contexto (75%)
-- Layout Responsivo (Celular, desktop e tablet, nessa ordem) (60%)
-- Documentação MarkDown (70%) ~(fazer diretament com HTML no banco de dados agora)~
-  - https://github.com/showdownjs/showdown
-- CLA. Exemplo: https://cla.developers.google.com/clas (70%)
-  
-- ~Painel de valores (60%)~ (escrever direto no markdown 'geral')
-- ~Documentação HTML no banco de dados (50%)~
-- ~Contagem de Estrelas e Cliques (50%)~(o que importa realmente é o engajamento na comunicação)
-- ~Edição de projetos pelo administrador (50%)~(fazer diretamente no banco de dados)
+Toda documentação não técnica e discussões podem ser acessadas em http://gleider.ml/income
 
-Os percentuais são qualitativos e referem-se ao sentimento probabilidade de entrega.
-A probabilidade geral refere-se ao produto das probabilidades.
+## Documentação Técnica
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Toda documentação técnica e código estão disponíveis em: https://github.com/gleiderr/income
 
-## Available Scripts
+O INCOME utiliza 
+- React(JavaScript) como linguagem de programação.
+- Google Firebase como base de dados
+- Markdown para documentação simples e ágil
+- BDD utilizando Cucumber para testes automatizados centrados no usuário
+- Google Material Design, pensando primeiramente em Smartphones
+- Versionamento em Github
+- VSCode para desenvolvimento
 
-In the project directory, you can run:
+### Módulo Chat
+Módulo de comunicação ágil entre todos os interessados por determinada solução. Desenvolvido visando a independência de outros módulos, pois futuramente poderá ser utilizado juntamente com outras aplicações.
 
-### `npm start`
+Envio de mensagens pode ser realizado utilizando "Enter" ou botão de envio.
 
-Runs the app in the development mode.<br>
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+#### Mensagens
 
-The page will reload if you make edits.<br>
-You will also see any lint errors in the console.
+A estrutura de cada mensagem é dada pelo modelo abaixo.
 
-### `npm test`
+```json
+'id': {
+  autor: 'autor_id',
+  texto: "minha mensagem",
+  timestamp: timestamp,
+}
+```
 
-Launches the test runner in the interactive watch mode.<br>
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- **`autor`**: Autor;
+- **`texto`**: Texto da mensagem;
+- **`timestamp`**: é definido pelo próprio servidor e representa o momento que a mensagem é gravada na base de dados. É utilizado para ordenar as mensagens apropriadamente.
 
-### `npm run build`
+### Módulo de Documentação
+Módulo pensado também para ser independente de outros módulos.
+Utiliza a linguagem Markdown para escrita da documentação e permite a conversão e  visualização em HTML.
 
-Builds the app for production to the `build` folder.<br>
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Somente é gravado o texto Markdown.
 
-The build is minified and the filenames include the hashes.<br>
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+### Módulo INCOME
+Módulo que integra Chat e Documentação
