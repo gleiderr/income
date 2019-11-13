@@ -25,10 +25,10 @@ Envio de mensagens pode ser realizado utilizando "Enter" ou botão de envio.
 A estrutura de cada mensagem é dada pelo modelo abaixo.
 
 ```json
-'id': {
-  autor: 'autor_id',
-  texto: "minha mensagem",
-  timestamp: timestamp,
+"id": {
+  "autor": "autor_id",
+  "texto": "minha mensagem",
+  "timestamp": timestamp,
 }
 ```
 
