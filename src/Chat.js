@@ -103,10 +103,19 @@ function MessageList({msgList}) {
 
   return (
     <div className={'teste'}
-         style={{flexGrow: 1, overflow: 'auto'}}
+         style={{flexGrow: 1, overflow: 'auto', position: 'relative'}}
          ref={lista} >
       {divMsgs}
       <div ref={fim}></div>
+      {/*<Fab mini icon={<MaterialIcon icon="expand_more"/> }
+          onClick={() => fim.current.scrollIntoView({behavior: "smooth"})}
+             style={{
+               position: 'absolute',
+               bottom: '4px',
+               right: '4px',
+               background: 'darkgray',
+               mixBlendMode: 'multiply',
+             }} />*/}
     </div>
   );
 }
