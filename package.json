@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "main": "src/index.js",
+  "homepage": "http://gleiderr.github.io/income",
   "dependencies": {
     "@material/react-button": "0.15.0",
     "@material/react-card": "0.15.0",
@@ -17,6 +18,7 @@
     "cucumber": "5.1.0",
     "firebase": "6.4.1",
     "firebaseui": "^4.2.0",
+    "gh-pages": "2.1.1",
     "react": "16.9.0",
     "react-dom": "16.9.0",
     "react-firebaseui": "4.0.0",
@@ -27,7 +29,9 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "npx babel-node --presets=@babel/react,@babel/preset-env node_modules/cucumber/bin/cucumber-js features/doc.feature",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": "react-app"
