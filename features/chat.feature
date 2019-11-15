@@ -2,21 +2,21 @@
 Funcionalidade: Chat
   Eu desejo enviar mensagens, ler mensagens minhas e de outros.
   
-  Esquema do Cenário: Usuário deseja enviar mensagens ao desenvolvedor utilizando "Enter"
+  Esquema do Cenário: Usuário deseja enviar mensagens ao desenvolvedor utilizando "<comando>"
     Dado o remetente '<remetente>'
     E nenhuma mensagem enviada
     E chat renderizado pelo '<remetente>'
     Quando o '<remetente>' digitar a mensagem '<mensagem>'
-    E teclar 'Enter'
+    E enviar mensagem com '<comando>'
     Então o texto digitado deve ser igual a '' 
     E uma mensagem deve ser exibida para o '<remetente>'
     E nessa mensagem "autor" contém '<remetente>'
     E nessa mensagem "texto" contém '<mensagem>'
 
     Exemplos:
-    | remetente | mensagem          |
-    | joão      | Olá, bom dia!     |
-    | pedro     | Boa tarde pessoas |
+    | remetente | mensagem          | comando |
+    | joão      | Olá, bom dia!     | Enter   |
+    | pedro     | Boa tarde pessoas | Botão   |
 
   Esquema do Cenário: Mensagem do <remetente> lida por desenvolvedor conectado simultaneamente
     Dado o remetente '<remetente>'
@@ -24,7 +24,7 @@ Funcionalidade: Chat
     E chat renderizado pelo '<remetente>'
     E chat renderizado pelo 'desenvolvedor'
     Quando o '<remetente>' digitar a mensagem '<mensagem>'
-    E teclar 'Enter'
+    E enviar mensagem com 'Enter'
     Então uma mensagem deve ser exibida para o 'desenvolvedor'
     E uma mensagem deve ser exibida para o '<remetente>'
 
@@ -37,7 +37,7 @@ Funcionalidade: Chat
     E nenhuma mensagem enviada
     E chat renderizado pelo ''
     Quando o '' digitar a mensagem 'Olá bom dia'
-    E teclar 'Enter'
+    E enviar mensagem com 'Enter'
     Então o texto digitado deve ser igual a 'Olá bom dia'
 
   #Cenário: Usuário não conectado deseja enviar mensagens

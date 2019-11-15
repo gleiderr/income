@@ -26,7 +26,7 @@ import {Cell, Grid, Row} from '@material/react-layout-grid';
 import MaterialIcon from '@material/react-material-icon';
 import { Fab } from '@material/react-fab';
 import {Body1} from '@material/react-typography';
-import { SignInChat } from './SignInScreen';
+//import { SignInChat } from './SignInScreen';
 import Doc from './Doc';
 import Chat from './Chat';
 import { Button } from '@material/react-button';
@@ -178,7 +178,7 @@ function msgsListener(setMsgs) {
         autor: doc.data().autor.nome,
       });
     });
-    console.table(data);
+    //console.table(data);
     setMsgs(data);
   },
   error => console.log(error));
