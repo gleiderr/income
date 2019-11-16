@@ -2,10 +2,6 @@
 
 Toda documentação não técnica e discussões podem ser acessadas em http://gleider.ml/income
 
-## Documentação Técnica
-
-Toda documentação técnica e código estão disponíveis em: https://github.com/gleiderr/income
-
 O INCOME utiliza 
 - React(JavaScript) como linguagem de programação.
 - Google Firebase como base de dados
@@ -28,7 +24,7 @@ A estrutura de cada mensagem é dada pelo modelo abaixo.
 "id": {
   "autor": "autor_id",
   "texto": "minha mensagem",
-  "timestamp": timestamp,
+  "timestamp": "timestamp",
 }
 ```
 
@@ -44,3 +40,30 @@ Somente é gravado o texto Markdown.
 
 ### Módulo INCOME
 Módulo que integra Chat e Documentação
+
+### Regras de segurança
+#### Perfil de Usuário
+
+|                  | Criar | Ler  | Alterar | Excluir |
+|:-----------------|:-----:|:----:|:-------:|:-------:|
+|**Todos**         | não   | não  | não     | não     |
+|**Comum**         | sim*  | sim* | não     | não     |
+|**Administrador** | sim*  | sim* | não     | não     |
+*Desde que seja o dono do perfil
+
+#### Mensagens
+
+|                  | Criar | Ler | Alterar | Excluir |
+|:-----------------|:-----:|:---:|:-------:|:-------:|
+|**Todos**         | não   | sim | não     | não     |
+|**Comum**         | sim*  | sim | não     | não     |
+|**Administrador** | sim*  | sim | não     | não     |
+*Desde que seja o autor
+
+#### Documentação
+
+|                  | Criar | Ler | Alterar | Excluir |
+|:-----------------|:-----:|:---:|:-------:|:-------:|
+|**Todos**         | não   | sim | não     | não     |
+|**Comum**         | não   | sim | não     | não     |
+|**Administrador** | sim   | sim | sim     | não     |
