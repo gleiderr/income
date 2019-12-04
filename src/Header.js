@@ -12,9 +12,10 @@ import TopAppBar, {
 } from '@material/react-top-app-bar';
 import { SignInChat } from './SignInScreen';
 
-export function ChatHeader({user, sign_in, open_sign_in}) {
+export function ChatHeader({user, sign_in, open_sign_in, hideChat}) {
 
-  const docLink = <Button id='fab-docs' href='#incomedocs'
+  const docLink = <Button id='fab-docs'
+                    onClick={() => hideChat()}
                     style={{
                       margin: 'auto 8px auto auto',
                       marginLeft: 'auto',

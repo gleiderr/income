@@ -28,7 +28,17 @@ body {
   }
 }
 
+#incomechat {
+  position: fixed;
+}
+
+
+
 @media (min-width: 840px) {
+  #incomechat {
+    position: relative;
+  }
+
   #fab-chat {
     display: none
   }

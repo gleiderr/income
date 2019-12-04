@@ -21,22 +21,16 @@ import '@material/react-text-field/dist/text-field.css';
 import '@material/react-fab/dist/fab.css';
 import '@material/react-material-icon/dist/material-icon.css';
 import '@material/react-top-app-bar/dist/top-app-bar.css';
+import '@material/react-drawer/dist/drawer.css';
 
 import {Cell, Grid, Row} from '@material/react-layout-grid';
 import MaterialIcon from '@material/react-material-icon';
 import { Fab } from '@material/react-fab';
 import {Body1} from '@material/react-typography';
+
 //import { SignInChat } from './SignInScreen';
 import Doc from './Doc';
 import Chat from './Chat';
-import { Button } from '@material/react-button';
-import TopAppBar, {
-  TopAppBarRow,
-  /*TopAppBarFixedAdjust, 
-  TopAppBarIcon,
-  TopAppBarSection,
-  TopAppBarTitle,*/
-} from '@material/react-top-app-bar';
 //import App from "./App";
 //import * as serviceWorker from "./serviceWorker";
 
@@ -119,32 +113,35 @@ function Income(props) {
     msgsListener, 
   };
 
+  const [displayDocs, setDocsDisplay] = useState('flex');
+  const [displayChat, setChatDisplay] = useState( window.innerWidth <= 840 ? 'none' : 'flex');
   return (
     <Body1 tag={'div'}>
       <Grid style={{padding: 0}}>
         <Row style={{gridGap: '0px'}}>
           <Cell id='incomedocs' className='vh100' phoneColumns={12} tabletColumns={12} desktopColumns={8} 
-                style={{display: 'flex', flexDirection: 'column', position: 'relative'}}>
+                style={{display: displayDocs, flexDirection: 'column', position: 'relative'}}>
             <Doc showHeader={!!user && user.papel === 'administrador'}
                   inventionSave={(markdown) => inventionSave(markdown, contexto, user)}
                   inventionListener={(setMarkdown) => inventionListener(contexto, setMarkdown)} />
             
-            <a id='fab-chat' style={{margin: '16px', position: 'absolute', bottom: '0px', right: '0px'}} href='#incomechat'>
-              <Fab icon={<MaterialIcon icon="chat"/> } style={{
-                color: 'var(--mdc-theme-on-primary, #fff)',
-                background: 'var(--mdc-theme-primary, #6200ee)'
-                }} />
-            </a>
+            <Fab id='fab-chat' icon={<MaterialIcon icon="chat"/>}
+                  onClick={() => setChatDisplay('flex')}
+                   style={{
+                     margin: '16px', position: 'absolute', bottom: '0px', right: '0px',
+                     zIndex: 0,
+                     color: 'var(--mdc-theme-on-primary, #fff)',
+                     background: 'var(--mdc-theme-primary, #6200ee)'
+                   }} />
           </Cell>
           <Cell id='incomechat' className='vh100' phoneColumns={12} tabletColumns={12} desktopColumns={4} 
-                style={{display: 'flex', flexDirection: 'column', position: 'relative'}}>
-            <ChatHeader user={user} sign_in={sign_in} open_sign_in={open_sign_in} />
+                style={{display: displayChat, flexDirection: 'column', background: 'white'}}>
+            <ChatHeader user={user} sign_in={sign_in} open_sign_in={open_sign_in} hideChat={() => setChatDisplay('none')}/>
             <Chat autor={user} alertas={[]} {...callbacks} />
           </Cell>
         </Row>
       </Grid>
-    </Body1>
-  );
+    </Body1>);
 }
 
 async function sendMsg(texto, autor) {

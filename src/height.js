@@ -19,7 +19,7 @@ export const setVH = () => {
     }
   }
 
-  const scroll = () => {
+  /*const scroll = () => {
     let element;
     const {hash = '#incomedocs'} = window.location;
     // alert(`.${hash}.`);
@@ -34,7 +34,7 @@ export const setVH = () => {
         element = document.querySelector('#incomedocs');
         element && element.scrollIntoView();
     }
-  };
+  };*/
 
   const resize = () => {
     //Recupera e atribui unidade de altura da tela corrente
@@ -42,12 +42,12 @@ export const setVH = () => {
     document.documentElement.style.setProperty('--vh', `${vh}px`);
 
     //Rola para sessão corrente
-    scroll();
+    //scroll();
   };
 
   resize();
   window.addEventListener('resize', throttle(resize));
-  window.addEventListener('scroll', throttle(scroll));
+  //window.addEventListener('scroll', throttle(scroll));
 }
 
 /*function throttle(func, wait, options) {
