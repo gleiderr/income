@@ -4,5 +4,25 @@
 }
 
 #incomedocs a {
-  word-break: break-all;
+  word-break: word-break;
+}
+
+#incomedocs li p {
+  margin-block-start: 0;
+  margin-block-end: 0;
+}
+
+@media (max-width: 479px) {
+  #incomedocs ul, ol {
+    padding-inline-start: 25px;
+  }
+
+  #incomedocs blockquote {
+    margin-inline-start: 20px;
+    margin-inline-end: 0px;
+  }
+}
+
+@media (max-width: 479px) {
+  
 }

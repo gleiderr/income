@@ -135,7 +135,7 @@ function Income(props) {
                    }} />
           </Cell>
           <Cell id='incomechat' className='vh100' phoneColumns={12} tabletColumns={12} desktopColumns={4} 
-                style={{display: displayChat, flexDirection: 'column', background: 'white'}}>
+                style={{display: displayChat, flexDirection: 'column', background: 'white', width: '100%'}}>
             <ChatHeader user={user} sign_in={sign_in} open_sign_in={open_sign_in} hideChat={() => setChatDisplay('none')}/>
             <Chat autor={user} alertas={[]} {...callbacks} />
           </Cell>
