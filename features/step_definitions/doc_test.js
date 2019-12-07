@@ -55,7 +55,7 @@ When('o desenvolvedor habilitar a edição', function () {
   assert.strictEqual(checkbox.checked, true, `O check box deveria conter "true". Checkbox: ${checkbox.outerHTML}`);
 });
 
-When('digitar o texto', function () {
+When('digitar o texto markdown', function () {
   console.log({texto: this.container.innerHTML});
   return 'pending';
 });
