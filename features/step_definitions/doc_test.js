@@ -33,6 +33,7 @@ Given('o seguinte texto markdown:', function (docString) {
 });
 
 Given('a documentação exibindo o cabeçalho', function () {
+  const doc = <Doc showHeader={true}
                     inventionSave={this.inventionSave} 
                     inventionListener={this.inventionListener} />
 
