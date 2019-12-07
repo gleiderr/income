@@ -29,6 +29,7 @@ Before(function () {
 });
 
 Given('o seguinte texto markdown:', function (docString) {
+  this.texto = docString;
 });
 
 Given('a documentação exibindo o cabeçalho', function () {
