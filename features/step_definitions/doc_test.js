@@ -28,12 +28,10 @@ Before(function () {
   }
 });
 
-Given('o texto markdown:', function (docString) {
-  this.markdown = docString;
+Given('o seguinte texto markdown:', function (docString) {
 });
 
-Given('a documentação renderizada {string} o cabeçalho', function (cabeçalho) {
-  const doc = <Doc showHeader={cabeçalho === 'exibindo'}
+Given('a documentação exibindo o cabeçalho', function () {
                     inventionSave={this.inventionSave} 
                     inventionListener={this.inventionListener} />
 
@@ -45,8 +43,7 @@ Given('a documentação renderizada {string} o cabeçalho', function (cabeçalho
   });
 });
 
-When('habilitar a edição', function () {
-  const chave = this.container.querySelector('[data-testid="switch"]');
+When('o desenvolvedor habilitar a edição', function () {
   act(() => {
     Simulate.click(chave);
   })
