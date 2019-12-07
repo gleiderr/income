@@ -46,9 +46,13 @@ Given('a documentação exibindo o cabeçalho', function () {
 });
 
 When('o desenvolvedor habilitar a edição', function () {
+  let chave = this.container.querySelector('[data-testid="switch"]');
+  let checkbox = chave.querySelector('#my-switch');
   act(() => {
-    Simulate.click(chave);
+    Simulate.change(chave, {target: {checked: true}});
   })
+
+  assert.strictEqual(checkbox.checked, true, `O check box deveria conter "true". Checkbox: ${checkbox.outerHTML}`);
 });
 
 When('digitar o texto', function () {
