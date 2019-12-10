@@ -51,16 +51,31 @@ import TextField, {/*HelperText, */Input} from '@material/react-text-field';
   useEffect(() => {
     return msgsListener(setMsgs);
   }, [msgsListener, setMsgs]);
+
+  const lineHeight = 20;
+  const padding = 0;
   
   return (
     <>
       <MessageList {...{msgList}} />
       <div style={{display: 'flex'}}>
-        <TextField label='Sua mensagem' outlined style={{ flex: 1, height: '40px', margin: '8px'}} >
-          <Input style={{height: '40px'}}
-                
-                onKeyDown={keyDownHandle}
-                value={texto} onChange={(e) => escrever(e.currentTarget.value)} />
+        <TextField id='MessageInput' className='MessageInput' label='Sua mensagem' outlined textarea style={{ flex: 1, height: 'auto', margin: '8px'}} >
+          <Input rows='1' value={texto} onKeyDown={keyDownHandle}
+                style={{
+                  margin: '8px',
+                  padding: `${padding}px`,
+                  lineHeight: `${lineHeight}px`,
+                  height: `${padding + lineHeight}px`, 
+                  maxHeight: `${padding + 4 * lineHeight}px`,
+                  resize: 'none',
+                }}
+                onChange={(e) => {
+                  escrever(e.currentTarget.value);
+
+                  let t = e.currentTarget;
+                  t.style.height = 'auto'; //necessário para diminuição da caixa de texto
+                  t.style.height = t.scrollHeight + 'px';
+                }} />
         </TextField>
         <Fab mini icon={<MaterialIcon icon="send"/> }
              onClick={send}

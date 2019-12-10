@@ -10,6 +10,7 @@ import './shadow.css';
 import './color.css';
 import './height.css';
 import './docs.css';
+import './styles/Chat.css';
 
 import '@material/react-layout-grid/dist/layout-grid.css';
 import '@material/react-card/dist/card.css';

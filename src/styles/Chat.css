@@ -1,0 +1,21 @@
+/*Escondendo barra de scroll não desabilitando-o*/
+#MessageInput ::-webkit-scrollbar { /*Chrome*/
+  display: none;
+}
+#MessageInput {
+  scrollbar-width: none; /*Firefox*/
+}
+
+/*Label do campo não focado .mdc-notched-outline--upgraded*/
+#MessageInput:not(.mdc-text-field--focused) label {
+  top: 25%;
+} 
+
+#MessageInput .mdc-notched-outline--notched label {
+  top: 17px;
+}
+
+/*Label do campo focado*/
+#MessageInput.mdc-text-field--focused label {
+  color: var(--mdc-theme-primary, #00695c);
+} 
