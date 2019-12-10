@@ -41,6 +41,8 @@ try {
   firebase_init();
 }
 
+global.firebase = firebase;
+
 const db = firebase.firestore();
 const invencoes = db.collection('invencoes');
 const timestamp = firebase.firestore.FieldValue.serverTimestamp();

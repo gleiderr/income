@@ -40,7 +40,7 @@ export function ChatHeader({user, sign_in, open_sign_in, hideChat}) {
                             {sign_in ? 'Cancelar' : 'Conectar'}
                           </Button>
 
-  const sigInChat = useMemo(() => <SignInChat user={user} />, [user]) ;
+  //const sigInChat = useMemo(() => <SignInChat user={user} />, [user]) ;
 
   return (
     <TopAppBar style={{position: 'static'}}>
@@ -48,7 +48,7 @@ export function ChatHeader({user, sign_in, open_sign_in, hideChat}) {
         {button}
         {docLink}
       </TopAppBarRow>
-      {sign_in ? sigInChat : null}
+      {sign_in && !user ? <SignInChat user={user} /> : null}
     </TopAppBar>
   );
 }

@@ -1,9 +1,9 @@
-import React from "react";
+import React, {useEffect} from "react";
 import firebase from "firebase";
 import firebase_init from "./firebase-local";
 import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
 //import firebaseui from 'firebaseui';
-const firebaseui = require('firebaseui');
+//const firebaseui = require('firebaseui');
 
 try {
   firebase.app();
@@ -41,17 +41,20 @@ export function SignIn() {
 }
 
 export function SignInChat({ user }) {
-  // Se usuário conectado, elemento é processado para que conexão seja 
-  // verificada, mas não é renderizado
-  if (!!user) return null; 
+  useEffect(() => {
+    const {AuthUI} = global.firebaseui.auth;
+    const ui = AuthUI.getInstance() || new AuthUI(firebase.auth());
+    ui.start('#firebaseui-auth-container', uiConfig);
+  });
   
   return (
     <div style={{background: 'var(--mdc-theme-primary)', alignSelf: 'center'}}>
       Conecte-se para enviar mensagens
-      <StyledFirebaseAuth
+      {/* <StyledFirebaseAuth
         uiConfig={uiConfig}
         firebaseAuth={firebase.auth()}
-      />
+      /> */}
+      <div id='firebaseui-auth-container'></div>
     </div>
   );
 }
