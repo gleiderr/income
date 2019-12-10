@@ -18,4 +18,8 @@
 /*Label do campo focado*/
 #MessageInput.mdc-text-field--focused label {
   color: var(--mdc-theme-primary, #00695c);
-} 
+}
+
+.msg-text {
+  white-space: pre-line;
+}

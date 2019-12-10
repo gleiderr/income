@@ -23,8 +23,7 @@ export default function Doc(props) {
           setBackground('goldenrod');
           inventionSave(markdown)
             .then(() => setBackground(DEFAULT_BACKGROUND));
-        }
-        } >
+        }} >
         Salvar
       </Button>
     </div>

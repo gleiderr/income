@@ -35,16 +35,12 @@ import TextField, {/*HelperText, */Input} from '@material/react-text-field';
 
   const send = () => {
     sendMsg(texto, autor)
-      .then(() => escrever('')) //Limpa o campo
-      .catch(console.error); 
+      .then(() => {
+        escrever('');
+        autoResize();
+      }) //Limpa o campo
+      .catch(console.error);
   }
-  
-  const keyDownHandle = evt => {
-    if (evt.key === "Enter") {
-      evt.persist();
-      send();
-    }
-  };
   
   //Atualiza lista de mensagens
   const [msgList, setMsgs] = useState([]);
@@ -54,13 +50,20 @@ import TextField, {/*HelperText, */Input} from '@material/react-text-field';
 
   const lineHeight = 20;
   const padding = 0;
+
+  const input = useRef(null);
+  const autoResize = () => {
+    const {inputElement} = input.current;
+    inputElement.style.height = 'auto'; //necessário para diminuição da caixa de texto
+    inputElement.style.height = inputElement.scrollHeight + 'px';
+  };
   
   return (
     <>
       <MessageList {...{msgList}} />
       <div style={{display: 'flex'}}>
         <TextField id='MessageInput' className='MessageInput' label='Sua mensagem' outlined textarea style={{ flex: 1, height: 'auto', margin: '8px'}} >
-          <Input rows='1' value={texto} onKeyDown={keyDownHandle}
+          <Input rows='1' value={texto} ref={input}
                 style={{
                   margin: '8px',
                   padding: `${padding}px`,
@@ -71,10 +74,7 @@ import TextField, {/*HelperText, */Input} from '@material/react-text-field';
                 }}
                 onChange={(e) => {
                   escrever(e.currentTarget.value);
-
-                  let t = e.currentTarget;
-                  t.style.height = 'auto'; //necessário para diminuição da caixa de texto
-                  t.style.height = t.scrollHeight + 'px';
+                  autoResize();
                 }} />
         </TextField>
         <Fab mini icon={<MaterialIcon icon="send"/> }
@@ -140,7 +140,7 @@ function Mensagem({msg}) {
     <Card outlined={false} style={{margin: '8px'}} data-testid="mensagem">
       <CardPrimaryContent style={{padding: '0px 4px'}}>
         <div data-testid="autor" style={{fontWeight: 'bold'}} >{msg.autor}</div>
-        <div data-testid="texto">{msg.texto}</div>
+        <div class="msg-text" data-testid="texto">{msg.texto}</div>
       </CardPrimaryContent>
     </Card>
   );
