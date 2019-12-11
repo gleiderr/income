@@ -34,12 +34,17 @@ import TextField, {/*HelperText, */Input} from '@material/react-text-field';
   const [texto, escrever] = useState('');
 
   const send = () => {
+    const textoEnviado = texto;
+    
+    escrever('');
+    autoResize();
+
     sendMsg(texto, autor)
-      .then(() => {
-        escrever('');
+      .then(() => console.log('msg enviada'))
+      .catch(() => {
+        escrever(textoEnviado);
         autoResize();
-      }) //Limpa o campo
-      .catch(console.error);
+      });
   }
   
   //Atualiza lista de mensagens
