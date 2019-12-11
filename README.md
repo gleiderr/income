@@ -1,3 +1,5 @@
+[![Run on Repl.it](https://repl.it/badge/github/gleiderr/income)](https://repl.it/github/gleiderr/income)
+
 # INCOME
 
 Toda documentação não técnica e discussões podem ser acessadas em http://gleider.ml/income
