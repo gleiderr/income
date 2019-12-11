@@ -21,5 +21,28 @@
 }
 
 .msg-text {
+  max-height: 145px;
+  margin-bottom: 5px;
+
+  /*wrap*/
   white-space: pre-line;
+  overflow-wrap: break-word;
+  overflow-y: auto;
+}
+
+/* Message scrollbar*/
+.msg-text {
+  --background-track: rgba(0,0,0,.25);
+  --background-thumb: rgba(0,0,0,.5);
+
+  /*Firefox*/
+  scrollbar-width: thin;
+  scrollbar-color: var(--background-thumb) var(--background-track);
+}
+.msg-text::-webkit-scrollbar { /*Chrome*/
+  width: 7px;
+  background-color: var(--background-track);
+}
+.msg-text::-webkit-scrollbar-thumb { /*Chrome*/
+  background-color: var(--background-thumb);
 }
