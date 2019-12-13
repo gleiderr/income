@@ -33,13 +33,31 @@ import TextField, {/*HelperText, */Input} from '@material/react-text-field';
 
   const [texto, escrever] = useState('');
 
-  const send = () => {
-    sendMsg(texto, autor)
+  const input = useRef(null);
+  const autoResize = () => {
+    //Posterga alterações na altura para próximos eventloops
+    Promise.resolve()
       .then(() => {
-        escrever('');
+        const {inputElement} = input.current;
+        inputElement.style.height = 'auto'; //necessário para diminuição da caixa de texto
+      }).then(() => {
+        const {inputElement} = input.current;
+        inputElement.style.height = inputElement.scrollHeight + 'px';
+      });
+  };
+
+  const send = () => {
+    const textoEnviado = texto;
+    
+    escrever('');
+    autoResize();
+
+    sendMsg(texto, autor)
+      .then(() => console.log('msg enviada'))
+      .catch(() => {
+        escrever(textoEnviado);
         autoResize();
-      }) //Limpa o campo
-      .catch(console.error);
+      });
   }
   
   //Atualiza lista de mensagens
@@ -50,13 +68,6 @@ import TextField, {/*HelperText, */Input} from '@material/react-text-field';
 
   const lineHeight = 20;
   const padding = 0;
-
-  const input = useRef(null);
-  const autoResize = () => {
-    const {inputElement} = input.current;
-    inputElement.style.height = 'auto'; //necessário para diminuição da caixa de texto
-    inputElement.style.height = inputElement.scrollHeight + 'px';
-  };
   
   return (
     <>

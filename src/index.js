@@ -152,6 +152,8 @@ async function sendMsg(texto, autor) {
      return Promise.reject('Conecte-se para enviar mensagens');
   }
 
+  //await demorar(5000);
+
   texto = texto.trim();
 
   if (texto.length > 0) {
@@ -161,6 +163,12 @@ async function sendMsg(texto, autor) {
   } else {
     return Promise.resolve();
   }
+
+  /*function demorar(t) {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => reject(), t)
+    })
+  }*/
 }
 
 function msgsListener(setMsgs) {
@@ -178,7 +186,6 @@ function msgsListener(setMsgs) {
         autor: doc.data().autor.nome,
       });
     });
-    //console.table(data);
     setMsgs(data);
   },
   error => console.log(error));
@@ -194,9 +201,8 @@ function inventionSave(markdown, invenção, autor) {
   invencoes.doc(invenção).collection('historico').add({
     markdown, timestamp
   });
-  console.log('salvando...');
+  
   return invencoes.doc(invenção).set({markdown})
-    .then((a) => console.log('salvo', a))
     .catch(error => Promise.reject(<div>error</div>));
 }
 
