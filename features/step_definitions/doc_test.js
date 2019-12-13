@@ -45,17 +45,22 @@ Given('a documentação exibindo o cabeçalho', function () {
   });
 });
 
-When('o desenvolvedor habilitar a edição', function () {
-  let chave = this.container.querySelector('[data-testid="switch"]');
-  let checkbox = chave.querySelector('#my-switch');
+When('o desenvolvedor desabilitar a visualização', function () {
+  const chave = this.container.querySelector('[data-testid="switch"]');
   act(() => {
-    Simulate.change(chave, {target: {checked: true}});
+    Simulate.change(chave, { target: {checked: false} });
   })
-
-  assert.strictEqual(checkbox.checked, true, `O check box deveria conter "true". Checkbox: ${checkbox.outerHTML}`);
+  
+  const checkbox = chave.querySelector('#my-switch');
+  assert.strictEqual(checkbox.checked, false, `O check box deveria conter "false". Checkbox: ${checkbox.outerHTML}`);
 });
 
 When('digitar o texto markdown', function () {
-  console.log({texto: this.container.innerHTML});
+  console.log({
+    checked: this.container.querySelector('#my-switch').checked,
+    myswitch: this.container.querySelector('[data-testid="switch"]').outerHTML,
+    input: this.container.querySelector('#my-switch').outerHTML,
+    contentEditable: this.container.innerHTML,
+  });
   return 'pending';
 });

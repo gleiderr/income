@@ -9,7 +9,7 @@ Funcionalidade: Documentação
       Texto
       """
     E a documentação exibindo o cabeçalho
-    Quando o desenvolvedor habilitar a edição
+    Quando o desenvolvedor desabilitar a visualização
     E digitar o texto markdown
     E clicar sobre salvar
     Então o texto deve ser salvo
