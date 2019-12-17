@@ -12,5 +12,6 @@ Funcionalidade: Documentação
     Quando o desenvolvedor desabilitar a visualização
     E digitar o texto markdown
     #E clicar sobre salvar
+    #E o desenvolvedor habilitar a visualização
     #Então o texto deve ser salvo
     #E o texto deve ser exibido

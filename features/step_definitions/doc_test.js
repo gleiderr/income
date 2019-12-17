@@ -61,13 +61,14 @@ When('digitar o texto markdown', function () {
   const texto = this.texto;
 
   act(() => {
-    markdown.innerHTML = texto;
+    markdown.innerHTML = this.texto;
     Simulate.blur(markdown);
   });
   
-  
-  console.log({
-    texto,
-    markdown: markdown.outerHTML
-  });
+  assert.strictEqual(markdown.innerHTML, this.texto, 
+                     `O conteúdo deveria ser: ${this.texto}`);
+});
+
+When('clicar sobre salvar', function () {
+
 });
