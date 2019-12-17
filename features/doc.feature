@@ -11,6 +11,6 @@ Funcionalidade: Documentação
     E a documentação exibindo o cabeçalho
     Quando o desenvolvedor desabilitar a visualização
     E digitar o texto markdown
-    E clicar sobre salvar
-    Então o texto deve ser salvo
-    E o texto deve ser exibido
+    #E clicar sobre salvar
+    #Então o texto deve ser salvo
+    #E o texto deve ser exibido
