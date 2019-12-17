@@ -151,7 +151,7 @@ function Mensagem({msg}) {
     <Card outlined={false} style={{margin: '8px'}} data-testid="mensagem">
       <CardPrimaryContent style={{padding: '0px 4px'}}>
         <div data-testid="autor" style={{fontWeight: 'bold'}} >{msg.autor}</div>
-        <div class="msg-text" data-testid="texto">{msg.texto}</div>
+        <div className="msg-text" data-testid="texto">{msg.texto}</div>
       </CardPrimaryContent>
     </Card>
   );
