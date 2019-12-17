@@ -52,7 +52,8 @@ When('o desenvolvedor desabilitar a visualização', function () {
   })
   
   const checkbox = chave.querySelector('#my-switch');
-  assert.strictEqual(checkbox.checked, false, `O check box deveria conter "false". Checkbox: ${checkbox.outerHTML}`);
+  assert.strictEqual(checkbox.checked, false, 
+                     `O check box deveria conter "false". Checkbox: ${checkbox.outerHTML}`);
 });
 
 When('digitar o texto markdown', function () {
