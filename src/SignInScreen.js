@@ -15,7 +15,7 @@ try {
 const uiConfig = {
   // Popup signin flow rather than redirect flow.
   signInFlow: "popup",
-  credentialHelper: firebaseui.auth.CredentialHelper.NONE,
+  credentialHelper: global.firebaseui.auth.CredentialHelper.NONE,
 
   // We will display Google and Facebook as auth providers.
   signInOptions: [
