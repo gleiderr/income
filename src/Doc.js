@@ -18,7 +18,8 @@ export default function Doc(props) {
       <label htmlFor='my-switch' style={{marginRight: '12px'}}>Visualizar</label>
       <Switch  checked={view} nativeControlId='my-switch' data-testid='switch'
               onChange={(e) => setView(e.target.checked)} />
-      <Button raised style={{marginLeft: 'auto', backgroundColor}}
+      <Button data-testid='save-button' 
+        raised style={{marginLeft: 'auto', backgroundColor}}
         onClick={() => {
           setBackground('goldenrod');
           inventionSave(markdown)

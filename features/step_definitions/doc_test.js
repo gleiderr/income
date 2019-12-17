@@ -14,11 +14,12 @@ Before(function () {
   initDOM();
 
   const listeners = [];
-  const callListeners = () => listeners.foreach(listener => listener());
+  const callListeners = () => listeners.forEach(listener => listener());
 
   this.inventionSave = (markdown) => {
     this.markdown = markdown;
     callListeners();
+    return Promise.resolve();
   }
 
   this.inventionListener = (setMarkdown) => {
@@ -70,5 +71,10 @@ When('digitar o texto markdown', function () {
 });
 
 When('clicar sobre salvar', function () {
+  const button = this.container.querySelector('[data-testid="save-button"]');
+  console.log(button.outerHTML);
 
+  act(() => {
+    Simulate.click(button);
+  });
 });
