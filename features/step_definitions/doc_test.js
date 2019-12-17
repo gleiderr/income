@@ -57,11 +57,17 @@ When('o desenvolvedor desabilitar a visualização', function () {
 });
 
 When('digitar o texto markdown', function () {
-  console.log({
-    checked: this.container.querySelector('#my-switch').checked,
-    myswitch: this.container.querySelector('[data-testid="switch"]').outerHTML,
-    input: this.container.querySelector('#my-switch').outerHTML,
-    contentEditable: this.container.innerHTML,
+  const markdown = this.container.querySelector('[data-testid="markdown"]');
+  const texto = this.texto;
+
+  act(() => {
+    markdown.innerHTML = texto;
+    Simulate.blur(markdown);
   });
-  return 'pending';
+  
+  
+  console.log({
+    texto,
+    markdown: markdown.outerHTML
+  });
 });

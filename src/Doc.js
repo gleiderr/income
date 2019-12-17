@@ -42,7 +42,8 @@ export default function Doc(props) {
 function Markdown(props) {
   const {markdown, setMarkdown} = props;
   return (
-    <div contentEditable suppressContentEditableWarning 
+    <div contentEditable suppressContentEditableWarning
+      data-testid='markdown'
       onBlur={(evt) => setMarkdown(evt.target.innerText)}
       style={{
         whiteSpace:'pre-wrap', 
