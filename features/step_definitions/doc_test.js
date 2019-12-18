@@ -88,5 +88,7 @@ Then('o texto deve ser salvo', function () {
 });
 
 Then('o seguinte conteúdo deve ser exibido:', function (conteudo) {
-  
+  const {innerHTML} = this.container.querySelector('[data-testid="view"]');
+
+  assert.strictEqual(conteudo, innerHTML, `conteudo: ${conteudo}, innerHTML: ${innerHTML}.`); 
 });

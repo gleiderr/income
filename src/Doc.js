@@ -68,5 +68,6 @@ function View(props) {
   converter.setFlavor('github');
   const html = converter.makeHtml(markdown);
   //console.log('render view', html); 
-  return <div className='income-doc' dangerouslySetInnerHTML={{__html: html}} />;
+  return <div className='income-doc' data-testid='view'
+              dangerouslySetInnerHTML={{__html: html}} />;
 }
