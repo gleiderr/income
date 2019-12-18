@@ -42,8 +42,10 @@ export default function Doc(props) {
 
 function Markdown(props) {
   const {markdown, setMarkdown} = props;
+  const input = useRef(null);
   return (
     <div contentEditable suppressContentEditableWarning
+      ref={input}
       data-testid='markdown'
       onBlur={(evt) => setMarkdown(evt.target.innerText)}
       style={{
@@ -65,5 +67,6 @@ function View(props) {
   const converter = new showdown.Converter({strikethrough: true});
   converter.setFlavor('github');
   const html = converter.makeHtml(markdown);
+  //console.log('render view', html); 
   return <div className='income-doc' dangerouslySetInnerHTML={{__html: html}} />;
 }

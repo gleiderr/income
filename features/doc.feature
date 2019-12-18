@@ -9,10 +9,15 @@ Funcionalidade: Documentação
       Texto
       """
     E a documentação exibindo o cabeçalho
-    Quando o desenvolvedor desabilitar a visualização
+    Quando o desenvolvedor "desabilitar" a visualização
     E digitar o texto markdown
     E clicar sobre salvar
-    #E o desenvolvedor habilitar a visualização
-    #Então o texto deve ser salvo
-    #Então o botão deve indicar "Salvando..."
-    #E o texto deve ser exibido
+    E o desenvolvedor "habilitar" a visualização
+    Então o texto deve ser salvo
+    E o seguinte conteúdo deve ser exibido:
+      """
+      <h1 id="título">Título</h1>
+      <p>Texto</p>
+      """
+
+  Esquema do Cenário: Estados intermediários do botão salvar

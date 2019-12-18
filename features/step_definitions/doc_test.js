@@ -16,6 +16,7 @@ Before(function () {
   const listeners = [];
   const callListeners = () => listeners.forEach(listener => listener());
 
+  this.markdown = undefined;
   this.inventionSave = (markdown) => {
     this.markdown = markdown;
     callListeners();
@@ -46,35 +47,46 @@ Given('a documentação exibindo o cabeçalho', function () {
   });
 });
 
-When('o desenvolvedor desabilitar a visualização', function () {
+When('o desenvolvedor {string} a visualização', function (acao) {
   const chave = this.container.querySelector('[data-testid="switch"]');
+  const checked = acao === 'desabilitar' ? false : true;
+
+  //console.log(this.container.innerHTML);
   act(() => {
-    Simulate.change(chave, { target: {checked: false} });
+    Simulate.change(chave, { target: {checked} });
   })
-  
+
   const checkbox = chave.querySelector('#my-switch');
-  assert.strictEqual(checkbox.checked, false, 
-                     `O check box deveria conter "false". Checkbox: ${checkbox.outerHTML}`);
+  assert.strictEqual(checkbox.checked, checked, 
+                     `O check box deveria conter "${checked}". Checkbox: ${checkbox.outerHTML}`);
 });
 
 When('digitar o texto markdown', function () {
   const markdown = this.container.querySelector('[data-testid="markdown"]');
-  const texto = this.texto;
 
   act(() => {
-    markdown.innerHTML = this.texto;
+    markdown.innerText = this.texto;
     Simulate.blur(markdown);
   });
-  
-  assert.strictEqual(markdown.innerHTML, this.texto, 
+   
+  assert.strictEqual(markdown.innerText, this.texto, 
                      `O conteúdo deveria ser: ${this.texto}`);
 });
 
 When('clicar sobre salvar', function () {
   const button = this.container.querySelector('[data-testid="save-button"]');
-  console.log(button.outerHTML);
 
   act(() => {
     Simulate.click(button);
   });
+});
+
+Then('o texto deve ser salvo', function () {
+  const {markdown, texto} = this;
+  assert.strictEqual(this.markdown, this.texto, `this.markdown: ${this.markdown} deve ser igual a this.texto ${this.texto}.`);
+
+});
+
+Then('o seguinte conteúdo deve ser exibido:', function (conteudo) {
+  
 });
