@@ -18,8 +18,7 @@ Before(function () {
 
   //Mock: salvamento seletivo do markdown no banco de dados
   this.markdown = undefined;
-  this.confirmar = undefined; 
-  this.rejeitar = reject => reject();
+  this.confirmar = undefined;
   this.inventionSave = (markdown) => {
     this.markdown = markdown;
     callListeners();
@@ -82,13 +81,12 @@ When('o desenvolvedor clicar sobre salvar', function () {
 
   act(() => {
     Simulate.click(button);
-    //this.confirmar();
   });
 });
 
 When('o sistema confirmar o salvamento', function () {
   act(() => {
-    this.confirmar();  
+    this.confirmar();
   });
 }); 
 
