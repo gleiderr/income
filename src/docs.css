@@ -12,6 +12,10 @@
   margin-block-end: 0;
 }
 
+.waiting {
+  background-color: goldenrod !important
+}
+
 @media (max-width: 479px) {
   #incomedocs ul, ol {
     padding-inline-start: 25px;
@@ -21,8 +25,4 @@
     margin-inline-start: 20px;
     margin-inline-end: 0px;
   }
-}
-
-@media (max-width: 479px) {
-  
 }

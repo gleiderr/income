@@ -5,13 +5,6 @@ import firebase_init from "./firebase-local";
 import {setVH} from './height';
 import {ChatHeader} from './Header';
 
-import './index.css';
-import './shadow.css';
-import './color.css';
-import './height.css';
-import './docs.css';
-import './styles/Chat.css';
-
 import '@material/react-layout-grid/dist/layout-grid.css';
 import '@material/react-card/dist/card.css';
 import '@material/react-list/dist/list.css';
@@ -23,6 +16,13 @@ import '@material/react-fab/dist/fab.css';
 import '@material/react-material-icon/dist/material-icon.css';
 import '@material/react-top-app-bar/dist/top-app-bar.css';
 import '@material/react-drawer/dist/drawer.css';
+
+import './index.css';
+import './shadow.css';
+import './color.css';
+import './height.css';
+import './docs.css';
+import './styles/Chat.css';
 
 import {Cell, Grid, Row} from '@material/react-layout-grid';
 import MaterialIcon from '@material/react-material-icon';
