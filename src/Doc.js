@@ -7,9 +7,7 @@ export default function Doc(props) {
   const {inventionListener, inventionSave, showHeader} = props;
   const [view, setView] = useState(true)
   const [markdown, setMarkdown] = useState(``);
-
-  const DEFAULT_BACKGROUND = 'var(--mdc-theme-primary, #6200ee)';
-  const [backgroundColor, setBackground] = useState(DEFAULT_BACKGROUND);
+  const [waiting, wait] = useState(''); 
 
   useEffect(() => inventionListener(setMarkdown), [inventionListener,setMarkdown])
 
@@ -18,18 +16,18 @@ export default function Doc(props) {
       <label htmlFor='my-switch' style={{marginRight: '12px'}}>Visualizar</label>
       <Switch  checked={view} nativeControlId='my-switch' data-testid='switch'
               onChange={(e) => setView(e.target.checked)} />
-      <Button data-testid='save-button' 
-        raised style={{marginLeft: 'auto', backgroundColor}}
+      <Button data-testid='save-button'
+        className={waiting}
+        raised style={{marginLeft: 'auto'}} 
         onClick={() => {
-          setBackground('goldenrod');
-          inventionSave(markdown)
-            .then(() => setBackground(DEFAULT_BACKGROUND));
+          wait('waiting'); 
+          inventionSave(markdown).then(() => wait(''));
         }} >
         Salvar
       </Button>
     </div>
   );
-  
+
   return (
     <>
       {header}
