@@ -53,11 +53,10 @@ import TextField, {/*HelperText, */Input} from '@material/react-text-field';
     autoResize();
 
     sendMsg(texto, autor)
-      .then(() => console.log('msg enviada'))
-      .catch(() => {
+      .catch(() => { 
         escrever(textoEnviado);
-        autoResize();
-      });
+        autoResize(); 
+      }); 
   }
   
   //Atualiza lista de mensagens
@@ -67,7 +66,7 @@ import TextField, {/*HelperText, */Input} from '@material/react-text-field';
   }, [msgsListener, setMsgs]);
 
   const lineHeight = 20;
-  const padding = 0;
+  const padding = 0; 
   
   return (
     <>
@@ -75,6 +74,7 @@ import TextField, {/*HelperText, */Input} from '@material/react-text-field';
       <div style={{display: 'flex'}}>
         <TextField id='MessageInput' className='MessageInput' label='Sua mensagem' outlined textarea style={{ flex: 1, height: 'auto', margin: '8px'}} >
           <Input rows='1' value={texto} ref={input}
+                 data-testid="input" 
                 style={{
                   margin: '8px',
                   padding: `${padding}px`,
@@ -85,10 +85,11 @@ import TextField, {/*HelperText, */Input} from '@material/react-text-field';
                 }}
                 onChange={(e) => {
                   escrever(e.currentTarget.value);
-                  autoResize();
+                  autoResize(); 
                 }} />
         </TextField>
         <Fab mini icon={<MaterialIcon icon="send"/> }
+             data-testid="send"
              onClick={send}
              style={{
                margin: 'auto',
@@ -104,14 +105,14 @@ import TextField, {/*HelperText, */Input} from '@material/react-text-field';
 function MessageList({msgList}) {
   const fim = useRef(null);
   const lista = useRef(null);
-  const [a, as] = useState(true);
+  //const [a, as] = useState(true); 
 
   const divMsgs = msgList.map(msg => 
     <Mensagem key={msg.id} msg={msg} />
   );
 
   //Rolagem das mensagens do chat em função da posição do scroll
-  useEffect(() => {
+  /*useEffect(() => {
     if (fim.current.previousSibling) {
       const { bottom: bottomList } = lista.current.getBoundingClientRect();
       const { top: topFim } = fim.current.previousSibling.getBoundingClientRect();
@@ -125,11 +126,13 @@ function MessageList({msgList}) {
         fim.current.scrollIntoView({behavior: "smooth"});
       }
     }
-  }, [msgList, a]);
+  }, [msgList, a]);*/
 
   return (
-    <div className={'teste'}
-         style={{flexGrow: 1, overflow: 'auto', position: 'relative'}}
+    <div className={'teste'} 
+         style={{
+           flexGrow: 1, overflow: 'auto', position: 'relative'
+         }}
          ref={lista} >
       {divMsgs}
       <div ref={fim}></div>

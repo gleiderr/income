@@ -57,15 +57,19 @@ Given('chat renderizado pelo {string}', function (usuário) {
 });
 
 When('o {string} digitar a mensagem {string}', function (remetente, mensagem) {
-  this.input = this.containers[remetente].querySelector('input');
-  this.input.value = mensagem;
-  Simulate.change(this.input);
+  this.input = this.containers[remetente].querySelector('[data-testid="input"]');
+  this.send = this.containers[remetente].querySelector('[data-testid="send"]');
+  
+  act(() => {
+    this.input.value = mensagem;
+    Simulate.change(this.input);
+  }); 
 });
 
-When('teclar {string}', function (string) {
+When('enviar mensagem', function () { 
   act(() => {
-    Simulate.keyDown(this.input, {'key': 'Enter'});
-  });
+    Simulate.click(this.send); 
+  }); 
 });
 
 Then('o texto digitado deve ser igual a {string}', function (expected) {
@@ -96,13 +100,18 @@ async function sendMsg(texto, autor) {
     return Promise.reject('Conecte-se para enviar mensagens');
   }
 
-  mensagens.push({
+  /*mensagens.push({
     texto: texto.trim(), 
     autor,
     timestamp: null, 
-  });
+  });*/
+  mensagens = [...mensagens, {
+    texto: texto.trim(), 
+    autor,
+    timestamp: null, 
+  }];
 
-  callListeners();
+  callListeners(); 
 
   return Promise.resolve();
 }
@@ -115,7 +124,7 @@ function callListeners() {
  * @callback [setMsgs] ação ao receber novas mensagens
  */
 function msgsListener(setMsgs) {
-  const newListener = () => {
+  const newListener = () => { 
     setMsgs(mensagens.map((m, index) => ({
       ...m,
       id: index,
