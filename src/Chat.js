@@ -45,18 +45,16 @@ import TextField, {/*HelperText, */Input} from '@material/react-text-field';
         inputElement.style.height = inputElement.scrollHeight + 'px';
       });
   };
+  const changeInput = value => {
+    escrever(value);
+    autoResize();
+  };
 
   const send = () => {
-    const textoEnviado = texto;
-    
-    escrever('');
-    autoResize();
-
+    const textoEnviado = texto; //memorização do texto enviado
+    changeInput(''); //limpeza do campo
     sendMsg(texto, autor)
-      .catch(() => { 
-        escrever(textoEnviado);
-        autoResize(); 
-      }); 
+      .catch(() => changeInput(textoEnviado)); //restaura texto enviado se erro
   }
   
   //Atualiza lista de mensagens
@@ -83,10 +81,7 @@ import TextField, {/*HelperText, */Input} from '@material/react-text-field';
                   maxHeight: `${padding + 4 * lineHeight}px`,
                   resize: 'none',
                 }}
-                onChange={(e) => {
-                  escrever(e.currentTarget.value);
-                  autoResize(); 
-                }} />
+                onChange={(e) => changeInput(e.currentTarget.value)} />
         </TextField>
         <Fab mini icon={<MaterialIcon icon="send"/> }
              data-testid="send"
