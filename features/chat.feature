@@ -35,8 +35,3 @@ Funcionalidade: Chat
     Quando o 'joão' digitar a mensagem 'Olá bom dia'
     E enviar mensagem 
     Então o texto digitado deve ser igual a 'Olá bom dia'
-
-  #Cenário: Usuário não conectado deseja enviar mensagens
-  #Cenário: Usuário deseja ler mensagens
-  #Cenário: Todo usuário deseja saber quando uma mensagem foi lida pelo destinatário
-  #Cenário: Todo usuário deseja ler mensagens de seu interesse
