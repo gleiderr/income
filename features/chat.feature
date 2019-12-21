@@ -28,10 +28,11 @@ Funcionalidade: Chat
     Então uma mensagem deve ser exibida para o 'desenvolvedor'
     E uma mensagem deve ser exibida para o 'joão'
 
+  #Usuários não conectados não recebem nome no chat
   Cenário: Usuário não conectado deseja enviar mensagens
-    Dado o remetente 'joão'
+    Dado o remetente ''
     E nenhuma mensagem enviada
-    E chat renderizado pelo 'joão'
-    Quando o 'joão' digitar a mensagem 'Olá bom dia'
+    E chat renderizado pelo ''
+    Quando o '' digitar a mensagem 'Olá bom dia'
     E enviar mensagem 
     Então o texto digitado deve ser igual a 'Olá bom dia'
