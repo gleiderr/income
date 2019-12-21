@@ -14,29 +14,25 @@ Funcionalidade: Chat
     E nessa mensagem "texto" contém '<mensagem>'
 
     Exemplos:
-    | remetente | mensagem          | comando |
-    | joão      | Olá, bom dia!     | Enter   |
-    | pedro     | Boa tarde pessoas | Botão   |
-
-  Esquema do Cenário: Mensagem do <remetente> lida por desenvolvedor conectado simultaneamente
-    Dado o remetente '<remetente>'
-    E nenhuma mensagem enviada
-    E chat renderizado pelo '<remetente>'
-    E chat renderizado pelo 'desenvolvedor'
-    Quando o '<remetente>' digitar a mensagem '<mensagem>'
-    E enviar mensagem
-    Então uma mensagem deve ser exibida para o 'desenvolvedor'
-    E uma mensagem deve ser exibida para o '<remetente>'
-
-  Exemplos:
     | remetente | mensagem          |
     | joão      | Olá, bom dia!     |
+    | pedro     | Boa tarde pessoas |
+
+  Cenário: Mensagem do <remetente> lida por desenvolvedor conectado simultaneamente
+    Dado o remetente 'joão'
+    E nenhuma mensagem enviada
+    E chat renderizado pelo 'joão'
+    E chat renderizado pelo 'desenvolvedor'
+    Quando o 'joão' digitar a mensagem '<mensagem>'
+    E enviar mensagem
+    Então uma mensagem deve ser exibida para o 'desenvolvedor'
+    E uma mensagem deve ser exibida para o 'joão'
 
   Cenário: Usuário não conectado deseja enviar mensagens
-    Dado o remetente ''
+    Dado o remetente 'joão'
     E nenhuma mensagem enviada
-    E chat renderizado pelo ''
-    Quando o '' digitar a mensagem 'Olá bom dia'
+    E chat renderizado pelo 'joão'
+    Quando o 'joão' digitar a mensagem 'Olá bom dia'
     E enviar mensagem 
     Então o texto digitado deve ser igual a 'Olá bom dia'
 
