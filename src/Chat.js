@@ -136,15 +136,9 @@ function MessageList({msgList}) {
          ref={lista} >
       {divMsgs}
       <div ref={fim}></div>
-      {/*<Fab mini icon={<MaterialIcon icon="expand_more"/> }
-          onClick={() => fim.current.scrollIntoView({behavior: "smooth"})}
-             style={{
-               position: 'absolute',
-               bottom: '4px',
-               right: '4px',
-               background: 'darkgray',
-               mixBlendMode: 'multiply',
-             }} />*/}
+      <Fab id="scroll-down" mini 
+           icon={<MaterialIcon icon="expand_more"/> }
+           onClick={() => console.log('scroll')} />
     </div>
   );
 }
