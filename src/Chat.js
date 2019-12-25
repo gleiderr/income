@@ -27,11 +27,9 @@ import TextField, {/*HelperText, */Input} from '@material/react-text-field';
  * }
  */
  
- export default function Chat(props) {
-  const {sendMsg, msgsListener} = props || {};
-  const {autor} = props || {};
-
+ export default function Chat({sendMsg, msgsListener, autor} = {}) {
   const [texto, escrever] = useState('');
+  const [autoScroll, setAutoScroll] = useState(true); 
 
   const input = useRef(null);
   const autoResize = () => {
@@ -51,6 +49,8 @@ import TextField, {/*HelperText, */Input} from '@material/react-text-field';
   };
 
   const send = () => {
+    setAutoScroll(true);
+
     const textoEnviado = texto; //memorização do texto enviado
     changeInput(''); //limpeza do campo
     sendMsg(texto, autor)
@@ -68,7 +68,7 @@ import TextField, {/*HelperText, */Input} from '@material/react-text-field';
   
   return (
     <>
-      <MessageList {...{msgList}} />
+      <MessageList key={''} {...{msgList, autoScroll, setAutoScroll}} />
       <div style={{display: 'flex'}}>
         <TextField id='MessageInput' className='MessageInput' label='Sua mensagem' outlined textarea style={{ flex: 1, height: 'auto', margin: '8px'}} >
           <Input rows='1' value={texto} ref={input}
@@ -97,41 +97,39 @@ import TextField, {/*HelperText, */Input} from '@material/react-text-field';
   );
 }
 
-function MessageList({msgList}) {
+function MessageList({msgList, autoScroll, setAutoScroll}) {
   const fim = useRef(null);
   const lista = useRef(null);
-  //const [a, as] = useState(true); 
 
-  const divMsgs = msgList.map(msg => 
-    <Mensagem key={msg.id} msg={msg} />
-  );
+  const divMsgs = msgList.map((msg) => {
+    return <Mensagem key={msg.id} msg={msg} />
+  });
 
-  //Rolagem das mensagens do chat em função da posição do scroll
-  /*useEffect(() => {
-    if (fim.current.previousSibling) {
-      const { bottom: bottomList } = lista.current.getBoundingClientRect();
-      const { top: topFim } = fim.current.previousSibling.getBoundingClientRect();
-      
-      console.log(fim.current);
-      console.log({bottomList, topFim, a});
-      if(a) {
-        as(false);
-        fim.current.scrollIntoView();
-      } else if (topFim - bottomList < 100) {
+  useEffect(() => {
+    if (autoScroll)
+      fim.current && 
+        fim.current.scrollIntoView && 
         fim.current.scrollIntoView({behavior: "smooth"});
-      }
-    }
-  }, [msgList, a]);*/
+  });
+
+  useEffect(() => {
+    //exibir botão nova mensagem abaixo
+  }, [msgList]);
 
   return (
-    <div className={'teste'} 
+    <div className={'teste'} data-testid="msg-list" ref={lista} 
          style={{
            flexGrow: 1, overflow: 'auto', position: 'relative'
          }}
-         ref={lista} >
+         onScroll={({target}) => {
+           const {bottom: bottomList} = target.getBoundingClientRect();
+           const { bottom: bottomFim } = fim.current.previousSibling.getBoundingClientRect();
+           setAutoScroll(Math.abs(bottomFim - bottomList) < 20);
+         }}
+         >
       {divMsgs}
       <div ref={fim}></div>
-      {/*<Fab mini icon={<MaterialIcon icon="expand_more"/> }
+      {<Fab mini icon={<MaterialIcon icon="expand_more"/> }
           onClick={() => fim.current.scrollIntoView({behavior: "smooth"})}
              style={{
                position: 'absolute',
@@ -139,7 +137,7 @@ function MessageList({msgList}) {
                right: '4px',
                background: 'darkgray',
                mixBlendMode: 'multiply',
-             }} />*/}
+             }} />}
     </div>
   );
 }
