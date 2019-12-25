@@ -36,3 +36,6 @@ Funcionalidade: Chat
     Quando o '' digitar a mensagem 'Olá bom dia'
     E enviar mensagem 
     Então o texto digitado deve ser igual a 'Olá bom dia'
+
+  #Cenário somente poderá ser testado quano "mocar" testes com puppeteer
+  Cenário: eventos de rolagem do scroll
