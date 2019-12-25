@@ -46,3 +46,24 @@
 .msg-text::-webkit-scrollbar-thumb { /*Chrome*/
   background-color: var(--background-thumb);
 }
+
+#scroll-down {
+  position: fixed;
+  bottom: 55px;
+
+   /* background */
+  background: darkgray;
+  mix-blend-mode: multiply;
+}
+
+@media (min-width: 840px) {
+  #scroll-down {
+    right: 25px;
+  }
+}
+
+@media (max-width: 839px) {
+  #scroll-down {
+    right: 12px;
+  }
+}
