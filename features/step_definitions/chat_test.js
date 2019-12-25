@@ -99,12 +99,6 @@ async function sendMsg(texto, autor) {
   if (!autor) {
     return Promise.reject('Conecte-se para enviar mensagens');
   }
-
-  /*mensagens.push({
-    texto: texto.trim(), 
-    autor,
-    timestamp: null, 
-  });*/
   mensagens = [...mensagens, {
     texto: texto.trim(), 
     autor,
