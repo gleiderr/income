@@ -105,11 +105,15 @@ function MessageList({msgList, autoScroll, setAutoScroll}) {
     return <Mensagem key={msg.id} msg={msg} />
   });
 
-  useEffect(() => {
-    if (autoScroll)
-      fim.current && 
+  const scrollDown = () => {
+    fim.current && 
         fim.current.scrollIntoView && 
         fim.current.scrollIntoView({behavior: "smooth"});
+  };
+
+  useEffect(() => {
+    if (autoScroll)
+      scrollDown();
   });
 
   useEffect(() => {
@@ -131,7 +135,7 @@ function MessageList({msgList, autoScroll, setAutoScroll}) {
       <div ref={fim}></div>
       <Fab id="scroll-down" mini 
            icon={<MaterialIcon icon="expand_more"/> }
-           onClick={() => console.log('scroll')} />
+           onClick={() => scrollDown()} />
     </div>
   );
 }
