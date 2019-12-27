@@ -56,6 +56,11 @@
   mix-blend-mode: multiply;
 }
 
+#scroll-down.new-msgs {
+  background: greenyellow;
+  mix-blend-mode: inherit;
+}
+
 @media (min-width: 840px) {
   #scroll-down {
     right: 25px;

@@ -112,12 +112,12 @@ function MessageList({msgList, autoScroll, setAutoScroll}) {
   };
 
   useEffect(() => {
-    if (autoScroll)
-      scrollDown();
+    if (autoScroll) scrollDown();
   });
 
+  const [news, setNews] = useState(false);
   useEffect(() => {
-    //exibir botão nova mensagem abaixo
+    if (!autoScroll) setNews(true);
   }, [msgList]);
 
   return (
@@ -133,9 +133,14 @@ function MessageList({msgList, autoScroll, setAutoScroll}) {
          >
       {divMsgs}
       <div ref={fim}></div>
-      <Fab id="scroll-down" mini 
+      <Fab id="scroll-down" className={news ? 'new-msgs' : undefined}  mini 
+          textLabel={news ? 'novas mensagens' : undefined}
+          exited={autoScroll}
            icon={<MaterialIcon icon="expand_more"/> }
-           onClick={() => scrollDown()} />
+           onClick={() => {
+             scrollDown();
+             setNews(false);
+           }} />
     </div>
   );
 }

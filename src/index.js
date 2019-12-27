@@ -130,6 +130,7 @@ function Income(props) {
             
             <Fab id='fab-chat' icon={<MaterialIcon icon="chat"/>}
                   onClick={() => setChatDisplay('flex')}
+                  textLabel='Chat'
                    style={{
                      margin: '16px', position: 'absolute', bottom: '0px', right: '0px',
                      zIndex: 0,
