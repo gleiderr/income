@@ -28,8 +28,7 @@ Funcionalidade: Documentação
     E o desenvolvedor digitar o texto markdown
     E o desenvolvedor clicar sobre salvar
     E o desenvolvedor "habilitar" a visualização
-    Então o texto deve ser salvo
-    E o seguinte conteúdo deve ser exibido:
+    Então o seguinte conteúdo deve ser exibido:
       """
       <h1 id="título">Título</h1>
       <p>Texto</p>

@@ -10,28 +10,40 @@ import {Given, When, Then, Before, After, BeforeAll} from 'cucumber';
 import assert from 'assert';
 import { Simulate, act } from 'react-dom/test-utils';
 
+import MockFirebase from 'mock-cloud-firestore';
+
+const firebase = global.firebase = new MockFirebase();
+
+const db = firebase.firestore();
+const invencoes = db.collection('invencoes');
+const timestamp = firebase.firestore.FieldValue.serverTimestamp();
+
+function inventionListener(invenção, setMarkdown) {
+  return invencoes.doc(invenção).onSnapshot( doc => {
+    if(doc.data()) setMarkdown(doc.data().markdown);
+  }, error => console.log(error));
+}
+
+let confirmar;
+function inventionSave(markdown, invenção, autor) {
+  invencoes.doc(invenção).collection('historico').add({
+    markdown, timestamp
+  });
+  
+  const savePromise = invencoes.doc(invenção).set({markdown})
+    .catch(error => Promise.reject(<div>error</div>));
+
+  //Resolução seletiva
+  return new Promise((resolve, reject) => {
+    confirmar = () => resolve(savePromise);
+  });
+}
+
 Before(function () {
   initDOM();
 
-  const listeners = [];
-  const callListeners = () => listeners.forEach(listener => listener());
-
   //Mock: salvamento seletivo do markdown no banco de dados
   this.markdown = undefined;
-  this.confirmar = undefined;
-  this.inventionSave = (markdown) => {
-    this.markdown = markdown;
-    callListeners();
-    return new Promise((resolve, reject) => {
-      this.confirmar = resolve;
-    });
-  }
-
-  this.inventionListener = (setMarkdown) => {
-    const newListener = () => setMarkdown(this.markdown);
-    newListener();
-    listeners.push(newListener);
-  }
 });
 
 Given('o seguinte texto markdown:', function (docString) {
@@ -39,9 +51,12 @@ Given('o seguinte texto markdown:', function (docString) {
 });
 
 When('a documentação for exibida', function () {
+  const contexto = 'income';
+  const user = 'usuario';
+
   const doc = <Doc showHeader={true}
-                    inventionSave={this.inventionSave} 
-                    inventionListener={this.inventionListener} />
+                    inventionSave={(markdown) => inventionSave(markdown, contexto, user)} 
+                    inventionListener={(setMarkdown) => inventionListener(contexto, setMarkdown)} />
 
   this.container = document.createElement('div');
   document.body.appendChild(this.container);
@@ -86,7 +101,7 @@ When('o desenvolvedor clicar sobre salvar', function () {
 
 When('o sistema confirmar o salvamento', function () {
   act(() => {
-    this.confirmar();
+    confirmar();
   });
 }); 
 
