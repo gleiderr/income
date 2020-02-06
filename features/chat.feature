@@ -37,5 +37,5 @@ Funcionalidade: Chat
     E enviar mensagem 
     Então o texto digitado deve ser igual a 'Olá bom dia'
 
-  #Cenário somente poderá ser testado quano "mocar" testes com puppeteer
+  #Cenário somente poderá ser testado quando "mocar" testes com puppeteer
   Cenário: eventos de rolagem do scroll
