@@ -14,7 +14,20 @@ const firebase = global.firebase = new MockFirebase({}, {isNaiveSnapshotListener
 
 const db = firebase.firestore();
 const invencoes = db.collection('invencoes');
+const incomeRef = invencoes.doc('income');
+const msgsRef = invencoes.doc('income').collection('msgs');
 const timestamp = firebase.firestore.FieldValue.serverTimestamp();
+
+// Alteração provisória sobre naiveListener
+db._dataChanged = function() {
+  console.log('passou aqui');
+  
+  if (this._options.isNaiveSnapshotListenerEnabled) {
+    const listeners = this._listeners.splice(0);
+    listeners.forEach(listener => listener());
+    //setTimeout(() => listeners.forEach(listener => listener()), 10);
+  }
+}
 
 async function sendMsg(texto, autor) {
   if (!autor) {
@@ -33,7 +46,6 @@ async function sendMsg(texto, autor) {
 }
 
 function msgsListener(setMsgs) {
-  const msgsRef = invencoes.doc('income').collection('msgs');
   const msgsQuery = msgsRef.orderBy('timestamp');
 
   return msgsQuery.onSnapshot( docs => {
@@ -44,7 +56,9 @@ function msgsListener(setMsgs) {
         id: doc.id,
         autor: doc.data().autor.nome,
       });
+      console.log('autor', doc.data().autor)
     });
+    console.table(data);
     setMsgs(data);
   },
   error => console.log(error));
@@ -75,6 +89,7 @@ Given('o remetente {string}', function (usuário) {
 });
 
 Given('nenhuma mensagem enviada', function () {
+  incomeRef.delete()
 });
 
 Given('Callbacks padrão', function () {
@@ -83,7 +98,8 @@ Given('Callbacks padrão', function () {
 
 Given('chat renderizado pelo {string}', function (usuário) {
   const callbacks = { sendMsg, msgsListener };
-  const chat = <Chat autor={usuário} destinatários={[this.destinatário]} 
+  console.log({usuário})
+  const chat = <Chat autor={{nome: usuário}} destinatários={[this.destinatário]} 
                      alertas={[]} {...callbacks} />;
 
   const new_container = document.createElement('div');
