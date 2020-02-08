@@ -44,6 +44,17 @@ try {
 global.firebase = firebase;
 
 const db = firebase.firestore();
+
+// $ firebase logging
+// $ firebase init
+// $ firebase emulators:start --only firestore,functions
+if (window.location.hostname !== 'gleider.ml') {
+  db.settings({
+    host: 'localhost:8081',
+    ssl: false,
+  })
+}
+
 const invencoes = db.collection('invencoes');
 const timestamp = firebase.firestore.FieldValue.serverTimestamp();
 

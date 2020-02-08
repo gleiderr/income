@@ -1,0 +1,32 @@
+rules_version = '2';
+service cloud.firestore {
+	match /databases/{database}/documents {
+  	function isAdmin() {
+    	return get(/databases/$(database)/documents/usuarios/$(request.auth.uid)) != null
+      		&& get(/databases/$(database)/documents/usuarios/$(request.auth.uid)).data.papel == 'administrador';
+    }
+  
+  	//Acesso a perfis de usuário
+    match /usuarios/{usuario} {
+      allow read, create: if request.auth.uid == usuario;
+      //Atualização e exclusão não são permitidas
+    }
+    
+    //Acesso à documentação
+    match /invencoes/{invencao} {
+    	allow read; //Todos podem ler
+      allow update: if isAdmin();
+      allow create: if isAdmin();
+      
+      match /historico/{hist} {
+      	allow read, update, create: if isAdmin();
+      }
+      
+      //Acesso a mensagens
+      match /msgs/{msg} {
+      	allow read; //Todos podem ler
+        allow create: if request.auth.uid != null; //Usuário autenticado pode criar
+      }
+    }
+  }
+}
