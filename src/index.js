@@ -45,14 +45,18 @@ global.firebase = firebase;
 
 const db = firebase.firestore();
 
-// $ firebase logging
-// $ firebase init
-// $ firebase emulators:start --only firestore,functions
+/**
+ * $ npm install -g firebase-tools
+ * $ firebase logging 
+ * $ firebase init
+ * $ firebase emulators:start --only firestore,functions
+ */ 
 if (window.location.hostname !== 'gleider.ml') {
   db.settings({
     host: 'localhost:8081',
     ssl: false,
-  })
+  });
+  //firebaseTest.clearFirestoreData();
 }
 
 const invencoes = db.collection('invencoes');
