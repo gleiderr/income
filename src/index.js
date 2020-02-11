@@ -88,13 +88,13 @@ function Income(props) {
         console.timeEnd('logging');
       } else { //ao fazer login
         console.time('logging');
-        
+
         //Atribui usuário sem definição do papel
         setUser({
           uid: user.uid,
           nome: user.displayName,
         });
-        
+
         const doc = db.collection('usuarios').doc(user.uid);
         unsubProfileGetter = doc.onSnapshot({ includeMetadataChanges: true }, get);
 
@@ -117,18 +117,18 @@ function Income(props) {
           await doc.set(newUser);
           return newUser;
         }
-      }      
+      }
     });
   }, []);
 
-  const callbacks = { 
+  const callbacks = {
     sendMsg: (...params) => {
       if (user) return sendMsg(...params);
-      
+
       open_sign_in(true);
       return Promise.reject('Usuário não conectado');
-    }, 
-    msgsListener, 
+    },
+    msgsListener,
   };
 
   const [displayDocs, setDocsDisplay] = useState('flex');
@@ -137,12 +137,12 @@ function Income(props) {
     <Body1 tag={'div'}>
       <Grid style={{padding: 0}}>
         <Row style={{gridGap: '0px'}}>
-          <Cell id='incomedocs' className='vh100' phoneColumns={12} tabletColumns={12} desktopColumns={8} 
+          <Cell id='incomedocs' className='vh100' phoneColumns={12} tabletColumns={12} desktopColumns={8}
                 style={{display: displayDocs, flexDirection: 'column', position: 'relative'}}>
             <Doc showHeader={!!user && user.papel === 'administrador'}
                   inventionSave={(markdown) => inventionSave(markdown, contexto, user)}
                   inventionListener={(setMarkdown) => inventionListener(contexto, setMarkdown)} />
-            
+
             <Fab id='fab-chat' icon={<MaterialIcon icon="chat"/>}
                   onClick={() => setChatDisplay('flex')}
                   textLabel='Chat'
@@ -153,7 +153,7 @@ function Income(props) {
                      background: 'var(--mdc-theme-primary, #6200ee)'
                    }} />
           </Cell>
-          <Cell id='incomechat' className='vh100' phoneColumns={12} tabletColumns={12} desktopColumns={4} 
+          <Cell id='incomechat' className='vh100' phoneColumns={12} tabletColumns={12} desktopColumns={4}
                 style={{display: displayChat, flexDirection: 'column', background: 'white', width: '100%'}}>
             <ChatHeader user={user} sign_in={sign_in} open_sign_in={open_sign_in} hideChat={() => setChatDisplay('none')}/>
             <Chat autor={user} alertas={[]} {...callbacks} />
@@ -197,7 +197,7 @@ function msgsListener(setMsgs) {
     const data = [];
     docs.forEach(doc => {
       data.push({
-        ...doc.data(), 
+        ...doc.data(),
         id: doc.id,
         autor: doc.data().autor.nome,
       });
@@ -217,7 +217,7 @@ function inventionSave(markdown, invenção, autor) {
   invencoes.doc(invenção).collection('historico').add({
     markdown, timestamp
   });
-  
+
   return invencoes.doc(invenção).set({markdown})
     .catch(error => Promise.reject(<div>error</div>));
 }
