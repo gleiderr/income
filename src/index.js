@@ -35,15 +35,8 @@ import Chat from './Chat';
 //import App from "./App";
 //import * as serviceWorker from "./serviceWorker";
 
-try {
-  firebase.app();
-} catch(err) {
-  firebase_init();
-}
-
-global.firebase = firebase;
-
-const db = firebase.firestore();
+const app = firebase_init();
+const db = app.firestore();
 
 /**
  * $ npm install -g firebase-tools
@@ -80,7 +73,7 @@ function Income(props) {
 
   useEffect(() => {
     let unsubProfileGetter = undefined;
-    return firebase.auth().onAuthStateChanged(user => {
+    return app.auth().onAuthStateChanged(user => {
       if (!user) {
         setUser(undefined);
         if(unsubProfileGetter) {

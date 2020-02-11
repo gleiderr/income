@@ -5,11 +5,8 @@ import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
 //import firebaseui from 'firebaseui';
 //const firebaseui = require('firebaseui');
 
-try {
-  firebase.app();
-} catch(err) {
-  firebase_init();
-}
+//Global inicializada por compatibilidade com firebaseui
+global.firebase = firebase;
 
 //https://github.com/firebase/firebaseui-web/
 const uiConfig = {
@@ -35,24 +32,26 @@ const uiConfig = {
 };
 
 export function SignIn() {
+  const app = firebase_init();
   return (
-    <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={firebase.auth()} />
+    <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={app.auth()} />
   );
 }
 
 export function SignInChat({ user }) {
   useEffect(() => {
     const {AuthUI} = global.firebaseui.auth;
-    const ui = AuthUI.getInstance() || new AuthUI(firebase.auth());
+    const app = firebase_init();
+    const ui = AuthUI.getInstance() || new AuthUI(app.auth());
     ui.start('#firebaseui-auth-container', uiConfig);
   });
-  
+
   return (
     <div style={{background: 'var(--mdc-theme-primary)', alignSelf: 'center'}}>
       Conecte-se para enviar mensagens
       {/* <StyledFirebaseAuth
         uiConfig={uiConfig}
-        firebaseAuth={firebase.auth()}
+        firebaseAuth={app.auth()}
       /> */}
       <div id='firebaseui-auth-container'></div>
     </div>

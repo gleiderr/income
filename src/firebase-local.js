@@ -1,6 +1,9 @@
 import firebase from "firebase";
 
+let app = undefined;
 export default function firebase_init() {
+  if (app) return app;
+
   const firebaseConfig = {
     apiKey: "AIzaSyCI77PrVU6FyFQN9OQhF8uo2ypHZQTQqSM",
     authDomain: "gleider-dev.firebaseapp.com",
@@ -11,5 +14,5 @@ export default function firebase_init() {
     appId: "1:868861057308:web:72ab5d4b1e875ce7"
   };
   // Initialize Firebase
-  firebase.initializeApp(firebaseConfig);
+  return app = firebase.initializeApp(firebaseConfig);
 }
