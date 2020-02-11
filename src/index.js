@@ -53,7 +53,7 @@ const db = firebase.firestore();
  */ 
 if (window.location.hostname !== 'gleider.ml') {
   db.settings({
-    host: 'localhost:8081',
+    host: 'localhost:3081',
     ssl: false,
   });
   //firebaseTest.clearFirestoreData();
