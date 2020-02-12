@@ -38,23 +38,6 @@ import Chat from './Chat';
 const app = firebase_init();
 const db = app.firestore();
 
-/**
- * $ npm install -g firebase-tools
- * $ firebase loging
- * $ firebase emulators:start --only firestore,functions
- *
- * https://firebase.google.com/docs/rules/unit-tests
- * https://firebase.google.com/docs/firestore/security/test-rules-emulator
- * https://github.com/firebase/quickstart-nodejs/tree/master/firestore-emulator/javascript-quickstart
- */
-if (window.location.hostname !== 'gleider.ml') {
-  db.settings({
-    host: 'localhost:3081',
-    ssl: false,
-  });
-  //firebaseTest.clearFirestoreData();
-}
-
 const invencoes = db.collection('invencoes');
 const timestamp = firebase.firestore.FieldValue.serverTimestamp();
 
