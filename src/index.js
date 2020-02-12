@@ -77,6 +77,8 @@ function Income(props) {
         const doc = db.collection('usuarios').doc(user.uid);
         unsubProfileGetter = doc.onSnapshot({ includeMetadataChanges: true }, get);
 
+        /** Bug-alert: em situações específicas ocorre um erro no comando unsubProfileGetter(), informando
+         * que unsubProfileGetter não é uma função */
         async function get(snapshot) {
           if (!snapshot.metadata.fromCache) {
            //Atribui usuário com definições gravadas no banco, se usuário permanecer conectado
