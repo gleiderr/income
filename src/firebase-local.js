@@ -1,5 +1,6 @@
 import firebase from "firebase";
-//aguardando uma próxima versão que trabalhe do lado do cliente e não somente do lado do servidor como essa versão 0.16.8
+/** aguardando uma próxima versão que trabalhe do lado do cliente e não somente
+ * do lado do servidor como essa versão 0.16.8 */
 //import {initializeTestApp} from "@firebase/testing";
 
 let app = undefined;
