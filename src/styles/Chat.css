@@ -9,7 +9,7 @@
 /*Label do campo não focado .mdc-notched-outline--upgraded*/
 #MessageInput:not(.mdc-text-field--focused) label {
   top: 25%;
-} 
+}
 
 #MessageInput .mdc-notched-outline--notched label {
   top: 17px;

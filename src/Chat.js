@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from 'react';
 import { Button } from '@material/react-button';
 import MaterialIcon from '@material/react-material-icon';
 import { Fab } from '@material/react-fab';
@@ -8,8 +8,8 @@ import Card, {
   CardActions,
   CardActionButtons,
   CardActionIcons, */
-} from "@material/react-card";
-import TextField, {/*HelperText, */Input} from '@material/react-text-field';
+} from '@material/react-card';
+import TextField, { /*HelperText, */ Input } from '@material/react-text-field';
 
 /**
  * @example Modelo de Dados Mensagens
@@ -20,26 +20,27 @@ import TextField, {/*HelperText, */Input} from '@material/react-text-field';
  *    timestamp: timestamp,
  *    autor: 'GleiderID',
  *  }
- * 
- * @example Modelo de Dados de Usuários 
+ *
+ * @example Modelo de Dados de Usuários
  * 'uid': {
  *    papel: 'administrador'
  * }
  */
- 
- export default function Chat({sendMsg, msgsListener, autor} = {}) {
+
+export default function Chat({ sendMsg, msgsListener, autor } = {}) {
   const [texto, escrever] = useState('');
-  const [autoScroll, setAutoScroll] = useState(true); 
+  const [autoScroll, setAutoScroll] = useState(true);
 
   const input = useRef(null);
   const autoResize = () => {
     //Posterga alterações na altura para próximos eventloops
     Promise.resolve()
       .then(() => {
-        const {inputElement} = input.current;
+        const { inputElement } = input.current;
         inputElement.style.height = 'auto'; //necessário para diminuição da caixa de texto
-      }).then(() => {
-        const {inputElement} = input.current;
+      })
+      .then(() => {
+        const { inputElement } = input.current;
         inputElement.style.height = inputElement.scrollHeight + 'px';
       });
   };
@@ -53,10 +54,9 @@ import TextField, {/*HelperText, */Input} from '@material/react-text-field';
 
     const textoEnviado = texto; //memorização do texto enviado
     changeInput(''); //limpeza do campo
-    sendMsg(texto, autor)
-      .catch(() => changeInput(textoEnviado)); //restaura texto enviado se erro
-  }
-  
+    sendMsg(texto, autor).catch(() => changeInput(textoEnviado)); //restaura texto enviado se erro
+  };
+
   //Atualiza lista de mensagens
   const [msgList, setMsgs] = useState([]);
   useEffect(() => {
@@ -64,51 +64,65 @@ import TextField, {/*HelperText, */Input} from '@material/react-text-field';
   }, [msgsListener, setMsgs]);
 
   const lineHeight = 20;
-  const padding = 0; 
-  
+  const padding = 0;
+
   return (
     <>
-      <MessageList key={''} {...{msgList, autoScroll, setAutoScroll}} />
-      <div style={{display: 'flex'}}>
-        <TextField id='MessageInput' className='MessageInput' label='Sua mensagem' outlined textarea style={{ flex: 1, height: 'auto', margin: '8px'}} >
-          <Input rows='1' value={texto} ref={input}
-                 data-testid="input" 
-                style={{
-                  margin: '8px',
-                  padding: `${padding}px`,
-                  lineHeight: `${lineHeight}px`,
-                  height: `${padding + lineHeight}px`, 
-                  maxHeight: `${padding + 4 * lineHeight}px`,
-                  resize: 'none',
-                }}
-                onChange={(e) => changeInput(e.currentTarget.value)} />
+      <MessageList key={''} {...{ msgList, autoScroll, setAutoScroll }} />
+      <div style={{ display: 'flex' }}>
+        <TextField
+          id='MessageInput'
+          className='MessageInput'
+          label='Sua mensagem'
+          outlined
+          textarea
+          style={{ flex: 1, height: 'auto', margin: '8px' }}
+        >
+          <Input
+            rows='1'
+            value={texto}
+            ref={input}
+            data-testid='input'
+            style={{
+              margin: '8px',
+              padding: `${padding}px`,
+              lineHeight: `${lineHeight}px`,
+              height: `${padding + lineHeight}px`,
+              maxHeight: `${padding + 4 * lineHeight}px`,
+              resize: 'none',
+            }}
+            onChange={e => changeInput(e.currentTarget.value)}
+          />
         </TextField>
-        <Fab mini icon={<MaterialIcon icon="send"/> }
-             data-testid="send"
-             onClick={send}
-             style={{
-               margin: 'auto',
-               marginRight: '8px',
-               color: 'var(--mdc-theme-on-primary, #fff)',
-               background: 'var(--mdc-theme-primary, #6200ee)'
-             }} />
+        <Fab
+          mini
+          icon={<MaterialIcon icon='send' />}
+          data-testid='send'
+          onClick={send}
+          style={{
+            margin: 'auto',
+            marginRight: '8px',
+            color: 'var(--mdc-theme-on-primary, #fff)',
+            background: 'var(--mdc-theme-primary, #6200ee)',
+          }}
+        />
       </div>
     </>
   );
 }
 
-function MessageList({msgList, autoScroll, setAutoScroll}) {
+function MessageList({ msgList, autoScroll, setAutoScroll }) {
   const fim = useRef(null);
   const lista = useRef(null);
 
-  const divMsgs = msgList.map((msg) => {
-    return <Mensagem key={msg.id} msg={msg} />
+  const divMsgs = msgList.map(msg => {
+    return <Mensagem key={msg.id} msg={msg} />;
   });
 
   const scrollDown = () => {
-    fim.current && 
-        fim.current.scrollIntoView && 
-        fim.current.scrollIntoView({behavior: "smooth"});
+    fim.current &&
+      fim.current.scrollIntoView &&
+      fim.current.scrollIntoView({ behavior: 'smooth' });
   };
 
   useEffect(() => {
@@ -121,36 +135,51 @@ function MessageList({msgList, autoScroll, setAutoScroll}) {
   }, [msgList]);
 
   return (
-    <div className={'teste'} data-testid="msg-list" ref={lista} 
-         style={{
-           flexGrow: 1, overflow: 'auto', position: 'relative'
-         }}
-         onScroll={({target}) => {
-           const {bottom: bottomList} = target.getBoundingClientRect();
-           const { bottom: bottomFim } = fim.current.previousSibling.getBoundingClientRect();
-           setAutoScroll(Math.abs(bottomFim - bottomList) < 20);
-         }}
-         >
+    <div
+      className={'teste'}
+      data-testid='msg-list'
+      ref={lista}
+      style={{
+        flexGrow: 1,
+        overflow: 'auto',
+        position: 'relative',
+      }}
+      onScroll={({ target }) => {
+        const { bottom: bottomList } = target.getBoundingClientRect();
+        const {
+          bottom: bottomFim,
+        } = fim.current.previousSibling.getBoundingClientRect();
+        setAutoScroll(Math.abs(bottomFim - bottomList) < 20);
+      }}
+    >
       {divMsgs}
       <div ref={fim}></div>
-      <Fab id="scroll-down" className={news ? 'new-msgs' : undefined}  mini 
-          textLabel={news ? 'novas mensagens' : undefined}
-          exited={autoScroll}
-           icon={<MaterialIcon icon="expand_more"/> }
-           onClick={() => {
-             scrollDown();
-             setNews(false);
-           }} />
+      <Fab
+        id='scroll-down'
+        className={news ? 'new-msgs' : undefined}
+        mini
+        textLabel={news ? 'novas mensagens' : undefined}
+        exited={autoScroll}
+        icon={<MaterialIcon icon='expand_more' />}
+        onClick={() => {
+          scrollDown();
+          setNews(false);
+        }}
+      />
     </div>
   );
 }
 
-function Mensagem({msg}) {
+function Mensagem({ msg }) {
   return (
-    <Card outlined={false} style={{margin: '8px'}} data-testid="mensagem">
-      <CardPrimaryContent style={{padding: '0px 4px'}}>
-        <div data-testid="autor" style={{fontWeight: 'bold'}} >{msg.autor}</div>
-        <div className="msg-text" data-testid="texto">{msg.texto}</div>
+    <Card outlined={false} style={{ margin: '8px' }} data-testid='mensagem'>
+      <CardPrimaryContent style={{ padding: '0px 4px' }}>
+        <div data-testid='autor' style={{ fontWeight: 'bold' }}>
+          {msg.autor}
+        </div>
+        <div className='msg-text' data-testid='texto'>
+          {msg.texto}
+        </div>
       </CardPrimaryContent>
     </Card>
   );
