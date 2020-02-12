@@ -4,8 +4,8 @@ export const setVH = () => {
     return () => {
       clearTimeout(currentDebouce);
       currentDebouce = setTimeout(() => f(), 15);
-    }
-  }
+    };
+  };
 
   const throttle = f => {
     let inThrottle = false;
@@ -13,11 +13,11 @@ export const setVH = () => {
       if (!inThrottle) {
         inThrottle = setTimeout(() => {
           f();
-          inThrottle = false
-        }, 15)
+          inThrottle = false;
+        }, 15);
       }
-    }
-  }
+    };
+  };
 
   /*const scroll = () => {
     let element;
@@ -48,7 +48,7 @@ export const setVH = () => {
   resize();
   window.addEventListener('resize', throttle(resize));
   //window.addEventListener('scroll', throttle(scroll));
-}
+};
 
 /*function throttle(func, wait, options) {
   var context, args, result;
@@ -81,4 +81,3 @@ export const setVH = () => {
     return result;
   };
 };*/
-
