@@ -116,7 +116,6 @@ function Income(props) {
     msgsListener,
   };
 
-  const [displayDocs, setDocsDisplay] = useState('flex');
   const [displayChat, setChatDisplay] = useState(
     window.innerWidth <= 840 ? 'none' : 'flex'
   );
@@ -130,11 +129,6 @@ function Income(props) {
             phoneColumns={12}
             tabletColumns={12}
             desktopColumns={8}
-            style={{
-              display: displayDocs,
-              flexDirection: 'column',
-              position: 'relative',
-            }}
           >
             <Doc
               showHeader={!!user && user.papel === 'administrador'}
@@ -151,15 +145,6 @@ function Income(props) {
               icon={<MaterialIcon icon='chat' />}
               onClick={() => setChatDisplay('flex')}
               textLabel='Chat'
-              style={{
-                margin: '16px',
-                position: 'absolute',
-                bottom: '0px',
-                right: '0px',
-                zIndex: 0,
-                color: 'var(--mdc-theme-on-primary, #fff)',
-                background: 'var(--mdc-theme-primary, #6200ee)',
-              }}
             />
           </Cell>
           <Cell
@@ -170,9 +155,6 @@ function Income(props) {
             desktopColumns={4}
             style={{
               display: displayChat,
-              flexDirection: 'column',
-              background: 'white',
-              width: '100%',
             }}
           >
             <ChatHeader
