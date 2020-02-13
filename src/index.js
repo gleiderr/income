@@ -121,11 +121,16 @@ function Income(props) {
   );
   return (
     <Body1 tag={'div'}>
-      <Grid style={{ padding: 0 }}>
+      <Grid className='vh100' style={{ padding: 0 }}>
+        <ChatHeader
+          user={user}
+          sign_in={sign_in}
+          open_sign_in={open_sign_in}
+          hideChat={() => setChatDisplay('none')}
+        />
         <Row style={{ gridGap: '0px' }}>
           <Cell
             id='incomedocs'
-            className='vh100'
             phoneColumns={12}
             tabletColumns={12}
             desktopColumns={8}
@@ -149,7 +154,6 @@ function Income(props) {
           </Cell>
           <Cell
             id='incomechat'
-            className='vh100'
             phoneColumns={12}
             tabletColumns={12}
             desktopColumns={4}
@@ -157,12 +161,6 @@ function Income(props) {
               display: displayChat,
             }}
           >
-            <ChatHeader
-              user={user}
-              sign_in={sign_in}
-              open_sign_in={open_sign_in}
-              hideChat={() => setChatDisplay('none')}
-            />
             <Chat autor={user} alertas={[]} {...callbacks} />
           </Cell>
         </Row>
