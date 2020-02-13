@@ -6,16 +6,22 @@ Código fonte: https://github.com/gleiderr/income
 O INCOME é composto por dois módulos principais. Este **módulo de documentação** que você está lendo é onde estão as principais especificações de como nossos softwares funcionam. Já o **módulo de chat** é onde toda a interação com nossos usuários e colaboradores acontece.
 
 ## Módulo de Documentação
-Esse módulo permite que o desenvolvedor escreva a documentação de forma simples ([markdown](https://pt.wikipedia.org/wiki/Markdown)) e que suas edições sejam acompanhadas em tempo real por seus usuários. Ou seja, quando o desenvolvedor salvar sua documentação os usuários conectados verão a edição imediatamente, sem necessidade de atualização da página.
+Esse módulo permite que o desenvolvedor escreva documentações de forma simples, utilizando [markdown](https://pt.wikipedia.org/wiki/Markdown)). As edições podem ser acompanhadas em tempo real pelos usuários. Ou seja, quando o desenvolvedor salva sua documentação os usuários conectados verão a edição imediatamente, sem necessidade de atualização da página.
+
+Podem ser criadas documentações independentes umas das outras com fácil acesso através do cabeçalho do INCOME.
 
 ## Módulo Chat
-Esse simples chat amplifica a capacidade de comunicação entre desenvolvedores e usuários. Essa comunicação é feita em tempo real e o único pré-requisito para tal é que o usuário conecte-se com usuário e senha.
+Esse simples chat amplifica a capacidade de comunicação entre desenvolvedores e usuários. Essa comunicação é feita em tempo real e o único pré-requisito para tal é que o usuário conecte-se ao INCOME com usuário e senha.
 
-As mensagens são exibidas na ordem que são recebidas pelo nosso servidor e exibem somente o nome do usuário e o conteúdo da mensagem.
+As mensagens são exibidas na ordem que são recebidas pelo nosso servidor e por simplicidade exibem somente o nome do usuário e o conteúdo da mensagem.
+
+## Novidades dessa versão
+- Gerenciar diversas documentações;
+  - Referenciamento de documentações via URL;
 
 ## Tecnologias utilizadas
 
-O INCOME utiliza 
+O INCOME utiliza
 - React(JavaScript) como linguagem de programação.
 - Google Firebase como base de dados
 - Markdown para documentação simples e ágil
