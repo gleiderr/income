@@ -121,14 +121,17 @@ function Income(props) {
   );
   return (
     <Body1 tag={'div'}>
-      <Grid className='vh100' style={{ padding: 0 }}>
+      <Grid
+        className='vh100'
+        style={{ padding: 0, display: 'flex', flexDirection: 'column' }}
+      >
         <ChatHeader
           user={user}
           sign_in={sign_in}
           open_sign_in={open_sign_in}
           hideChat={() => setChatDisplay('none')}
         />
-        <Row style={{ gridGap: '0px' }}>
+        <Row style={{ gridGap: '0px', flex: 1 }}>
           <Cell
             id='incomedocs'
             phoneColumns={12}
