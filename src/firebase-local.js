@@ -1,4 +1,5 @@
 import firebase from 'firebase';
+import user from './test/user.json';
 /** aguardando uma próxima versão que trabalhe do lado do cliente e não somente
  * do lado do servidor como essa versão 0.16.8 */
 //import {initializeTestApp} from "@firebase/testing";
@@ -34,6 +35,16 @@ export default function firebase_init() {
       host: 'localhost:3081',
       ssl: false,
     });
+
+    criarUsuárioAdministrador();
+
+    function criarUsuárioAdministrador() {
+      app
+        .firestore()
+        .collection('usuarios')
+        .doc(user.uid)
+        .set(user);
+    }
   }
   return app;
 }

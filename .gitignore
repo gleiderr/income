@@ -3,3 +3,4 @@ build/*
 firebase-debug.log
 firestore-debug.log
 README.html
+src/test/user.json
