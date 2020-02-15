@@ -43,7 +43,7 @@ export default function Doc(props) {
   return (
     <>
       {header}
-      <div style={{ flexGrow: 1, overflow: 'auto', padding: '8px' }}>
+      <div id='doc-container'>
         {view ? (
           <View {...{ markdown }} />
         ) : (
@@ -59,20 +59,12 @@ function Markdown(props) {
   const input = useRef(null);
   return (
     <div
+      id='markdown-editor'
       contentEditable
       suppressContentEditableWarning
       ref={input}
       data-testid='markdown'
       onBlur={evt => setMarkdown(evt.target.innerText)}
-      style={{
-        whiteSpace: 'pre-wrap',
-        WebkitUserModify: 'read-write',
-        overflowWrap: 'break-word',
-        lineBreak: 'after-white-space',
-        lineHeight: '1em',
-        fontFamily: 'monospace',
-        display: 'inline-block',
-      }}
     >
       {markdown}
     </div>

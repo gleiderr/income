@@ -13,11 +13,30 @@
 }
 
 .waiting {
-  background-color: goldenrod !important
+  background-color: goldenrod !important;
+}
+
+#doc-container {
+  display: flex;
+  flex-grow: 1;
+  overflow: auto;
+  padding: 8px;
+}
+
+#markdown-editor {
+  display: inline-block;
+  flex: 1;
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+  line-height: 1em;
+  font-family: monospace;
+  -webkit-user-modify: read-write;
+  line-break: after-white-space;
 }
 
 @media (max-width: 479px) {
-  #incomedocs ul, ol {
+  #incomedocs ul,
+  ol {
     padding-inline-start: 25px;
   }
 
