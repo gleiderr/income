@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import firebase from 'firebase';
 
 import { Button } from '@material/react-button';

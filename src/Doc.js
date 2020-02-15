@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import showdown from 'showdown';
 import Switch from '@material/react-switch';
 import Button from '@material/react-button';

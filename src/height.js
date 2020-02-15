@@ -1,11 +1,11 @@
 export const setVH = () => {
-  const debouce = f => {
+  /*const debouce = f => {
     let currentDebouce;
     return () => {
       clearTimeout(currentDebouce);
       currentDebouce = setTimeout(() => f(), 15);
     };
-  };
+  };*/
 
   const throttle = f => {
     let inThrottle = false;
