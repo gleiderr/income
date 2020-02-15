@@ -2,9 +2,11 @@ import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import firebase from 'firebase';
 import firebase_init from './firebase-local';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
+
 import { setVH } from './height';
 import { ChatHeader } from './Header';
-import { BrowserRouter, Route, Switch, useParams } from 'react-router-dom';
+import DocChat from './DocChat';
 
 import '@material/react-layout-grid/dist/layout-grid.css';
 import '@material/react-card/dist/card.css';
@@ -25,16 +27,8 @@ import './height.css';
 import './docs.css';
 import './styles/Chat.css';
 
-import { Cell, Grid, Row } from '@material/react-layout-grid';
-import MaterialIcon from '@material/react-material-icon';
-import { Fab } from '@material/react-fab';
 import { Body1 } from '@material/react-typography';
-
-//import { SignInChat } from './SignInScreen';
-import Doc from './Doc';
-import Chat from './Chat';
-//import App from "./App";
-//import * as serviceWorker from "./serviceWorker";
+import { Grid, Row } from '@material/react-layout-grid';
 
 const app = firebase_init();
 const db = app.firestore();
@@ -48,7 +42,9 @@ function Income({ sendMsg, msgsListener, inventionListener, inventionSave }) {
   //Estados
   const [user, setUser] = useState(undefined);
   const [sign_in, open_sign_in] = useState(false);
-  const { contexto = 'income' } = useParams();
+  const [displayChat, setChatDisplay] = useState(
+    window.innerWidth <= 840 ? 'none' : 'flex'
+  );
 
   useEffect(() => {
     let unsubProfileGetter = undefined;
@@ -102,19 +98,6 @@ function Income({ sendMsg, msgsListener, inventionListener, inventionSave }) {
     });
   }, []);
 
-  const callbacks = {
-    sendMsg: (...params) => {
-      if (user) return sendMsg(...params);
-
-      open_sign_in(true);
-      return Promise.reject('Usuário não conectado');
-    },
-    msgsListener,
-  };
-
-  const [displayChat, setChatDisplay] = useState(
-    window.innerWidth <= 840 ? 'none' : 'flex'
-  );
   return (
     <Body1 tag={'div'}>
       <Grid
@@ -128,38 +111,20 @@ function Income({ sendMsg, msgsListener, inventionListener, inventionSave }) {
           hideChat={() => setChatDisplay('none')}
         />
         <Row style={{ gridGap: '0px', flex: 1 }}>
-          <Cell
-            id='incomedocs'
-            phoneColumns={12}
-            tabletColumns={12}
-            desktopColumns={8}
-          >
-            <Doc
-              showHeader={!!user && user.papel === 'administrador'}
-              inventionSave={markdown => inventionSave(markdown, contexto)}
-              inventionListener={setMarkdown =>
-                inventionListener(contexto, setMarkdown)
-              }
-            />
+          <DocChat
+            user={user}
+            displayChat={displayChat}
+            setChatDisplay={setChatDisplay}
+            inventionSave={inventionSave}
+            inventionListener={inventionListener}
+            msgsListener={msgsListener}
+            sendMsg={(...params) => {
+              if (user) return sendMsg(...params);
 
-            <Fab
-              id='fab-chat'
-              icon={<MaterialIcon icon='chat' />}
-              onClick={() => setChatDisplay('flex')}
-              textLabel='Chat'
-            />
-          </Cell>
-          <Cell
-            id='incomechat'
-            phoneColumns={12}
-            tabletColumns={12}
-            desktopColumns={4}
-            style={{
-              display: displayChat,
+              open_sign_in(true);
+              return Promise.reject('Usuário não conectado');
             }}
-          >
-            <Chat autor={user} alertas={[]} {...callbacks} />
-          </Cell>
+          />
         </Row>
       </Grid>
     </Body1>
