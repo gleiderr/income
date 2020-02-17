@@ -1,4 +1,11 @@
 import firebase from 'firebase';
+
+/**Arquivo json no formato:
+ * {
+ *   "uid": "sssss",
+ *   "nome": "aaaaa"
+ * }
+ */
 import user from './test/user.json';
 /** aguardando uma próxima versão que trabalhe do lado do cliente e não somente
  * do lado do servidor como essa versão 0.16.8 */
