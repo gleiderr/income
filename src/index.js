@@ -131,7 +131,7 @@ function Income({ sendMsg, msgsListener, inventionListener, inventionSave }) {
   );
 }
 
-async function sendMsg(texto, autor) {
+async function sendMsg(texto, autor, contexto) {
   if (!autor) {
     return Promise.reject('Conecte-se para enviar mensagens');
   }
@@ -142,7 +142,7 @@ async function sendMsg(texto, autor) {
 
   if (texto.length > 0) {
     return invencoes
-      .doc('income')
+      .doc(contexto)
       .collection('msgs')
       .add({ texto, timestamp, autor });
   } else {
@@ -156,8 +156,8 @@ async function sendMsg(texto, autor) {
   }*/
 }
 
-function msgsListener(setMsgs) {
-  const msgsRef = invencoes.doc('income').collection('msgs');
+function msgsListener(setMsgs, contexto) {
+  const msgsRef = invencoes.doc(contexto).collection('msgs');
   const msgsQuery = msgsRef.orderBy('timestamp');
 
   return msgsQuery.onSnapshot(

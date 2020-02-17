@@ -53,9 +53,8 @@ export default function DocChat({
       >
         <Chat
           autor={user}
-          alertas={[]}
-          sendMsg={sendMsg}
-          msgsListener={msgsListener}
+          sendMsg={(...params) => sendMsg(...params, contexto)}
+          msgsListener={(...params) => msgsListener(...params, contexto)}
         />
       </Cell>
     </>
