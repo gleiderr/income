@@ -36,6 +36,7 @@ export default function firebase_init() {
    * https://firebase.google.com/docs/rules/unit-tests
    * https://firebase.google.com/docs/firestore/security/test-rules-emulator
    * https://github.com/firebase/quickstart-nodejs/tree/master/firestore-emulator/javascript-quickstart
+   * https://github.com/firebase/firebase-tools-ui
    */
   if (window.location.hostname !== 'gleider.ml') {
     app.firestore().settings({
