@@ -22,10 +22,13 @@ Para cada documentação existe um chat relacionado. Assim os usuários podem co
 ## Novidades dessa versão
 - Gerenciar diversas documentações e diversos chats;
   - Referenciamento via URL;
+- Cabeçalho comum ao chat e à documentação;
 
 ## Novas sugestões
 - Criar links internos que não exijam o recarregamento da página;
 - Criar breadcrumbs para navegação fácil entre documentações;
+- Criar cabeçalho com acesso ás diversas documentações;
+
 ## Tecnologias utilizadas
 
 O INCOME utiliza
