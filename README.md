@@ -17,6 +17,8 @@ Esse simples chat amplifica a capacidade de comunicação entre desenvolvedores 
 
 As mensagens são exibidas na ordem que são recebidas pelo nosso servidor e por simplicidade exibem somente o nome do usuário e o conteúdo da mensagem.
 
+Para cada documentação existe um chat relacionado. Assim os usuários podem comunicar-se dentro de contextos específicos.
+
 ## Novidades dessa versão
 - Gerenciar diversas documentações e diversos chats;
   - Referenciamento via URL;
