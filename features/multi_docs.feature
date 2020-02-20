@@ -23,6 +23,17 @@ Funcionalidade: Seleção e edição de múltiplas documentações
 
   @puppeteer
   Cenário: Tentativa de acesso a documentações que não existem
+    Dado um usuário comum
+    E o INCOME acessado
+    E a documentação 1 não existindo no banco de dados
+    Quando o usuário acessar a url '1'
+    Então deve ser exibida a mensagem:
+      """
+      Desculpe, esse sistema ainda não foi desenvolvido.
+      Envie sua sugestão em nosso chat para criarmos.
+      Obrigado
+      """
+    E deve ser exibido um link para a página raíz
 
   @puppeteer
   Cenário: Edição de documentações
