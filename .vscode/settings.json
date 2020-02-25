@@ -1,0 +1,14 @@
+{
+  "editor.quickSuggestions": {
+    "other": true,
+    "comments": true,
+    "strings": true
+  },
+  "cucumberautocomplete.steps": ["features/step_definitions/*.js"],
+  "cucumberautocomplete.syncfeatures": "features/*feature",
+  "cucumberautocomplete.strictGherkinCompletion": false,
+  "cucumberautocomplete.strictGherkinValidation": true,
+  "cucumberautocomplete.smartSnippets": true,
+  "cucumberautocomplete.stepsInvariants": true,
+  "cucumberautocomplete.gherkinDefinitionPart": "(Given|When|Then)\\("
+}
