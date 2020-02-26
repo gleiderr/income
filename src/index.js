@@ -42,9 +42,8 @@ function Income({ sendMsg, msgsListener, inventionListener, inventionSave }) {
   //Estados
   const [user, setUser] = useState(undefined);
   const [sign_in, open_sign_in] = useState(false);
-  const [displayChat, setChatDisplay] = useState(
-    window.innerWidth <= 840 ? 'none' : 'flex'
-  );
+  const mobile = window.innerWidth <= 840;
+  const [displayChat, setChatDisplay] = useState(!mobile);
 
   useEffect(() => {
     let unsubProfileGetter = undefined;
@@ -108,11 +107,12 @@ function Income({ sendMsg, msgsListener, inventionListener, inventionSave }) {
           user={user}
           sign_in={sign_in}
           open_sign_in={open_sign_in}
-          hideChat={() => setChatDisplay('none')}
+          hideChat={() => setChatDisplay(false)}
         />
         <Row style={{ gridGap: '0px', flex: 1 }}>
           <DocChat
             user={user}
+            mobile={mobile}
             displayChat={displayChat}
             setChatDisplay={setChatDisplay}
             inventionSave={inventionSave}

@@ -10,6 +10,7 @@ import Chat from './Chat';
 
 export default function DocChat({
   user,
+  mobile,
   displayChat,
   setChatDisplay,
   inventionSave,
@@ -17,7 +18,7 @@ export default function DocChat({
   sendMsg,
   msgsListener,
 }) {
-  const displayDoc = displayChat == 'none' ? 'flex' : 'none';
+  const displayDoc = mobile && displayChat ? 'none' : 'flex';
   const { contexto = 'income' } = useParams();
 
   return (
@@ -27,7 +28,9 @@ export default function DocChat({
         phoneColumns={12}
         tabletColumns={12}
         desktopColumns={8}
-        style={{ display: displayDoc }}
+        style={{
+          display: displayDoc,
+        }}
       >
         <Doc
           showHeader={!!user && user.papel === 'administrador'}
@@ -40,9 +43,8 @@ export default function DocChat({
         <Fab
           id='fab-chat'
           textLabel='Chat'
-          style={{ display: displayChat === 'none' ? 'block' : 'none' }}
           icon={<MaterialIcon icon='chat' />}
-          onClick={() => setChatDisplay('flex')}
+          onClick={() => setChatDisplay(true)}
         />
       </Cell>
       <Cell
@@ -51,7 +53,7 @@ export default function DocChat({
         tabletColumns={12}
         desktopColumns={4}
         style={{
-          display: displayChat,
+          display: displayChat ? 'flex' : 'none',
           position: 'relative',
         }}
       >
