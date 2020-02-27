@@ -104,12 +104,12 @@ function Income({ sendMsg, msgsListener, inventionListener, inventionSave }) {
 
   const callbacks = {
     sendMsg: (...params) => {
-      if (user) return sendMsg(...params);
+      if (user) return sendMsg(...params, contexto);
 
       open_sign_in(true);
       return Promise.reject('Usuário não conectado');
     },
-    msgsListener,
+    msgsListener: setMsgs => msgsListener(setMsgs, contexto),
   };
 
   const [displayChat, setChatDisplay] = useState(
@@ -165,7 +165,7 @@ function Income({ sendMsg, msgsListener, inventionListener, inventionSave }) {
   );
 }
 
-async function sendMsg(texto, autor) {
+async function sendMsg(texto, autor, invenção) {
   if (!autor) {
     return Promise.reject('Conecte-se para enviar mensagens');
   }
@@ -176,7 +176,7 @@ async function sendMsg(texto, autor) {
 
   if (texto.length > 0) {
     return invencoes
-      .doc('income')
+      .doc(invenção)
       .collection('msgs')
       .add({ texto, timestamp, autor });
   } else {
@@ -190,8 +190,8 @@ async function sendMsg(texto, autor) {
   }*/
 }
 
-function msgsListener(setMsgs) {
-  const msgsRef = invencoes.doc('income').collection('msgs');
+function msgsListener(setMsgs, invenção) {
+  const msgsRef = invencoes.doc(invenção).collection('msgs');
   const msgsQuery = msgsRef.orderBy('timestamp');
 
   return msgsQuery.onSnapshot(
