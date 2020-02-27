@@ -1,12 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import ReactDOM from 'react-dom';
 import firebase from 'firebase';
 import firebase_init from './firebase-local';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
-
 import { setVH } from './height';
 import { ChatHeader } from './Header';
-import DocChat from './DocChat';
 
 import '@material/react-layout-grid/dist/layout-grid.css';
 import '@material/react-card/dist/card.css';
@@ -27,8 +24,16 @@ import './height.css';
 import './docs.css';
 import './styles/Chat.css';
 
+import { Cell, Grid, Row } from '@material/react-layout-grid';
+import MaterialIcon from '@material/react-material-icon';
+import { Fab } from '@material/react-fab';
 import { Body1 } from '@material/react-typography';
-import { Grid, Row } from '@material/react-layout-grid';
+
+//import { SignInChat } from './SignInScreen';
+import Doc from './Doc';
+import Chat from './Chat';
+//import App from "./App";
+//import * as serviceWorker from "./serviceWorker";
 
 const app = firebase_init();
 const db = app.firestore();
@@ -38,12 +43,16 @@ const timestamp = firebase.firestore.FieldValue.serverTimestamp();
 
 setVH();
 
-function Income({ sendMsg, msgsListener, inventionListener, inventionSave }) {
+function Income(props) {
+  //Props
+  const { sendMsg, msgsListener } = props;
+  const { inventionListener, inventionSave } = props;
+
   //Estados
   const [user, setUser] = useState(undefined);
+  const [contexto, setContexto] = useState('income');
   const [sign_in, open_sign_in] = useState(false);
-  const mobile = window.innerWidth <= 840;
-  const [displayChat, setChatDisplay] = useState(!mobile);
+  //const [connecting, initLogin] = useState(false);
 
   useEffect(() => {
     let unsubProfileGetter = undefined;
@@ -97,41 +106,72 @@ function Income({ sendMsg, msgsListener, inventionListener, inventionSave }) {
     });
   }, []);
 
+  const callbacks = {
+    sendMsg: (...params) => {
+      if (user) return sendMsg(...params);
+
+      open_sign_in(true);
+      return Promise.reject('Usuário não conectado');
+    },
+    msgsListener,
+  };
+
+  const [displayChat, setChatDisplay] = useState(
+    window.innerWidth <= 840 ? 'none' : 'flex'
+  );
   return (
     <Body1 tag={'div'}>
-      <Grid
-        className='vh100'
-        style={{ padding: 0, display: 'flex', flexDirection: 'column' }}
-      >
-        <ChatHeader
-          user={user}
-          sign_in={sign_in}
-          open_sign_in={open_sign_in}
-          hideChat={() => setChatDisplay(false)}
-        />
-        <Row style={{ gridGap: '0px', flex: 1 }}>
-          <DocChat
-            user={user}
-            mobile={mobile}
-            displayChat={displayChat}
-            setChatDisplay={setChatDisplay}
-            inventionSave={inventionSave}
-            inventionListener={inventionListener}
-            msgsListener={msgsListener}
-            sendMsg={(...params) => {
-              if (user) return sendMsg(...params);
+      <Grid style={{ padding: 0 }}>
+        <Row style={{ gridGap: '0px' }}>
+          <Cell
+            id='incomedocs'
+            className='vh100'
+            phoneColumns={12}
+            tabletColumns={12}
+            desktopColumns={8}
+          >
+            <Doc
+              showHeader={!!user && user.papel === 'administrador'}
+              inventionSave={markdown =>
+                inventionSave(markdown, contexto, user)
+              }
+              inventionListener={setMarkdown =>
+                inventionListener(contexto, setMarkdown)
+              }
+            />
 
-              open_sign_in(true);
-              return Promise.reject('Usuário não conectado');
+            <Fab
+              id='fab-chat'
+              icon={<MaterialIcon icon='chat' />}
+              onClick={() => setChatDisplay('flex')}
+              textLabel='Chat'
+            />
+          </Cell>
+          <Cell
+            id='incomechat'
+            className='vh100'
+            phoneColumns={12}
+            tabletColumns={12}
+            desktopColumns={4}
+            style={{
+              display: displayChat,
             }}
-          />
+          >
+            <ChatHeader
+              user={user}
+              sign_in={sign_in}
+              open_sign_in={open_sign_in}
+              hideChat={() => setChatDisplay('none')}
+            />
+            <Chat autor={user} alertas={[]} {...callbacks} />
+          </Cell>
         </Row>
       </Grid>
     </Body1>
   );
 }
 
-async function sendMsg(texto, autor, contexto) {
+async function sendMsg(texto, autor) {
   if (!autor) {
     return Promise.reject('Conecte-se para enviar mensagens');
   }
@@ -142,7 +182,7 @@ async function sendMsg(texto, autor, contexto) {
 
   if (texto.length > 0) {
     return invencoes
-      .doc(contexto)
+      .doc('income')
       .collection('msgs')
       .add({ texto, timestamp, autor });
   } else {
@@ -156,8 +196,9 @@ async function sendMsg(texto, autor, contexto) {
   }*/
 }
 
-function msgsListener(setMsgs, contexto) {
-  const msgsRef = invencoes.doc(contexto).collection('msgs');
+function msgsListener(setMsgs) {
+  //db.collection('conversas').doc(contexto).delete().then(() => console.log('excluído'));
+  const msgsRef = invencoes.doc('income').collection('msgs');
   const msgsQuery = msgsRef.orderBy('timestamp');
 
   return msgsQuery.onSnapshot(
@@ -201,26 +242,15 @@ function inventionSave(markdown, invenção, autor) {
     .catch(error => Promise.reject(<div>error</div>));
 }
 
-const callbacks = {
-  sendMsg,
-  msgsListener,
-  inventionListener,
-  inventionSave,
-};
-
-function App() {
-  return (
-    <BrowserRouter>
-      <Switch>
-        <Route path='/:contexto?'>
-          <Income {...callbacks} />
-        </Route>
-      </Switch>
-    </BrowserRouter>
-  );
-}
-
-ReactDOM.render(<App />, document.querySelector('#root'));
+ReactDOM.render(
+  <Income
+    sendMsg={sendMsg}
+    msgsListener={msgsListener}
+    inventionListener={inventionListener}
+    inventionSave={inventionSave}
+  />,
+  document.querySelector('#root')
+);
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
