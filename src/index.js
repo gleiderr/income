@@ -43,11 +43,7 @@ const timestamp = firebase.firestore.FieldValue.serverTimestamp();
 
 setVH();
 
-function Income(props) {
-  //Props
-  const { sendMsg, msgsListener } = props;
-  const { inventionListener, inventionSave } = props;
-
+function Income({ sendMsg, msgsListener, inventionListener, inventionSave }) {
   //Estados
   const [user, setUser] = useState(undefined);
   const [contexto, setContexto] = useState('income');
@@ -132,9 +128,7 @@ function Income(props) {
           >
             <Doc
               showHeader={!!user && user.papel === 'administrador'}
-              inventionSave={markdown =>
-                inventionSave(markdown, contexto, user)
-              }
+              inventionSave={markdown => inventionSave(markdown, contexto)}
               inventionListener={setMarkdown =>
                 inventionListener(contexto, setMarkdown)
               }
@@ -197,7 +191,6 @@ async function sendMsg(texto, autor) {
 }
 
 function msgsListener(setMsgs) {
-  //db.collection('conversas').doc(contexto).delete().then(() => console.log('excluído'));
   const msgsRef = invencoes.doc('income').collection('msgs');
   const msgsQuery = msgsRef.orderBy('timestamp');
 
@@ -227,7 +220,7 @@ function inventionListener(invenção, setMarkdown) {
   );
 }
 
-function inventionSave(markdown, invenção, autor) {
+function inventionSave(markdown, invenção) {
   invencoes
     .doc(invenção)
     .collection('historico')
