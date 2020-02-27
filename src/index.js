@@ -1,9 +1,10 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import firebase from 'firebase';
 import firebase_init from './firebase-local';
 import { setVH } from './height';
 import { ChatHeader } from './Header';
+import { BrowserRouter, Route, Switch, useParams } from 'react-router-dom';
 
 import '@material/react-layout-grid/dist/layout-grid.css';
 import '@material/react-card/dist/card.css';
@@ -46,9 +47,8 @@ setVH();
 function Income({ sendMsg, msgsListener, inventionListener, inventionSave }) {
   //Estados
   const [user, setUser] = useState(undefined);
-  const [contexto, setContexto] = useState('income');
   const [sign_in, open_sign_in] = useState(false);
-  //const [connecting, initLogin] = useState(false);
+  const { contexto = 'income' } = useParams();
 
   useEffect(() => {
     let unsubProfileGetter = undefined;
@@ -235,15 +235,26 @@ function inventionSave(markdown, invenção) {
     .catch(error => Promise.reject(<div>error</div>));
 }
 
-ReactDOM.render(
-  <Income
-    sendMsg={sendMsg}
-    msgsListener={msgsListener}
-    inventionListener={inventionListener}
-    inventionSave={inventionSave}
-  />,
-  document.querySelector('#root')
-);
+const callbacks = {
+  sendMsg,
+  msgsListener,
+  inventionListener,
+  inventionSave,
+};
+
+function App() {
+  return (
+    <BrowserRouter>
+      <Switch>
+        <Route path='/:contexto?'>
+          <Income {...callbacks} />
+        </Route>
+      </Switch>
+    </BrowserRouter>
+  );
+}
+
+ReactDOM.render(<App />, document.querySelector('#root'));
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
