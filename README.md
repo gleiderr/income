@@ -4,19 +4,21 @@ Código fonte: https://github.com/gleiderr/income
 
 > "O desenvolvimento de software é um jogo de invenção e comunicação cuja principal medida de sucesso é o software funcionando" (Alistair Cockburn, 2001)
 
-O INCOME é composto por dois módulos principais. Este **módulo de documentação** que você está lendo é onde estão as principais especificações de como nossos softwares funcionam. Já o **módulo de chat** é onde toda a interação com nossos usuários e colaboradores acontece.
+O INCOME é uma ferramenta para desenvolvimento de ideias a partir da comunicação e da demonstração das soluções desenvolvidas. Cada ambiente de desenvolvimento possui seu próprio endereço (URL).
+
+Apenas o usuário desenvolvedor pode criar ou editar novos ambientes. Para criação bastar acessar o endereço do ambiente e proceder como se já existisse. Ao salvar qualquer documentação ou interagir no chat, a criação do endereço estará efetivada.
+
+Quando um usuário comum acessa um ambiente inexistente, então é exibida uma mensagem indicando a inexistência e ele é redirecionado ao caminho raíz.
+
+O INCOME é composto por dois módulos principais. Este **módulo de documentação** que você está lendo contém as principais especificações de como os sistemas funcionam. Já o **módulo de chat** é onde toda a comunicação com os usuários e colaboradores acontece.
 
 O ambiente possui compatibilidade com dispositivos móveis e desktops, com prioridade aos dispositivos móveis.
 
 ## Módulo de Documentação
 
-Esse módulo permite o acesso às documentações diretamente via URL. As edições são acompanhadas em tempo real pelos usuários. Ou seja, quando o desenvolvedor editar uma documentação os usuários conectados veem a modificação imediatamente, sem necessidade de atualização da página.
+Esse módulo destina-se ao texto descritivo dos sistemas. As edições são acompanhadas em tempo real pelos usuários. Ou seja, quando o desenvolvedor edita uma documentação os usuários conectados imediatamente veem a modificação, sem necessidade de atualização da página.
 
-Os usuários podem acessar as diversas documentações diretamente via URL ou através de links que podem estar presentes na própria documentação ou em sites externos. A URL de cada documentação é composta por http://gleider.ml/income/\<documentacao\>, sendo \<documentacao\> o nome de cada documentação correpondente.
-
-Apenas o usuário desenvolvedor pode criar e editar documentações. Para criação ou edição bastar acessar o endereço da \<documentacao\> escolhida e editá-la utilizando [markdown](https://pt.wikipedia.org/wiki/Markdown)). Essa URL será utilizada como endereço permanente para a documentação.
-
-Quando um usuário acessar uma URL sem documentação correspondente, então será exibida uma mensagem incentivando-o a enviar uma sugestão de documentação e será apresentado um link para a URL raíz.
+A documentação é redigida utilizando a linguagem [markdown](https://pt.wikipedia.org/wiki/Markdown)).
 
 ## Módulo Chat
 
@@ -24,19 +26,13 @@ Esse simples chat amplifica a capacidade de comunicação entre desenvolvedores 
 
 As mensagens são exibidas na ordem que são recebidas pelo nosso servidor e por simplicidade exibem somente o nome do usuário e o conteúdo da mensagem.
 
-Para cada documentação existe um chat relacionado. Assim os usuários podem comunicar-se dentro de contextos específicos.
+Para cada ambiente existe um chat relacionado. Isso permite que os usuários comuniquem-se dentro de contextos específicos.
 
 ## Novidades dessa versão
 
 - Gerenciar diversas documentações e diversos chats;
   - Referenciamento via URL;
 - Cabeçalho comum ao chat e à documentação;
-
-## Novas sugestões
-
-- Criar links internos que não exijam o recarregamento da página;
-- Criar breadcrumbs para navegação fácil entre documentações;
-- Criar cabeçalho com acesso ás diversas documentações;
 
 ## Tecnologias utilizadas
 
