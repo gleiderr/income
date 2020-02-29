@@ -14,6 +14,10 @@ O INCOME é composto por dois módulos principais. Este **módulo de documentaç
 
 O ambiente possui compatibilidade com dispositivos móveis e desktops, com prioridade aos dispositivos móveis.
 
+## Módulo de Demonstração
+
+O Módulo de Demonstração é onde o sucesso do software pode ser avaliado através do seu funcionamento.
+
 ## Módulo de Documentação
 
 Esse módulo destina-se ao texto descritivo dos sistemas. As edições são acompanhadas em tempo real pelos usuários. Ou seja, quando o desenvolvedor edita uma documentação os usuários conectados imediatamente veem a modificação, sem necessidade de atualização da página.
