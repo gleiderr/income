@@ -29,8 +29,8 @@ Funcionalidade: Seleção e edição de múltiplas documentações
     Quando o usuário acessar a url '1'
     Então deve ser exibida a mensagem:
       """
-      Desculpe, esse sistema ainda não foi desenvolvido.
-      Envie sua sugestão em nosso chat para criarmos.
+      Desculpe, sistema ainda não desenvolvido.
+      Envie sua sugestão em nosso chat.
       Obrigado
       """
     E deve ser exibido um link para a página raíz
