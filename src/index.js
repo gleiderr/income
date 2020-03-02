@@ -4,7 +4,13 @@ import firebase from 'firebase';
 import firebase_init from './firebase-local';
 import { setVH } from './height';
 import { ChatHeader } from './Header';
-import { BrowserRouter, Route, Switch, useParams } from 'react-router-dom';
+import {
+  BrowserRouter,
+  Route,
+  Switch,
+  useParams,
+  Link,
+} from 'react-router-dom';
 
 import '@material/react-layout-grid/dist/layout-grid.css';
 import '@material/react-card/dist/card.css';
@@ -45,10 +51,11 @@ const timestamp = firebase.firestore.FieldValue.serverTimestamp();
 setVH();
 
 function Income({ sendMsg, msgsListener, inventionListener, inventionSave }) {
-  //Estados
+  const CONTEXTO_PADRÃO = 'income';
   const [user, setUser] = useState(undefined);
   const [sign_in, open_sign_in] = useState(false);
-  const { contexto = 'income' } = useParams();
+  const { contexto = CONTEXTO_PADRÃO } = useParams();
+  const { status } = useInvencao(contexto);
 
   useEffect(() => {
     let unsubProfileGetter = undefined;
@@ -115,6 +122,25 @@ function Income({ sendMsg, msgsListener, inventionListener, inventionSave }) {
   const [displayChat, setChatDisplay] = useState(
     window.innerWidth <= 840 ? 'none' : 'flex'
   );
+
+  if (status === 'lendo') return <div>Carregando conteúdo...</div>;
+
+  /*if (
+    status === 'inexistente' &&
+    (!user ||
+      user.papel !== 'administrador') &&
+    contexto !== CONTEXTO_PADRÃO
+  ) {
+    return (
+      <div>
+        <p>Desculpe, sistema ainda não desenvolvido.</p>
+        <p>Envie sua sugestão em nosso chat.</p>
+        <p>Obrigado</p>
+        <Link to='./'>voltar</Link>
+      </div>
+    );
+  }*/
+
   return (
     <Body1 tag={'div'}>
       <Grid style={{ padding: 0 }}>
@@ -218,6 +244,25 @@ function inventionListener(invenção, setMarkdown) {
     },
     error => console.log(error)
   );
+}
+
+function useInvencao(invenção) {
+  const [status, setStatus] = useState('lendo');
+  const doc = invencoes.doc(invenção);
+
+  useEffect(() => {
+    doc.onSnapshot(
+      doc => {
+        if (!doc.data()) setStatus('inexistente');
+      },
+      error => setStatus('erro')
+    );
+
+    //return () => console.log('saiu');
+  }, []);
+
+  console.log({ status });
+  return { status };
 }
 
 function inventionSave(markdown, invenção) {
