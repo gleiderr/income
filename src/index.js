@@ -55,7 +55,8 @@ function Income({ sendMsg, msgsListener, inventionListener, inventionSave }) {
   const [user, setUser] = useState(undefined);
   const [sign_in, open_sign_in] = useState(false);
   const { contexto = CONTEXTO_PADRÃO } = useParams();
-  const { status } = useInvencao(contexto);
+  const { status } = useInvencão(contexto);
+  const isAdmin = !!user && user.papel === 'administrador';
 
   useEffect(() => {
     let unsubProfileGetter = undefined;
@@ -123,23 +124,20 @@ function Income({ sendMsg, msgsListener, inventionListener, inventionSave }) {
     window.innerWidth <= 840 ? 'none' : 'flex'
   );
 
-  if (status === 'lendo') return <div>Carregando conteúdo...</div>;
+  let conteúdo;
 
-  /*if (
-    status === 'inexistente' &&
-    (!user ||
-      user.papel !== 'administrador') &&
-    contexto !== CONTEXTO_PADRÃO
-  ) {
-    return (
+  if (status === 'lendo') conteúdo = <div>Carregando conteúdo...</div>;
+
+  if (status === 'inexistente' && contexto !== CONTEXTO_PADRÃO && !isAdmin) {
+    conteúdo = (
       <div>
         <p>Desculpe, sistema ainda não desenvolvido.</p>
         <p>Envie sua sugestão em nosso chat.</p>
         <p>Obrigado</p>
-        <Link to='./'>voltar</Link>
+        <Link to='./'>Voltar</Link>
       </div>
     );
-  }*/
+  }
 
   return (
     <Body1 tag={'div'}>
@@ -153,7 +151,7 @@ function Income({ sendMsg, msgsListener, inventionListener, inventionSave }) {
             desktopColumns={8}
           >
             <Doc
-              showHeader={!!user && user.papel === 'administrador'}
+              showHeader={isAdmin}
               inventionSave={markdown => inventionSave(markdown, contexto)}
               inventionListener={setMarkdown =>
                 inventionListener(contexto, setMarkdown)
@@ -246,16 +244,13 @@ function inventionListener(invenção, setMarkdown) {
   );
 }
 
-function useInvencao(invenção) {
+function useInvencão(invenção) {
   const [status, setStatus] = useState('lendo');
   const doc = invencoes.doc(invenção);
 
   useEffect(() => {
     return doc.onSnapshot(
-      doc => {
-        if (doc.data()) setStatus('ok');
-        else setStatus('inexistente');
-      },
+      doc => setStatus(doc.data() ? 'ok' : 'inexistente'),
       error => setStatus('erro')
     );
   });
