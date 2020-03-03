@@ -249,10 +249,7 @@ function useInvencão(invenção) {
   const doc = invencoes.doc(invenção);
 
   useEffect(() => {
-    return doc.onSnapshot(
-      doc => setStatus(doc.data() ? 'ok' : 'inexistente'),
-      error => setStatus('erro')
-    );
+    return doc.onSnapshot(doc => setStatus(doc.data() ? 'ok' : 'inexistente'));
   });
 
   return { status };
