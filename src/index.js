@@ -124,23 +124,32 @@ function Income({ sendMsg, msgsListener, inventionListener, inventionSave }) {
     window.innerWidth <= 840 ? 'none' : 'flex'
   );
 
-  let conteúdo;
-
-  if (status === 'lendo') conteúdo = <div>Carregando conteúdo...</div>;
-
-  if (status === 'inexistente' && contexto !== CONTEXTO_PADRÃO && !isAdmin) {
-    conteúdo = (
-      <div>
-        <p>Desculpe, sistema ainda não desenvolvido.</p>
-        <p>Envie sua sugestão em nosso chat.</p>
-        <p>Obrigado</p>
-        <Link to='./'>Voltar</Link>
-      </div>
-    );
-  }
-
   return (
     <Body1 tag={'div'}>
+      <Conteudo />
+    </Body1>
+  );
+
+  function Conteudo() {
+    // eslint-disable-next-line default-case
+    switch (status) {
+      case 'lendo':
+        return <div>Carregando conteúdo...</div>;
+      case 'inexistente':
+        if (contexto !== CONTEXTO_PADRÃO && !isAdmin) {
+          return (
+            <div style={{ padding: '16px' }}>
+              <p>Desculpe, sistema ainda não desenvolvido.</p>
+              <p>Envie sua sugestão em nosso chat.</p>
+              <p>Obrigado</p>
+              <Link to='./'>Voltar para o início</Link>
+            </div>
+          );
+        }
+        break;
+    }
+
+    return (
       <Grid style={{ padding: 0 }}>
         <Row style={{ gridGap: '0px' }}>
           <Cell
@@ -185,8 +194,8 @@ function Income({ sendMsg, msgsListener, inventionListener, inventionSave }) {
           </Cell>
         </Row>
       </Grid>
-    </Body1>
-  );
+    );
+  }
 }
 
 async function sendMsg(texto, autor, invenção) {
