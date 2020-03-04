@@ -51,7 +51,7 @@ const timestamp = firebase.firestore.FieldValue.serverTimestamp();
 setVH();
 
 function Income({ sendMsg, msgsListener, inventionListener, inventionSave }) {
-  const CONTEXTO_PADRÃO = 'income';
+  const CONTEXTO_PADRÃO = 'inicio';
   const [user, setUser] = useState(undefined);
   const [sign_in, open_sign_in] = useState(false);
   const { contexto = CONTEXTO_PADRÃO } = useParams();
