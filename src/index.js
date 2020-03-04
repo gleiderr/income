@@ -290,14 +290,16 @@ function App() {
   //Somente para o ambiente do github onde já existe o caminho para /income
   const path_github = '/income';
   return (
-    <BrowserRouter>
+    <BrowserRouter basename={path_github}>
       <Switch>
-        <Route path={`${path_github}/:contexto?`}>
-          <Income {...callbacks} />
-        </Route>
+        <Route path={`/:contexto?`} component={Teste} />
       </Switch>
     </BrowserRouter>
   );
+
+  function Teste() {
+    return <Income {...callbacks} />;
+  }
 }
 
 ReactDOM.render(<App />, document.querySelector('#root'));
