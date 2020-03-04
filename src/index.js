@@ -134,7 +134,7 @@ function Income({ sendMsg, msgsListener, inventionListener, inventionSave }) {
     // eslint-disable-next-line default-case
     switch (status) {
       case 'lendo':
-        return <div>Carregando conteúdo...</div>;
+        return <div style={{ padding: '16px' }}>Carregando conteúdo...</div>;
       case 'inexistente':
         if (contexto !== CONTEXTO_PADRÃO && !isAdmin) {
           return (
