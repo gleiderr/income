@@ -287,10 +287,12 @@ const callbacks = {
 };
 
 function App() {
+  //Somente para o ambiente do github onde já existe o caminho para /income
+  const path_github = '/income';
   return (
     <BrowserRouter>
       <Switch>
-        <Route path='/:contexto?'>
+        <Route path={`${path_github}/:contexto?`}>
           <Income {...callbacks} />
         </Route>
       </Switch>
