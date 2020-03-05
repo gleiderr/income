@@ -33,7 +33,7 @@
     "build": "react-scripts build",
     "test": "npx babel-node --presets=@babel/react,@babel/preset-env node_modules/cucumber/bin/cucumber-js --fail-fast --no-strict",
     "eject": "react-scripts eject",
-    "predeploy": "npm run build",
+    "predeploy": "npm run build && copy build\\index.html build\\404.html",
     "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
