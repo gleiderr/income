@@ -32,6 +32,7 @@
   font-family: monospace;
   -webkit-user-modify: read-write;
   line-break: after-white-space;
+  overflow: auto;
 }
 
 @media (max-width: 479px) {
